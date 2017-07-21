@@ -23,7 +23,7 @@ class PrimaryHDU(models.Model):
     instrument = models.CharField(max_length=80, help_text = "INSTRUME")
     telescope  = models.CharField(max_length=80, help_text = "TELESCOP")
     date_obs  = models.DateTimeField(help_text = 'DATE-OBS')
-    obj  = models.CharField(max_length=80, help_text = 'OBJECT')
+    obj  = models.CharField(max_length=80, blank=True, help_text = 'OBJECT')
 
     # Other FITS field content not stored above
     extras = JSONField()  # top level key on json dict  corresponds to instrument
@@ -35,13 +35,13 @@ class ExtensionHDU(models.Model):
     # Exentsion names registered at: https://fits.gsfc.nasa.gov/xtension.html
     xtension = models.CharField(max_length=40)
     naxis = models.PositiveSmallIntegerField()
-    naxisN = ArrayField(models.PositiveSmallIntegerField())
+    naxisN = ArrayField(models.PositiveSmallIntegerField(), default=list)
     pcount = models.PositiveIntegerField()
     gcount = models.PositiveIntegerField()    
 
     # Others
     date_obs  = models.DateTimeField(help_text = 'DATE-OBS')
-    obj  = models.CharField(max_length=80, help_text = 'OBJECT')
+    obj  = models.CharField(max_length=80, blank=True, help_text='OBJECT')
 
     # Other FITS field content not stored above
     extras = JSONField()  # top level key on json dict  corresponds to instrument (in primary)

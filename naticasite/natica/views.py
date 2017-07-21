@@ -6,8 +6,8 @@ from rest_framework.decorators import api_view, renderer_classes
 import sys
 import argparse
 import logging
-from datetime import datetime
 import hashlib
+from django.utils import timezone
 
 from .models import FitsFile, PrimaryHDU, ExtensionHDU
 
@@ -51,9 +51,11 @@ def validate_header(hdulist):
     assert 'TELESCOP' in hdrkeys
     instrume_vals = hvalues('INSTRUME')
     telescop_vals = hvalues('TELESCOP')
-    dateobs_vals = hvalues('DATE-OBS') #!
+    dateobs_vals = hvalues('DATE-OBS') #!!!
+    object_vals = hvalues('OBJECT')
     assert 1 == len(instrume_vals)
     assert 1 == len(telescop_vals)
+    assert 0 < len(object_vals)
     logging.debug('DBG: instrume_vals={}'.format(instrume_vals))
     logging.debug('DBG: telescop_vals={}'.format(telescop_vals))
     return(dict(instrument=instrume_vals.pop(),
@@ -66,14 +68,18 @@ def validate_header(hdulist):
 def store_metadata(hdulist, vals):
     """Store ALL of the FITS header values into DB."""
     logging.debug('DBG-vals={}'.format(vals))
+
+    ## FITS File
     fits = FitsFile(id=vals['md5sum'],
                     original_filename=vals['src_fname'],
                     archive_filename=vals['arch_fname'],
                     filesize=vals['size'],
-                    release_date=datetime.now() )
+                    release_date=timezone.now() )
     fits.save()
 
-    notstored = {'SIMPLE', 'COMMENT', 'EXTEND'}
+    ## Primary HDU
+    #!!! Add to naxisN array if appropriate
+    notstored = {'SIMPLE', 'COMMENT', 'HISTORY', 'EXTEND', ''} #!
     extras = (set(hdulist[0].header.keys()) 
               - set([ f.name.upper() for f in PrimaryHDU._meta.get_fields()])
               - notstored)
@@ -86,11 +92,36 @@ def store_metadata(hdulist, vals):
                          naxis=hdulist[0].header['NAXIS'],
                          instrument = vals['instrument'],
                          telescope = vals['telescope'],
-                         date_obs  = vals['dateobs'],
+                         date_obs = vals['dateobs'],
+                         #!!! obj = hdulist[0].header['OBJECT'],
                          extras = {vals['instrument']: extradict}
                          )
     primary.save()
-    
+
+    ## Extension HDUs
+    #!!! Add to naxisN array if appropriate
+    #!!! Should move/remove some values from Extension to Primary
+    #    (e.g. instrument, telescope)
+    extension_core = set([ f.name.upper()
+                           for f in ExtensionHDU._meta.get_fields()])
+    for idx,hdu in enumerate(hdulist[1:],1):
+        extras = set(hdu.header.keys()) - extension_core - notstored
+        logging.debug('DBG-HDU[{}] extras={}'.format(idx,extras))
+        extradict = {}
+        for k in extras:
+            extradict[k] = hdu.header[k]
+        extension = ExtensionHDU(fitsfile=fits,
+                                 extension_idx=idx,
+                                 xtension=hdu.header['XTENSION'],
+                                 naxis=hdu.header['NAXIS'],
+                                 pcount=hdu.header['PCOUNT'],
+                                 gcount=hdu.header['GCOUNT'],
+                                 date_obs  = hdu.header['DATE-OBS'],
+                                 obj = hdu.header['OBJECT'],
+                                 extras = {vals['instrument']: extradict}
+                                 )
+        extension.save()
+        
 def handle_uploaded_file(f):
     import astropy.io.fits as pyfits
     tgtfile = '/data/upload/foo.fits' #!!!
