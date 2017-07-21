@@ -93,7 +93,7 @@ def store_metadata(hdulist, vals):
                          instrument = vals['instrument'],
                          telescope = vals['telescope'],
                          date_obs = vals['dateobs'],
-                         #!!! obj = hdulist[0].header['OBJECT'],
+                         obj = hdulist[0].header.get('OBJECT',''),
                          extras = {vals['instrument']: extradict}
                          )
     primary.save()
@@ -117,7 +117,7 @@ def store_metadata(hdulist, vals):
                                  pcount=hdu.header['PCOUNT'],
                                  gcount=hdu.header['GCOUNT'],
                                  date_obs  = hdu.header['DATE-OBS'],
-                                 obj = hdu.header['OBJECT'],
+                                 obj = hdu.header.get('OBJECT',''),
                                  extras = {vals['instrument']: extradict}
                                  )
         extension.save()
@@ -156,8 +156,8 @@ def ingest_fits(request):
 
 ##############################################################################
 
-def test_submit_fits(fits_file_path):       
-    logging.debug('DBG-1: natica.test_submit_fits({})'.format(fits_file_path))
+def submit_fits_file(fits_file_path):       
+    logging.debug('DBG-1: natica.submit_fits_file({})'.format(fits_file_path))
     import requests
     f = open(fits_file_path, 'rb')
     urls = 'http://0.0.0.0:8000/natica/ingest/'
@@ -203,7 +203,6 @@ def main():
                         datefmt='%m-%d %H:%M')
     logging.debug('Debug output is enabled in %s !!!', sys.argv[0])
 
-    my_test_submit_fits(args.infile)
-
+    submit_fits_file(args.infile)
 if __name__ == '__main__':
     main()
