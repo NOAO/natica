@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGIN_URL = "/admin/login/"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 #MEDIA_ROOT = '/var/mars/'
 
 # Static files (CSS, JavaScript, Images)
@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'django.contrib.postgres',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    #'debug_toolbar',
     'natica', # replace LSA
     'rest_framework',
     'rest_framework_swagger',
@@ -65,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -104,6 +106,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
 
 SWAGGER_SETTINGS = {
     'enabled_methods': [
@@ -154,7 +157,7 @@ LOGGING = {
             'class' : 'logging.FileHandler',
             'level': 'INFO',
             'formatter': 'precise',
-            'filename': '/var/log/mars/mars.log',
+            'filename': '/var/log/natica/natica.log',
             #! 'maxBytes': 10000000,
             #! 'backupCount': 5,
         },
@@ -162,7 +165,7 @@ LOGGING = {
             'class' : 'logging.FileHandler',
             'level': 'DEBUG',
             'formatter': 'precise',
-            'filename': '/var/log/mars/mars-detail.log',
+            'filename': '/var/log/natica/natica-detail.log',
             #! 'maxBytes': 10000000,
             #! 'backupCount': 5,
         },

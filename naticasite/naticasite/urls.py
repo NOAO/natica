@@ -18,7 +18,20 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
 
+from django.views.generic.base import RedirectView
+from django.contrib.staticfiles.storage import staticfiles_storage
+from rest_framework import routers, serializers, viewsets
+from django.contrib.auth.models import User # ,Group
+from rest_framework_swagger.views import get_swagger_view
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^natica/', include('natica.urls', namespace='natica')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+#!if settings.DEBUG:
+#!    import debug_toolbar
+#!    urlpatterns = [
+#!        url(r'^__debug__/', include(debug_toolbar.urls)),
+#!    ] + urlpatterns
