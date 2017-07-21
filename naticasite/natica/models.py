@@ -3,18 +3,21 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 
 
 class FitsFile(models.Model):
-    id = models.CharField(max_length=32, primary_key=True) # md5sum of file as stored in MSS
+    # md5sum of file as stored in MSS
+    id = models.CharField(max_length=32, primary_key=True)
+    original_filename = models.CharField(max_length=256)
+    archive_filename = models.CharField(max_length=256)
     filesize         = models.BigIntegerField()
     release_date     = models.DateTimeField()
 
 class PrimaryHDU(models.Model):
-    fitsfile = models.ForeignKey(FitsFile, on_delete=models.CASCADE)
+    fitsfile = models.OneToOneField(FitsFile, on_delete=models.CASCADE)
 
     ## Required For Primary per FITS Std 3.0
     # assert(SIMPLE = T)
     bitpix = models.IntegerField()
     naxis = models.PositiveSmallIntegerField()
-    naxisN = ArrayField(models.PositiveSmallIntegerField())
+    naxisN = ArrayField(models.PositiveSmallIntegerField(), default=list)
 
     # Others
     instrument = models.CharField(max_length=80, help_text = "INSTRUME")

@@ -6,6 +6,8 @@ from rest_framework.decorators import api_view, renderer_classes
 import sys
 import argparse
 import logging
+from datetime import datetime
+import hashlib
 
 from .models import FitsFile, PrimaryHDU, ExtensionHDU
 
@@ -21,19 +23,96 @@ def index(request):
     logging.debug('DBG-0')
     return JsonResponse(counts)
 
+def md5(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+
+def validate_header(hdulist):
+    """Raise exception if FITS header is not good enuf for Archive.
+
+    INSTRUME and TELESCOP must exist in at least one HDU and have the
+    same value in all of them.
+
+    """
+    #! Insure TELESCOP and INSTRUME have known values
+
+    def hvalues(k):
+        return set([hdu.header.get(k, None) for hdu in hdulist]) - {None}
+
+    hdrkeys = set()
+    for hdu in hdulist:
+        hdrkeys.update(hdu.header.keys())
+    #assert 'INSTRUME' in hdulist[0].header.keys()
+    assert 'INSTRUME' in hdrkeys
+    assert 'TELESCOP' in hdrkeys
+    instrume_vals = hvalues('INSTRUME')
+    telescop_vals = hvalues('TELESCOP')
+    dateobs_vals = hvalues('DATE-OBS') #!
+    assert 1 == len(instrume_vals)
+    assert 1 == len(telescop_vals)
+    logging.debug('DBG: instrume_vals={}'.format(instrume_vals))
+    logging.debug('DBG: telescop_vals={}'.format(telescop_vals))
+    return(dict(instrument=instrume_vals.pop(),
+                telescope=telescop_vals.pop(),
+                dateobs=dateobs_vals.pop(),
+                ))
+    
+    
+#src_fname, arch_fname, md5sum, size,  
+def store_metadata(hdulist, vals):
+    """Store ALL of the FITS header values into DB."""
+    logging.debug('DBG-vals={}'.format(vals))
+    fits = FitsFile(id=vals['md5sum'],
+                    original_filename=vals['src_fname'],
+                    archive_filename=vals['arch_fname'],
+                    filesize=vals['size'],
+                    release_date=datetime.now() )
+    fits.save()
+
+    notstored = {'SIMPLE', 'COMMENT', 'EXTEND'}
+    extras = (set(hdulist[0].header.keys()) 
+              - set([ f.name.upper() for f in PrimaryHDU._meta.get_fields()])
+              - notstored)
+    logging.debug('DBG-extras={}'.format(extras))
+    extradict = {}
+    for k in extras:
+        extradict[k] = hdulist[0].header[k]
+    primary = PrimaryHDU(fitsfile=fits,
+                         bitpix=hdulist[0].header['BITPIX'],
+                         naxis=hdulist[0].header['NAXIS'],
+                         instrument = vals['instrument'],
+                         telescope = vals['telescope'],
+                         date_obs  = vals['dateobs'],
+                         extras = {vals['instrument']: extradict}
+                         )
+    primary.save()
+    
 def handle_uploaded_file(f):
     import astropy.io.fits as pyfits
-    with open('/data/upload/foo.fits', 'wb+') as destination:
+    tgtfile = '/data/upload/foo.fits' #!!!
+    with open(tgtfile, 'wb+') as destination:
         hdulist = pyfits.open(f)
-        #logging.debug('DBG-hdulist.info: {}'.format(hdulist.info()))
+        #!!! Validate headers, abort with approriate error if bad for Archive
+        valdict = validate_header(hdulist)
+            
         logging.debug('DBG-PrimaryHDU keys:{}'
                       .format(','.join(set(hdulist[0].header.keys()))))
         extkeys = set()
         for hdu in hdulist[1:]:
             extkeys.update(hdu.header.keys())
         logging.debug('DBG-ExtensionHDU keys:{}'.format(','.join(extkeys)))
+
         for chunk in f.chunks():
             destination.write(chunk)
+        valdict.update(dict(src_fname = f.name,
+                            arch_fname = tgtfile,
+                            md5sum = md5(tgtfile),
+                            size = f.size))
+        store_metadata(hdulist,valdict)
             
 @api_view(['POST'])
 def ingest_fits(request):
