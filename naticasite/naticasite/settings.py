@@ -72,7 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
-    #'middleware.RequestExceptionHandler',
+    'middleware.RequestExceptionHandler',
     ]
 
 ROOT_URLCONF = 'naticasite.urls'
@@ -183,6 +183,13 @@ LOGGING = {
         'django': {
             'handlers': ['file', 'debugfile'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        # Hide annoying admin "DEBUG, Exception":
+        #  e.g "Exception while resolving variable 'errors' in template 'admin/change_list.html'."
+        'django.template': {
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': True,
         },
         #!'django.server': {

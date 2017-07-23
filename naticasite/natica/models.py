@@ -19,11 +19,16 @@ class PrimaryHDU(models.Model):
     naxis = models.PositiveSmallIntegerField()
     naxisN = ArrayField(models.PositiveSmallIntegerField(), default=list)
 
-    # Others
+    # Others. 
     instrument = models.CharField(max_length=80, help_text = "INSTRUME")
     telescope  = models.CharField(max_length=80, help_text = "TELESCOP")
-    date_obs  = models.DateTimeField(help_text = 'DATE-OBS')
+    # Following can be in Primary or Extension or Both
+    date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
     obj  = models.CharField(max_length=80, blank=True, help_text = 'OBJECT')
+    #!ra = models.FloatField(null=True)
+    #!dec = models.FloatField(null=True)
+    ra = models.CharField(null=True, max_length=20)
+    dec = models.CharField(null=True, max_length=20)
 
     # Other FITS field content not stored above
     extras = JSONField()  # top level key on json dict  corresponds to instrument
@@ -39,9 +44,14 @@ class ExtensionHDU(models.Model):
     pcount = models.PositiveIntegerField()
     gcount = models.PositiveIntegerField()    
 
-    # Others
-    date_obs  = models.DateTimeField(help_text = 'DATE-OBS')
+    # Others.
+    # Following can be in Primary or Extension or Both
+    date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
     obj  = models.CharField(max_length=80, blank=True, help_text='OBJECT')
+    #!ra = models.FloatField(null=True)
+    #!dec = models.FloatField(null=True)
+    ra = models.CharField(null=True, max_length=20)
+    dec = models.CharField(null=True, max_length=20)
 
     # Other FITS field content not stored above
     extras = JSONField()  # top level key on json dict  corresponds to instrument (in primary)

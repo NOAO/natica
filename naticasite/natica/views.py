@@ -1,15 +1,25 @@
 #! /usr/bin/env python
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from rest_framework.decorators import api_view, renderer_classes
-
 import sys
 import argparse
 import logging
 import hashlib
+import json
+import requests
+import datetime
+
+from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from rest_framework.decorators import api_view, renderer_classes
+
 from django.utils import timezone
+from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import FitsFile, PrimaryHDU, ExtensionHDU
+from . import exceptions as nex
+from . import search_filters as sf
+
+api_version = '0.0.1' # prototype only
 
 @api_view(['GET'])
 def index(request):
@@ -20,7 +30,6 @@ def index(request):
                   PrimaryHDU = PrimaryHDU.objects.count(),
                   ExtensionHDU = ExtensionHDU.objects.count(),
                   )
-    logging.debug('DBG-0')
     return JsonResponse(counts)
 
 def md5(fname):
@@ -68,6 +77,7 @@ def validate_header(hdulist):
 def store_metadata(hdulist, vals):
     """Store ALL of the FITS header values into DB."""
     logging.debug('DBG-vals={}'.format(vals))
+    prihdr = hdulist[0].header
 
     ## FITS File
     fits = FitsFile(id=vals['md5sum'],
@@ -80,20 +90,22 @@ def store_metadata(hdulist, vals):
     ## Primary HDU
     #!!! Add to naxisN array if appropriate
     notstored = {'SIMPLE', 'COMMENT', 'HISTORY', 'EXTEND', ''} #!
-    extras = (set(hdulist[0].header.keys()) 
+    extras = (set(prihdr.keys()) 
               - set([ f.name.upper() for f in PrimaryHDU._meta.get_fields()])
               - notstored)
     logging.debug('DBG-extras={}'.format(extras))
     extradict = {}
     for k in extras:
-        extradict[k] = hdulist[0].header[k]
+        extradict[k] = prihdr[k]
     primary = PrimaryHDU(fitsfile=fits,
-                         bitpix=hdulist[0].header['BITPIX'],
-                         naxis=hdulist[0].header['NAXIS'],
+                         bitpix=prihdr['BITPIX'],
+                         naxis=prihdr['NAXIS'],
                          instrument = vals['instrument'],
                          telescope = vals['telescope'],
                          date_obs = vals['dateobs'],
-                         obj = hdulist[0].header.get('OBJECT',''),
+                         obj = prihdr.get('OBJECT',''),
+                         ra = prihdr.get('RA'),
+                         dec = prihdr.get('DEC'),
                          extras = {vals['instrument']: extradict}
                          )
     primary.save()
@@ -118,6 +130,8 @@ def store_metadata(hdulist, vals):
                                  gcount=hdu.header['GCOUNT'],
                                  date_obs  = hdu.header['DATE-OBS'],
                                  obj = hdu.header.get('OBJECT',''),
+                                 ra = hdu.header.get('RA'),
+                                 dec = hdu.header.get('DEC'),
                                  extras = {vals['instrument']: extradict}
                                  )
         extension.save()
@@ -143,8 +157,12 @@ def handle_uploaded_file(f):
                             arch_fname = tgtfile,
                             md5sum = md5(tgtfile),
                             size = f.size))
-        store_metadata(hdulist,valdict)
+        try: 
+            store_metadata(hdulist,valdict)
+        except Exception as err:
+            raise nex.CannotStoreInDB(err)
             
+#@csrf_exempt
 @api_view(['POST'])
 def ingest_fits(request):
     logging.debug('DBG-1: natica.ingest_fits({})'.format(request))
@@ -153,56 +171,80 @@ def ingest_fits(request):
         handle_uploaded_file(request.FILES['file'])
     return JsonResponse(dict(result='file uploaded'))
 
+# curl -H "Content-Type: application/json" -X POST -d @request-search-1.json http://localhost:8080/natica/search/ | python -m json.tool
+@api_view(['POST'])
+def search(request):
+    """
+    Search Archive, returns FITS metadata (header field/values).
+    """
+    if request.method != 'POST':
+        raise Exception('Only accepts POST http method')
+    if request.content_type != "application/json":
+        raise Exception('Only accepts content_type = application/json')
 
-##############################################################################
+    body = json.loads(request.body.decode('utf-8'))
+    jsearch = body['search']
+    logging.debug('jsearch={}'.format(jsearch))
 
-def submit_fits_file(fits_file_path):       
-    logging.debug('DBG-1: natica.submit_fits_file({})'.format(fits_file_path))
-    import requests
+    #!!! add validation against schema
+
+    avail_fields = set([
+        'search_box_min',
+        'pi',
+        'prop_id',
+        'obs_date',
+        'filename',
+        'original_filename',
+        'telescope_instrument',
+        'release_date',
+        'flag_raw',
+        'image_filter',
+        'exposure_time',
+        'coordinates',
+    ])
+    used_fields = set(jsearch.keys())
+    if not (avail_fields >= used_fields):
+        unavail = used_fields - avail_fields
+        #print('DBG: Extra fields ({}) in search'.format(unavail))
+        raise dex.UnknownSearchField('Extra fields ({}) in search'
+                                     .format(unavail))
+    assert(avail_fields >= used_fields)
+
+    # Construct query (anchored on FitsFile)
+    slop = jsearch.get('search_box_min', .001)
+    q = (sf.coordinates(jsearch.get('coordinates', None), slop)
+         & sf.pi(jsearch.get('pi', None))
+         & sf.propid(jsearch.get('propid', None))
+         & sf.dateobs(jsearch.get('obs_date', None))
+         & sf.archive_filename(jsearch.get('filename', None))
+         & sf.original_filename(jsearch.get('original_filename', None))
+         & sf.telescope_instrument(jsearch.get('telescope_instrument', None))
+         & sf.release_date(jsearch.get('release_date', None))
+         & sf.flag_raw(jsearch.get('flag_raw', None))
+         & sf.image_filter(jsearch.get('image_filter', None))
+         & sf.exposure_time(jsearch.get('exposure_time', None))
+         )
+
+    qs = FitsFile.objects.filter(q)
+    meta = dict(
+        api_version = api_version,
+        timestamp = datetime.datetime.now(),
+        comment = (
+            'WARNING: Has not been tested AT ALL.'
+            ' Much of the search is disabled..'
+        ),
+        query = str(qs.query)
+        #! page_result_count = len(results),
+        #! to_here_count = offset + len(results),
+        #! total_count = total_count,
+    )
+    return JsonResponse(dict(meta=meta, results=list(qs.values())))
+                        
+def submit_fits_file(fits_file_path):
+    """For use in a natica MANAGE command"""
+    #!logging.debug('DBG-1: natica.submit_fits_file({})'.format(fits_file_path))
     f = open(fits_file_path, 'rb')
     urls = 'http://0.0.0.0:8000/natica/ingest/'
-    logging.debug('DBG-2')
     r = requests.post(urls, files= {'file':f})
-    logging.debug('DBG-3')
     print(r.status_code)
     
-ff1 = '/data/tada-test-data/basic/kp109391.fits.fz'
-ff2 = '/data/tada-test-data/drop-test/20160314/kp4m-mosaic3/mos3.75870.fits.fz'
-
-def main():
-    "Parse command line arguments and do the work."
-    print('EXECUTING: %s\n\n' % (' '.join(sys.argv)))
-
-    parser = argparse.ArgumentParser(
-        description='My shiny new python program',
-        epilog='EXAMPLE: %(prog)s a b"'
-        )
-    parser.add_argument('--version', action='version', version='1.0.1')
-    parser.add_argument('infile', # type=argparse.FileType('r'),
-                        help='Input file')
-    #!parser.add_argument('outfile', type=argparse.FileType('w'),
-    #!                    help='Output output')
-
-    parser.add_argument('--loglevel',
-                        help='Kind of diagnostic output',
-                        choices=['CRTICAL', 'ERROR', 'WARNING',
-                                 'INFO', 'DEBUG'],
-                        default='WARNING')
-    args = parser.parse_args()
-    #!args.outfile.close()
-    #!args.outfile = args.outfile.name
-
-    #!print 'My args=',args
-    #!print 'infile=',args.infile
-
-    log_level = getattr(logging, args.loglevel.upper(), None)
-    if not isinstance(log_level, int):
-        parser.error('Invalid log level: %s' % args.loglevel)
-    logging.basicConfig(level=log_level,
-                        format='%(levelname)s %(message)s',
-                        datefmt='%m-%d %H:%M')
-    logging.debug('Debug output is enabled in %s !!!', sys.argv[0])
-
-    submit_fits_file(args.infile)
-if __name__ == '__main__':
-    main()

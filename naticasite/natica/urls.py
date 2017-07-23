@@ -7,5 +7,7 @@ urlpatterns = [
 
     url(r'^$', views.index, name='index'),
     url(r'^ingest/$', views.ingest_fits, name='ingest_fits'),
+    url(r'^search/$', views.search, name='search'),
+
 ]
 
