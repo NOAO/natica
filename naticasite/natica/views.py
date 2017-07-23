@@ -106,7 +106,8 @@ def store_metadata(hdulist, vals):
                          obj = prihdr.get('OBJECT',''),
                          ra = prihdr.get('RA'),
                          dec = prihdr.get('DEC'),
-                         extras = {vals['instrument']: extradict}
+                         #extras = {vals['instrument']: extradict}
+                         extras = extradict
                          )
     primary.save()
 
@@ -132,7 +133,7 @@ def store_metadata(hdulist, vals):
                                  obj = hdu.header.get('OBJECT',''),
                                  ra = hdu.header.get('RA'),
                                  dec = hdu.header.get('DEC'),
-                                 extras = {vals['instrument']: extradict}
+                                 extras = extradict
                                  )
         extension.save()
         
@@ -201,12 +202,13 @@ def search(request):
         'image_filter',
         'exposure_time',
         'coordinates',
+        'extras',
     ])
     used_fields = set(jsearch.keys())
     if not (avail_fields >= used_fields):
         unavail = used_fields - avail_fields
         #print('DBG: Extra fields ({}) in search'.format(unavail))
-        raise dex.UnknownSearchField('Extra fields ({}) in search'
+        raise nex.UnknownSearchField('Extra fields ({}) in search'
                                      .format(unavail))
     assert(avail_fields >= used_fields)
 
@@ -223,8 +225,11 @@ def search(request):
          & sf.flag_raw(jsearch.get('flag_raw', None))
          & sf.image_filter(jsearch.get('image_filter', None))
          & sf.exposure_time(jsearch.get('exposure_time', None))
+         & sf.extras(jsearch.get('extras', None))
          )
 
+    
+    logging.debug('DBG: q={}'.format(str(q)))
     qs = FitsFile.objects.filter(q)
     meta = dict(
         api_version = api_version,
@@ -238,6 +243,7 @@ def search(request):
         #! to_here_count = offset + len(results),
         #! total_count = total_count,
     )
+    logging.debug('DBG: query={}'.format(qs.query))
     return JsonResponse(dict(meta=meta, results=list(qs.values())))
                         
 def submit_fits_file(fits_file_path):

@@ -12,9 +12,10 @@ def coordinates(val, slop):
         )
 
 def pi(val):
-    return Q() # !!! DISABLED
+    #return Q() # !!! DISABLED
     if val == None: return Q()
-    return Q(pi=val)
+    #return Q(pi=val)
+    return Q(primaryhdu__extras__PROPOSER=val)
 
 def propid(val):
     return Q() # !!! DISABLED
@@ -84,3 +85,6 @@ def exposure_time(val):
     else:
         return Q(exposure=val)
     
+def extras(val):
+    if val == None: return Q()
+    return Q(**val) 
