@@ -137,7 +137,7 @@ def store_metadata(hdulist, vals):
                                  )
         extension.save()
         
-def handle_uploaded_file(f):
+def handle_uploaded_file(f, md5sum):
     import astropy.io.fits as pyfits
     tgtfile = '/data/upload/foo.fits' #!!!
     with open(tgtfile, 'wb+') as destination:
@@ -156,7 +156,7 @@ def handle_uploaded_file(f):
             destination.write(chunk)
         valdict.update(dict(src_fname = f.name,
                             arch_fname = tgtfile,
-                            md5sum = md5(tgtfile),
+                            md5sum = md5sum,
                             size = f.size))
         try: 
             store_metadata(hdulist,valdict)
@@ -166,11 +166,11 @@ def handle_uploaded_file(f):
 #@csrf_exempt
 @api_view(['POST'])
 def ingest_fits(request):
-    logging.debug('DBG-1: natica.ingest_fits({})'.format(request))
     if request.method == 'POST':
-        logging.debug('DBG-1')
-        handle_uploaded_file(request.FILES['file'])
-    return JsonResponse(dict(result='file uploaded'))
+        logging.debug('DBG-1 ingest_fits.request.data={}'.format(request.data))
+        handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
+    #return JsonResponse(dict(result='file uploaded: '))
+    return JsonResponse(dict(result='file uploaded: {}'.format(request.FILES['file'].name)))
 
 # curl -H "Content-Type: application/json" -X POST -d @request-search-1.json http://localhost:8080/natica/search/ | python -m json.tool
 @api_view(['POST'])
@@ -251,6 +251,8 @@ def submit_fits_file(fits_file_path):
     #!logging.debug('DBG-1: natica.submit_fits_file({})'.format(fits_file_path))
     f = open(fits_file_path, 'rb')
     urls = 'http://0.0.0.0:8000/natica/ingest/'
-    r = requests.post(urls, files= {'file':f})
-    print(r.status_code)
+    r = requests.post(urls,
+                      data=dict(md5sum=md5(fits_file_path)),
+                      files={'file':f})
+    print('{}: {}'.format(r.status_code,r.json()))
     
