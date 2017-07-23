@@ -6,7 +6,9 @@ import hashlib
 import json
 import requests
 import datetime
+import pytz
 
+import dateutil.parser
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from rest_framework.decorators import api_view, renderer_classes
@@ -102,7 +104,7 @@ def store_metadata(hdulist, vals):
                          naxis=prihdr['NAXIS'],
                          instrument = vals['instrument'],
                          telescope = vals['telescope'],
-                         date_obs = vals['dateobs'],
+                         date_obs  = pytz.utc.localize(dateutil.parser.parse(vals['dateobs'])),
                          obj = prihdr.get('OBJECT',''),
                          ra = prihdr.get('RA'),
                          dec = prihdr.get('DEC'),
@@ -129,7 +131,7 @@ def store_metadata(hdulist, vals):
                                  naxis=hdu.header['NAXIS'],
                                  pcount=hdu.header['PCOUNT'],
                                  gcount=hdu.header['GCOUNT'],
-                                 date_obs  = hdu.header['DATE-OBS'],
+                                 date_obs  = pytz.utc.localize(dateutil.parser.parse(hdu.header['DATE-OBS'])),
                                  obj = hdu.header.get('OBJECT',''),
                                  ra = hdu.header.get('RA'),
                                  dec = hdu.header.get('DEC'),
@@ -161,15 +163,19 @@ def handle_uploaded_file(f, md5sum):
         try: 
             store_metadata(hdulist,valdict)
         except Exception as err:
+            logging.error('handle_uploaded_file.store_metadata:{}'.format(err))
             raise nex.CannotStoreInDB(err)
             
 #@csrf_exempt
 @api_view(['POST'])
-def ingest_fits(request):
+def ingest(request):
     if request.method == 'POST':
         logging.debug('DBG-1 ingest_fits.request.data={}'.format(request.data))
-        handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
-    #return JsonResponse(dict(result='file uploaded: '))
+        try:
+            handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
+        except Exception as err:
+            logging.error('ingest:{}'.format(err))
+            raise nex.CannotIngest(err)
     return JsonResponse(dict(result='file uploaded: {}'.format(request.FILES['file'].name)))
 
 # curl -H "Content-Type: application/json" -X POST -d @request-search-1.json http://localhost:8080/natica/search/ | python -m json.tool
@@ -254,5 +260,5 @@ def submit_fits_file(fits_file_path):
     r = requests.post(urls,
                       data=dict(md5sum=md5(fits_file_path)),
                       files={'file':f})
-    print('{}: {}'.format(r.status_code,r.json()))
+    logging.debug('submit_fits_file: {}, {}'.format(r.status_code,r.json()))
     

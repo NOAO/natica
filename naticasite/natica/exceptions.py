@@ -13,10 +13,8 @@ class BaseNaticaException(Exception):
 class InvalidUsage(BaseNaticaException):
     status_code = 400
 
-
 class UnknownSearchField(BaseNaticaException):
     status_code = 400
-    
 
 class BadTIFormat(BaseNaticaException):
     status_code = 400    
@@ -35,4 +33,7 @@ class CannotProcessContentType(BaseNaticaException):
     
     
 class CannotStoreInDB(BaseNaticaException):
+    status_code = 400
+
+class CannotIngest(BaseNaticaException):
     status_code = 400

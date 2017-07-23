@@ -28,10 +28,10 @@ class Command(BaseCommand):
             try:
                 submit_fits_file(fits)
             except Exception as err:
-                error = True
-                badfits.add(fits)
                 self.stdout.write(self.style.ERROR(
                     'Failed ingest of "{}"; {}'.format(fits, err)))
+                error = True
+                badfits.add(fits)
                 #raise CommandError('Failed ingest of "{}"'.format(fits))
                 continue
             goodfits.add(fits)
