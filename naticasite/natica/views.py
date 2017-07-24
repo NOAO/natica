@@ -16,6 +16,7 @@ from rest_framework.decorators import api_view, renderer_classes
 from django.utils import timezone
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.core.management.base import CommandError
 
 from .models import FitsFile, PrimaryHDU, ExtensionHDU
 from . import exceptions as nex
@@ -160,22 +161,25 @@ def handle_uploaded_file(f, md5sum):
                             arch_fname = tgtfile,
                             md5sum = md5sum,
                             size = f.size))
-        try: 
-            store_metadata(hdulist,valdict)
-        except Exception as err:
-            logging.error('handle_uploaded_file.store_metadata:{}'.format(err))
-            raise nex.CannotStoreInDB(err)
-            
+        #!try: 
+        #!    store_metadata(hdulist,valdict)
+        #!except Exception as err:
+        #!    logging.error('handle_uploaded_file.store_metadata:{}'.format(err))
+        #!    raise nex.CannotStoreInDB(err)
+        store_metadata(hdulist,valdict)
+    
 #@csrf_exempt
 @api_view(['POST'])
 def ingest(request):
     if request.method == 'POST':
         logging.debug('DBG-1 ingest_fits.request.data={}'.format(request.data))
-        try:
-            handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
-        except Exception as err:
-            logging.error('ingest:{}'.format(err))
-            raise nex.CannotIngest(err)
+        #!try:
+        #!    handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
+        #!except Exception as err:
+        #!    logging.error('views.ingest():{}'.format(err))
+        #!    raise nex.CannotIngest(err)
+        handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
+
     return JsonResponse(dict(result='file uploaded: {}'.format(request.FILES['file'].name)))
 
 # curl -H "Content-Type: application/json" -X POST -d @request-search-1.json http://localhost:8080/natica/search/ | python -m json.tool
@@ -261,4 +265,7 @@ def submit_fits_file(fits_file_path):
                       data=dict(md5sum=md5(fits_file_path)),
                       files={'file':f})
     logging.debug('submit_fits_file: {}, {}'.format(r.status_code,r.json()))
+    if r.status_code != 200:
+        raise CommandError(r.text)
+    return False
     
