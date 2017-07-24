@@ -239,7 +239,7 @@ def search(request):
     meta.update(
         api_version = api_version,
         timestamp = datetime.datetime.now(),
-        comment = 'WARNING: Has not been tested AT ALL.',
+        comment = 'WARNING: Disabled searches: PI, EXPOSURE_TIME ',
         query = str(qs.query),
         page_result_count = len(results),
         to_here_count = offset + len(results),
