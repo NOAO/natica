@@ -48,37 +48,47 @@ def validate_header(hdulist):
 
     INSTRUME and TELESCOP must exist in at least one HDU and have the
     same value in all of them.
-
     """
-    #! Insure TELESCOP and INSTRUME have known values
+    #!!! Insure TELESCOP and INSTRUME have known values (enum)
 
     def hvalues(k):
         return set([hdu.header.get(k, None) for hdu in hdulist]) - {None}
 
-    hdrkeys = set()
-    for hdu in hdulist:
-        hdrkeys.update(hdu.header.keys())
-    #assert 'INSTRUME' in hdulist[0].header.keys()
-    assert 'INSTRUME' in hdrkeys
-    assert 'TELESCOP' in hdrkeys
-    instrume_vals = hvalues('INSTRUME')
-    telescop_vals = hvalues('TELESCOP')
-    dateobs_vals = hvalues('DATE-OBS') #!!!
-    object_vals = hvalues('OBJECT')
-    assert 1 == len(instrume_vals)
-    assert 1 == len(telescop_vals)
-    assert 0 < len(object_vals)
-    logging.debug('DBG: instrume_vals={}'.format(instrume_vals))
-    logging.debug('DBG: telescop_vals={}'.format(telescop_vals))
-    return(dict(instrument=instrume_vals.pop(),
-                telescope=telescop_vals.pop(),
-                dateobs=dateobs_vals.pop(),
-                ))
+    def just_one(k):
+        vals = hvalues(k)
+        if 0 == len(vals):
+            raise nex.MissingFieldError('Missing FITS field {}'.format(k))
+        if 1 < len(vals):
+            raise nex.ConflictingValuesError(
+                'Conflicting FITS field values for {}'.format(k))
+        return vals.pop()
+
+    def at_least_one(k):
+        vals = hvalues(k)
+        if 0 == len(vals):
+            raise nex.MissingFieldError('Missing FITS field {}'.format(k))
+        return vals.pop()
+
+    instrument = just_one('INSTRUME')
+    telescope = just_one('TELESCOP')
+    dateobs = at_least_one('DATE-OBS') #!!!
+    object = at_least_one('OBJECT') 
+    return(dict(instrument=instrument,
+                telescope=telescope,
+                dateobs=dateobs,
+                object=object,
+    ))
     
     
 #src_fname, arch_fname, md5sum, size,  
 def store_metadata(hdulist, vals):
     """Store ALL of the FITS header values into DB."""
+    def localize(hdr, k):
+        if k in hdr:
+            return pytz.utc.localize(dateutil.parser.parse(hdr.get(k)))
+        else:
+            return None
+
     logging.debug('DBG-vals={}'.format(vals))
     prihdr = hdulist[0].header
 
@@ -105,7 +115,7 @@ def store_metadata(hdulist, vals):
                          naxis=prihdr['NAXIS'],
                          instrument = vals['instrument'],
                          telescope = vals['telescope'],
-                         date_obs  = pytz.utc.localize(dateutil.parser.parse(vals['dateobs'])),
+                         date_obs  = localize(prihdr, 'DATE-OBS'),
                          obj = prihdr.get('OBJECT',''),
                          ra = prihdr.get('RA'),
                          dec = prihdr.get('DEC'),
@@ -132,7 +142,7 @@ def store_metadata(hdulist, vals):
                                  naxis=hdu.header['NAXIS'],
                                  pcount=hdu.header['PCOUNT'],
                                  gcount=hdu.header['GCOUNT'],
-                                 date_obs  = pytz.utc.localize(dateutil.parser.parse(hdu.header['DATE-OBS'])),
+                                 date_obs  = localize(hdu.header, 'DATE-OBS'),
                                  obj = hdu.header.get('OBJECT',''),
                                  ra = hdu.header.get('RA'),
                                  dec = hdu.header.get('DEC'),
@@ -145,7 +155,7 @@ def handle_uploaded_file(f, md5sum):
     tgtfile = '/data/upload/foo.fits' #!!!
     with open(tgtfile, 'wb+') as destination:
         hdulist = pyfits.open(f)
-        #!!! Validate headers, abort with approriate error if bad for Archive
+        # Validate headers, abort with approriate error if bad for Archive
         valdict = validate_header(hdulist)
             
         logging.debug('DBG-PrimaryHDU keys:{}'
@@ -161,11 +171,6 @@ def handle_uploaded_file(f, md5sum):
                             arch_fname = tgtfile,
                             md5sum = md5sum,
                             size = f.size))
-        #!try: 
-        #!    store_metadata(hdulist,valdict)
-        #!except Exception as err:
-        #!    logging.error('handle_uploaded_file.store_metadata:{}'.format(err))
-        #!    raise nex.CannotStoreInDB(err)
         store_metadata(hdulist,valdict)
     
 #@csrf_exempt
@@ -173,11 +178,6 @@ def handle_uploaded_file(f, md5sum):
 def ingest(request):
     if request.method == 'POST':
         logging.debug('DBG-1 ingest_fits.request.data={}'.format(request.data))
-        #!try:
-        #!    handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
-        #!except Exception as err:
-        #!    logging.error('views.ingest():{}'.format(err))
-        #!    raise nex.CannotIngest(err)
         handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
 
     return JsonResponse(dict(result='file uploaded: {}'.format(request.FILES['file'].name)))
@@ -218,7 +218,7 @@ def search(request):
     if not (avail_fields >= used_fields):
         unavail = used_fields - avail_fields
         #print('DBG: Extra fields ({}) in search'.format(unavail))
-        raise nex.UnknownSearchField('Extra fields ({}) in search'
+        raise nex.ExtraSearchFieldError('Extra fields ({}) in search'
                                      .format(unavail))
     assert(avail_fields >= used_fields)
 
@@ -266,6 +266,6 @@ def submit_fits_file(fits_file_path):
                       files={'file':f})
     logging.debug('submit_fits_file: {}, {}'.format(r.status_code,r.json()))
     if r.status_code != 200:
-        raise CommandError(r.text)
+        raise CommandError(r.json()['errorMessage'])
     return False
     

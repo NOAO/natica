@@ -10,30 +10,37 @@ class BaseNaticaException(Exception):
     def to_dict(self):
         return {'errorMessage': self.error_message}
 
-class InvalidUsage(BaseNaticaException):
+class UsageError(BaseNaticaException):
     status_code = 400
 
-class UnknownSearchField(BaseNaticaException):
+class ExtraSearchFieldError(BaseNaticaException):
     status_code = 400
 
-class BadTIFormat(BaseNaticaException):
+class TIFormatError(BaseNaticaException):
     status_code = 400    
 
-class BadNumeric(BaseNaticaException):
+class NumericError(BaseNaticaException):
     status_code = 400    
 
-class BadSearchSyntax(BaseNaticaException):
+class SearchSyntaxEerror(BaseNaticaException):
     status_code = 400    
 
 class BadFakeError(BaseNaticaException):
     status_code = 400    
 
-class CannotProcessContentType(BaseNaticaException):
+class ContentTypeErrpr(BaseNaticaException):
     status_code = 400
     
     
-class CannotStoreInDB(BaseNaticaException):
+class DBStoreError(BaseNaticaException):
     status_code = 400
 
-class CannotIngest(BaseNaticaException):
+class IngestError(BaseNaticaException):
     status_code = 400
+
+class MissingFieldError(BaseNaticaException):
+    status_code = 400
+
+class ConflictingValuesError(BaseNaticaException):
+    status_code = 400
+

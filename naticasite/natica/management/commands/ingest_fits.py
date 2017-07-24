@@ -5,7 +5,7 @@ from natica.views import submit_fits_file
 # EXAMPLES:
 #   python3 manage.py ingest_fits /data/tada-test-data/basic/kp109391.fits.fz /data/tada-test-data/drop-test/20160314/kp4m-mosaic3/mos3.75870.fits.fz
 #
-# 53 files
+# pass 37/53 files:
 #   find /data/tada-test-data \( -name "*.fits" -o -name "*.fits.fz" \) -print0 | xargs -0 python3 manage.py ingest_fits
 #
 # Failed files (17):
@@ -24,27 +24,26 @@ class Command(BaseCommand):
         badfits = set()
         goodfits = set()
         for fits in options['fits']:
-            #!self.stdout.write('Submit: {}'.format(fits))
+            self.stdout.write('Ingest {}: '.format(fits), ending='')
             try:
                 submit_fits_file(fits)
             except Exception as err:
-                self.stdout.write(self.style.ERROR(
-                    'Failed ingest of "{}"; {}'.format(fits, err)))
+                self.stdout.write(self.style.ERROR(err))
                 error = True
                 badfits.add(fits)
                 #raise CommandError('Failed ingest of "{}"'.format(fits))
                 continue
             goodfits.add(fits)
-            #!self.stdout.write(self.style.SUCCESS(
-            #!    'Successfully ingested file "%s"' % fits))
+            self.stdout.write(self.style.SUCCESS('OK'))
 
+        total = len(options['fits'])
         if len(goodfits) > 0:
             self.stdout.write(self.style.SUCCESS(
-                'Successfully ingested files: {}'
-                .format(' '.join(goodfits))))
+                'Successfully ingested {}/{} files: {}'
+                .format(len(goodfits), total, ' '.join(goodfits))))
         if error:
-            raise CommandError('Failed ingest of: "{}"'
-                               .format(' '.join(badfits)))
+            raise CommandError('Failed ingest of {}/{} files: "{}"'
+                               .format(len(badfits),total, ' '.join(badfits)))
 
 
 
