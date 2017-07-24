@@ -1,21 +1,28 @@
 from django.db.models import Q
 
+proc_LUT = dict(raw = 'raw',
+                calibrated = 'InstCal',
+                reprojected = 'projected',
+                stacked = 'stacked',
+                master_calibration = 'mastercal',
+                image_tiles = 'tiled',
+                sky_subtracted = 'skysub')
+
 def coordinates(val, slop):
     if val == None: return Q()
     ra = val['ra']
     dec = val['dec']
     return (
-        Q(primaryhdu__dec__lte=(dec + slop))
-        & Q(primaryhdu__dec__gte=(dec - slop))
-        & Q(primaryhdu__ra__lte=(ra + slop))
-        & Q(primaryhdu__ra__gte=(ra - slop))
+        Q(dec__lte=(dec + slop))
+        & Q(dec__gte=(dec - slop))
+        & Q(ra__lte=(ra + slop))
+        & Q(ra__gte=(ra - slop))
         )
 
 def pi(val):
-    #return Q() # !!! DISABLED
     if val == None: return Q()
     #return Q(pi=val)
-    return Q(primaryhdu__extras__PROPOSER=val)
+    return Q(hdu__extras__PROPOSER=val)
 
 def propid(val):
     return Q() # !!! DISABLED
@@ -28,9 +35,9 @@ def dateobs(val):
     if isinstance(val, list):
         mindate,maxdate,*xtra = val
         # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
-        return Q(primaryhdu__date_obs__range=(mindate, maxdate))
+        return Q(date_obs__range=(mindate, maxdate))
     else:
-        return Q(primaryhdu__date_obs=val)
+        return Q(date_obs=val)
 
 def archive_filename(val):
     if val == None: return Q()
@@ -43,12 +50,11 @@ def original_filename(val):
 def telescope_instrument(val):
     if val == None: return Q()
     tele_list,inst_list = zip(*val)
-    return (Q(primaryhdu__telescope__in=tele_list)
-            & Q(primaryhdu__instrument__in=inst_list) )
+    return (Q(telescope__in=tele_list)
+            & Q(instrument__in=inst_list) )
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def release_date(val):
-    return Q() # !!! DISABLED
     if val == None: return Q()
     if isinstance(val, list):
         mindate,maxdate,*xtra = val
@@ -58,21 +64,13 @@ def release_date(val):
         return Q(release_date=val)
     
 def flag_raw(val):
-    return Q() # !!! DISABLED
     if val == None: return Q()
-    return Q(rawfile=val)
+    return Q(hdu__extras__PROCTYPE='raw')
 
 def image_filter(val):
-    return Q() # !!! DISABLED
     if val == None: return Q()
-    proc_LUT = dict(raw = 'raw',
-                    calibrated = 'InstCal',
-                    reprojected = 'projected',
-                    stacked = 'stacked',
-                    master_calibration = 'mastercal',
-                    image_tiles = 'tiled',
-                    sky_subtracted = 'skysub')
-    return Q(proctype__in=[proc_LUT[p] for p in val])
+    # Case insensitive match against extras['PRODTYPE'] (json field)
+    return Q(hdu__extras__PRODTYPE__iexact='image')
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def exposure_time(val):
@@ -88,3 +86,6 @@ def exposure_time(val):
 def extras(val):
     if val == None: return Q()
     return Q(**val) 
+
+# All PROCTYPE values
+# [e['extras']['PROCTYPE'] for e in Hdu.objects.filter(extras__has_key='PROCTYPE').values('extras')]

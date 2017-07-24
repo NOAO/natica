@@ -10,51 +10,42 @@ class FitsFile(models.Model):
     filesize         = models.BigIntegerField()
     release_date     = models.DateTimeField()
 
-class PrimaryHDU(models.Model):
-    fitsfile = models.OneToOneField(FitsFile, on_delete=models.CASCADE)
+    # (Possibly aggregated) from HDU(s)
+    instrument = models.CharField(max_length=80, help_text = "INSTRUME")
+    telescope  = models.CharField(max_length=80, help_text = "TELESCOP")
+    date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
+    ra = models.CharField(null=True, max_length=20)
+    dec = models.CharField(null=True, max_length=20)
 
-    ## Required For Primary per FITS Std 3.0
-    # assert(SIMPLE = T)
+class Hdu(models.Model):
+    """Required header fields per FITS Std 3.0"""
+    fitsfile = models.ForeignKey(FitsFile, on_delete=models.CASCADE)
+    hdu_idx  = models.PositiveSmallIntegerField() # hdu_idx[0] :: Primary HDU
+    # (SIMPLE = T) Required For Primary HDU
+    # name of ext type; Required For Conformant Extensions HUD
+    xtension = models.CharField(max_length=40, blank=True)
+
+    # Required For Primary, Extension HDU
     bitpix = models.IntegerField()
     naxis = models.PositiveSmallIntegerField()
     naxisN = ArrayField(models.PositiveSmallIntegerField(), default=list)
+    
+    # Required For Conformant Extensions HDU (not Primary)
+    pcount = models.PositiveIntegerField(null=True)
+    gcount = models.PositiveIntegerField(null=True)
 
-    # Others. 
-    instrument = models.CharField(max_length=80, help_text = "INSTRUME")
-    telescope  = models.CharField(max_length=80, help_text = "TELESCOP")
-    # Following can be in Primary or Extension or Both
+    # Others (not required by STD, but we need them in at least one HDU)
+    instrument = models.CharField(max_length=80,blank=True,help_text="INSTRUME")
+    telescope  = models.CharField(max_length=80,blank=True,help_text="TELESCOP")
     date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
     obj  = models.CharField(max_length=80, blank=True, help_text = 'OBJECT')
-    #!ra = models.FloatField(null=True)
-    #!dec = models.FloatField(null=True)
     ra = models.CharField(null=True, max_length=20)
     dec = models.CharField(null=True, max_length=20)
 
     # Other FITS field content not stored above
     extras = JSONField()  # top level key on json dict  corresponds to instrument
+
     
-class ExtensionHDU(models.Model):
-    fitsfile = models.ForeignKey(FitsFile, on_delete=models.CASCADE)
-    extension_idx  = models.PositiveSmallIntegerField()
-    ## Required For Conformant Extensions per FITS Std 3.0
-    # Exentsion names registered at: https://fits.gsfc.nasa.gov/xtension.html
-    xtension = models.CharField(max_length=40)
-    naxis = models.PositiveSmallIntegerField()
-    naxisN = ArrayField(models.PositiveSmallIntegerField(), default=list)
-    pcount = models.PositiveIntegerField()
-    gcount = models.PositiveIntegerField()    
-
-    # Others.
-    # Following can be in Primary or Extension or Both
-    date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
-    obj  = models.CharField(max_length=80, blank=True, help_text='OBJECT')
-    #!ra = models.FloatField(null=True)
-    #!dec = models.FloatField(null=True)
-    ra = models.CharField(null=True, max_length=20)
-    dec = models.CharField(null=True, max_length=20)
-
-    # Other FITS field content not stored above
-    extras = JSONField()  # top level key on json dict  corresponds to instrument (in primary)
 
 ##############################################################################
 ### New schema (PROPOSED) to replace Legacy Science Archive 

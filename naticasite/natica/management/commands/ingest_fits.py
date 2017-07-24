@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand, CommandError
-from natica.models import FitsFile, PrimaryHDU, ExtensionHDU
 from natica.views import submit_fits_file
 
 # EXAMPLES:
