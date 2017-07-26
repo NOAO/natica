@@ -18,6 +18,8 @@ class FitsFile(models.Model):
     ra = models.CharField(null=True, max_length=20)
     dec = models.CharField(null=True, max_length=20)
 
+    extras = JSONField(default={})  
+
 class Hdu(models.Model):
     """Required header fields per FITS Std 3.0"""
     fitsfile = models.ForeignKey(FitsFile, on_delete=models.CASCADE)
@@ -44,7 +46,7 @@ class Hdu(models.Model):
     dec = models.CharField(null=True, max_length=20)
 
     # Other FITS field content not stored above
-    extras = JSONField()  # top level key on json dict  corresponds to instrument
+    extras = JSONField() 
 
     
 
