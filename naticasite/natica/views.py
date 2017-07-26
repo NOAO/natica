@@ -43,7 +43,7 @@ def md5(fname):
     return hash_md5.hexdigest()
 
 
-def validate_header(hdulist):
+def validate_header(hdudictlist):
     """Raise exception if FITS header is not good enuf for Archive.
 
     INSTRUME and TELESCOP must exist in at least one HDU and have the
@@ -52,7 +52,7 @@ def validate_header(hdulist):
     #!!! Insure TELESCOP and INSTRUME have known values (enum)
 
     def hvalues(k):
-        return set([hdu.header.get(k, None) for hdu in hdulist]) - {None}
+        return set([hd.get(k, None) for hd in hdudictlist]) - {None}
 
     def just_one(k):
         vals = hvalues(k)
@@ -86,7 +86,7 @@ def validate_header(hdulist):
     
     
 #src_fname, arch_fname, md5sum, size,  
-def store_metadata(hdulist, vals):
+def store_metadata(hdudict_list, vals):
     """Store ALL of the FITS header values into DB."""
     def localize(dateval):
         if dateval == None:
@@ -111,39 +111,41 @@ def store_metadata(hdulist, vals):
 
     notstored = {'SIMPLE', 'COMMENT', 'HISTORY', 'EXTEND', ''} #!
     core = set([ f.name.upper() for f in Hdu._meta.get_fields()])
-    for idx,hdu in enumerate(hdulist):
-        extras = set(hdu.header.keys()) - core - notstored
-        logging.debug('DBG-extras={}'.format(extras))
+    for idx,hdudict in enumerate(hdudict_list):
+        extras = set(hdudict.keys()) - core - notstored
+        #logging.debug('DBG-extras={}'.format(extras))
         extradict = {}
         for k in extras:
-            extradict[k] = hdu.header[k]
+            extradict[k] = hdudict[k]
             hduobj = Hdu(fitsfile=fits,
                          hdu_idx=idx,
-                         xtension=hdu.header.get('XTENSION',''),
-                         bitpix=hdu.header['BITPIX'],
-                         naxis=hdu.header['NAXIS'],
-                         pcount=hdu.header.get('PCOUNT',None),
-                         gcount=hdu.header.get('GCOUNT',None),
-                         
-                         instrument=hdu.header.get('INSTRUME',''),
-                         telescope=hdu.header.get('TELESCOP',''),
-                         date_obs  = localize(hdu.header.get('DATE-OBS',None)),
-                         obj = hdu.header.get('OBJECT',''),
-                         ra = hdu.header.get('RA'),
-                         dec = hdu.header.get('DEC'),
+                         xtension=hdudict.get('XTENSION',''),
+                         bitpix=hdudict['BITPIX'],
+                         naxis=hdudict['NAXIS'],
+                         pcount=hdudict.get('PCOUNT',None),
+                         gcount=hdudict.get('GCOUNT',None),
+                         instrument=hdudict.get('INSTRUME',''),
+                         telescope=hdudict.get('TELESCOP',''),
+                         date_obs  = localize(hdudict.get('DATE-OBS',None)),
+                         obj = hdudict.get('OBJECT',''),
+                         ra = hdudict.get('RA'),
+                         dec = hdudict.get('DEC'),
                          
                          extras = extradict
             )
             #!!! Add to naxisN array if appropriate
         hduobj.save()
-        
+
+def hdudictlist(hdulist):
+    return [dict(hdu.header.items()) for hdu in hdulist]
+                
 def handle_uploaded_file(f, md5sum):
     import astropy.io.fits as pyfits
     tgtfile = '/data/upload/foo.fits' #!!!
     with open(tgtfile, 'wb+') as destination:
         hdulist = pyfits.open(f)
         # Validate headers, abort with approriate error if bad for Archive
-        valdict = validate_header(hdulist)
+        valdict = validate_header(hdudictlist(hdulist))
 
         for chunk in f.chunks():
             destination.write(chunk)
@@ -151,7 +153,7 @@ def handle_uploaded_file(f, md5sum):
                             arch_fname = tgtfile,
                             md5sum = md5sum,
                             size = f.size))
-        store_metadata(hdulist,valdict)
+        store_metadata(hdudictlist(hdulist),valdict)
     
 #@csrf_exempt
 @api_view(['POST'])
@@ -223,7 +225,7 @@ def search(request):
          & sf.exposure_time(jsearch.get('exposure_time', None))
          & sf.extras(jsearch.get('extras', None))
          )
-    logging.debug('DBG: q={}'.format(str(q)))
+    #logging.debug('DBG: q={}'.format(str(q)))
     total_count = FitsFile.objects.count()
     qs = FitsFile.objects.filter(q).distinct()\
                                    .order_by(order_fields)[offset:page_limit]
@@ -245,7 +247,7 @@ def search(request):
         to_here_count = offset + len(results),
         total_count = total_count,
     )
-    logging.debug('DBG: query={}'.format(qs.query))
+    #logging.debug('DBG: query={}'.format(qs.query))
     return JsonResponse(dict(meta=meta, results=list(qs.values())))
                         
 def submit_fits_file(fits_file_path):

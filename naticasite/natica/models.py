@@ -4,7 +4,8 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 
 class FitsFile(models.Model):
     # md5sum of file as stored in MSS
-    id = models.CharField(max_length=32, primary_key=True)
+    md5sum = models.CharField(max_length=32, unique=True)
+    #id = models.CharField(max_length=32, primary_key=True)
     original_filename = models.CharField(max_length=256)
     archive_filename = models.CharField(max_length=256)
     filesize         = models.BigIntegerField()

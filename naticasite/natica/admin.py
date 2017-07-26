@@ -6,11 +6,11 @@ from .models import FitsFile, Hdu
 class FitsFileAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'instrument', 'telescope', 'date_obs',
+        'release_date',
         'original_filename',
         'archive_filename',
-        'release_date',
-        'instrument', 'telescope', 'date_obs',
-        'ra', 'dec',
+        #'ra', 'dec',
     )
 
 @admin.register(Hdu)
