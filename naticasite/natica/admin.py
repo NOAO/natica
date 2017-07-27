@@ -43,7 +43,7 @@ class FitsFileAdmin(admin.ModelAdmin):
         'release_date',
         'original_filename',
         'archive_filename',
-        'extras',
+        #'extras',
         #'ra', 'dec',
     )
 

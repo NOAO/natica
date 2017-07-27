@@ -26,16 +26,31 @@ from . import search_filters as sf
 
 api_version = '0.0.1' # prototype only
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 @api_view(['GET'])
 def index(request):
     """
     Return the number of reach kind of records.
     """
+    ip = get_client_ip(request)
     counts = dict(FitsFile=FitsFile.objects.count(),
                   PrimaryHDU=Hdu.objects.filter(hdu_idx=0).count(),
                   ExtensionHDU=Hdu.objects.exclude(hdu_idx=0).count(),
+                  ip=ip,
                   )
-    return JsonResponse(counts)
+    #return JsonResponse(counts)
+    return HttpResponse('''<table>
+    <tr> <th>FitsFile</th> <td>{FitsFile}</td> </tr>
+    <tr> <th>PrimaryHDU</th> <td>{PrimaryHDU}</td> </tr>
+    <tr> <th>ip</th> <td>{ip}</td> </tr>
+    </table>'''.format(**counts))
 
 def md5(fname):
     hash_md5 = hashlib.md5()
@@ -89,13 +104,14 @@ def validate_header(hdudictlist):
 
 api_extras = [
     'DTPROPID',
-    'PROPOSER',
-    'FILTER',
     'EXPTIME',
-    'OBSTYPE',
+    'FILTER',
+    'IMAGETYP',
     'OBSMODE',
-    'PRODTYPE',
+    'OBSTYPE',
     'PROCTYPE',
+    'PRODTYPE',
+    'PROPOSER',
     'SEEING',
     ]
 def aggregate_extras(hdudict_list):
@@ -276,33 +292,48 @@ def search(request):
     # Construct query (anchored on FitsFile)
     slop = jsearch.get('search_box_min', .001)
     q = (sf.coordinates(jsearch.get('coordinates', None), slop)
-         & sf.pi(jsearch.get('pi', None))
-         & sf.propid(jsearch.get('propid', None))
-         & sf.dateobs(jsearch.get('obs_date', None))
-         & sf.archive_filename(jsearch.get('filename', None))
-         & sf.original_filename(jsearch.get('original_filename', None))
-         & sf.telescope_instrument(jsearch.get('telescope_instrument', None))
-         & sf.release_date(jsearch.get('release_date', None))
+         & sf.exposure_time(jsearch.get('exposure_time', None))
+         & sf.filename(jsearch.get('filename', None))
          & sf.flag_raw(jsearch.get('flag_raw', None))
          & sf.image_filter(jsearch.get('image_filter', None))
-         & sf.exposure_time(jsearch.get('exposure_time', None))
+         & sf.obs_date(jsearch.get('obs_date', None))
+         & sf.original_filename(jsearch.get('original_filename', None))
+         & sf.pi(jsearch.get('pi', None))
+         & sf.prop_id(jsearch.get('propid', None))
+         & sf.release_date(jsearch.get('release_date', None))
+         & sf.telescope_instrument(jsearch.get('telescope_instrument', None))
+
          & sf.extras(jsearch.get('extras', None))
          )
     #logging.debug('DBG: q={}'.format(str(q)))
     total_count = FitsFile.objects.count()
     qs = FitsFile.objects.filter(q).distinct()\
                                    .order_by(order_fields)[offset:page_limit]
-    results=list(qs.values())
-    #native_results=list(qs.values(*response_fields.keys()))
-    #results = [response_fields[v] for v in native_results
-    
-    for  fobj in qs:
-        fobj.extras = dict()
-        for hobj in f.hdu_set.filter(extras__has_any_keys=results_extras):
-            fobj.extras.update({k:hobj.extras.get(k) for k in result_extras})
-
-            
-
+    results = [dict(
+    ra=fobj.ra,
+        dec=fobj.dec,
+        #depth,
+        exposure=fobj.extras.get('EXPTIME'),
+        filename=fobj.archive_filename,
+        filesize=fobj.filesize,
+        filter=fobj.extras.get('FILTER'), # FILTER, FILTERS, FILTER1, FILTER2
+        image_type=fobj.extras.get('IMAGETYP'), 
+        instrument=fobj.instrument,
+        md5sum=fobj.md5sum,
+        obs_date=fobj.date_obs,
+        observation_mode=fobj.extras.get('OBSMODE'),
+        observation_type=fobj.extras.get('OBSTYPE'), 
+        original_filename=fobj.original_filename,
+        pi=fobj.extras.get('PROPOSER'),
+        product=fobj.extras.get('PRODTYPE'),
+        prop_id=fobj.extras.get('DTPROPID'),
+        release_date=fobj.release_date,
+        seeing=fobj.extras.get('SEEING'),
+        #survey_id
+        telescope=fobj.telescope,
+    ) for fobj in qs]
+        
+  
     meta = OrderedDict.fromkeys(['api_version',
                                  'timestamp',
                                  'comment',
@@ -320,7 +351,7 @@ def search(request):
         total_count = total_count,
     )
     #logging.debug('DBG: query={}'.format(qs.query))
-    return JsonResponse(dict(meta=meta, results=list(qs.values())))
+    return JsonResponse(dict(meta=meta, results=results))
                         
 def submit_fits_file(fits_file_path):
     """For use in a natica MANAGE command"""

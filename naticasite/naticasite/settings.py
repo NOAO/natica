@@ -56,17 +56,17 @@ INSTALLED_APPS = (
     'django.contrib.postgres',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    #'debug_toolbar',
     'natica', # replace LSA
     'rest_framework',
     'rest_framework_swagger',
+    'debug_toolbar',
 )
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -106,7 +106,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-INTERNAL_IPS = ['127.0.0.1', '0.0.0.0']
+INTERNAL_IPS = ['127.0.0.1',  '10.0.2.2'] # '0.0.0.0', '192.168.1.45',
 
 SWAGGER_SETTINGS = {
     'enabled_methods': [

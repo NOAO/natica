@@ -24,7 +24,7 @@ def pi(val):
     #return Q(pi=val)
     return Q(hdu__extras__PROPOSER=val)
 
-def propid(val):
+def prop_id(val):
     return Q() # !!! DISABLED
     if val == None: return Q()
     return Q(propid=val)
@@ -38,10 +38,13 @@ def dateobs(val):
         return Q(date_obs__range=(mindate, maxdate))
     else:
         return Q(date_obs=val)
+obs_date = dateobs
 
 def archive_filename(val):
     if val == None: return Q()
     return Q(archive_filename=val)
+filename=archive_filename
+
 
 def original_filename(val):
     if val == None: return Q()
@@ -74,14 +77,13 @@ def image_filter(val):
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def exposure_time(val):
-    return Q() # !!! DISABLED
     if val == None: return Q()
     if isinstance(val, list):
         minval,maxval,*xtra = val
         # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
-        return Q(exposure__range=(minval, maxval))
+        return Q(hdu__extras__EXPTIME__range=(minval, maxval))
     else:
-        return Q(exposure=val)
+        return Q(hdu__extras__EXPTIME=val)
     
 def extras(val):
     if val == None: return Q()
