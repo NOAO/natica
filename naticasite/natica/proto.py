@@ -15,6 +15,10 @@ def toc():
 def try_queries():
     c = Client()
     search_list = [
+        {"coordinates": { "ra": 181.368791666667, "dec": -45.5396111111111 }},
+        {"filename": 
+         '/data/json-scrape/20170701/ct15m/smarts/c15e_170702_114228_cri.fits.json'
+         },
         { "exposure_time": [10.0, 19.9] },
         { "obs_date": ["2017-07-01", "2017-07-03"] },
     ]
@@ -28,6 +32,8 @@ def try_queries():
         meta.pop('api_version')
         meta.pop('comment')
         meta.pop('query')
+        #meta.pop('to_here_count')
+        #meta.pop('to_page_result_count')
         qlist.append(dict(meta=meta,
                           queries=connection.queries))
 
