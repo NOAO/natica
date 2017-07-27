@@ -19,12 +19,26 @@ from django.utils import timezone
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management.base import CommandError
+from django.views.decorators.cache import never_cache
 
 from .models import FitsFile, Hdu
 from . import exceptions as nex
 from . import search_filters as sf
+from . import proto
 
 api_version = '0.0.1' # prototype only
+
+@api_view(['GET'])
+@never_cache
+def prot(request):
+    """
+    Try some queries.
+    """
+    #elapsed = proto.try_queries()
+    response = proto.try_queries()
+    return JsonResponse(response, json_dumps_params=dict(indent=4))
+
+
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -34,6 +48,7 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
+
 @api_view(['GET'])
 def index(request):
     """
@@ -41,15 +56,15 @@ def index(request):
     """
     ip = get_client_ip(request)
     counts = dict(FitsFile=FitsFile.objects.count(),
-                  PrimaryHDU=Hdu.objects.filter(hdu_idx=0).count(),
-                  ExtensionHDU=Hdu.objects.exclude(hdu_idx=0).count(),
+                  HDU=Hdu.objects.all().count(),
                   ip=ip,
                   )
     #return JsonResponse(counts)
-    return HttpResponse('''<table>
-    <tr> <th>FitsFile</th> <td>{FitsFile}</td> </tr>
-    <tr> <th>PrimaryHDU</th> <td>{PrimaryHDU}</td> </tr>
-    <tr> <th>ip</th> <td>{ip}</td> </tr>
+    return HttpResponse('''<h3>Object Counts</h3>
+    <table>
+    <tr> <th align="left">FitsFile</th> <td>{FitsFile}</td> </tr>
+    <tr> <th align="left">HDU</th> <td>{HDU}</td> </tr>
+    <tr> <th align="left">IP</th> <td>{ip}</td> </tr>
     </table>'''.format(**counts))
 
 def md5(fname):
@@ -306,11 +321,13 @@ def search(request):
          & sf.extras(jsearch.get('extras', None))
          )
     #logging.debug('DBG: q={}'.format(str(q)))
-    total_count = FitsFile.objects.count()
-    qs = FitsFile.objects.filter(q).distinct()\
-                                   .order_by(order_fields)[offset:page_limit]
+    fullqs = FitsFile.objects.filter(q).distinct().order_by(order_fields)
+    query = str(fullqs.query)
+    total_count = len(fullqs) #.count()   tot seconds: 2.8
+    #total_count = fullqs.count() #       tot seconds: 4.9
+    qs = fullqs[offset:page_limit]
     results = [dict(
-    ra=fobj.ra,
+        ra=fobj.ra,
         dec=fobj.dec,
         #depth,
         exposure=fobj.extras.get('EXPTIME'),
@@ -344,8 +361,10 @@ def search(request):
     meta.update(
         api_version = api_version,
         timestamp = datetime.datetime.now(),
-        comment = 'WARNING: Disabled searches: PI,  ',
-        query = str(qs.query),
+        comment = ('WARNING: RESULTS missing values: surve_id, depth.'
+                   '  (Where do they come from???)'
+                   ),
+        query = query,
         page_result_count = len(results),
         to_here_count = offset + len(results),
         total_count = total_count,
