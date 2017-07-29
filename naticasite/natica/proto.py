@@ -2,6 +2,7 @@ from django.db import connection
 from django.test import Client
 import json
 import time
+from collections import OrderedDict
 
 def wrap(qdict):
     return dict(search=qdict)
@@ -14,32 +15,53 @@ def toc():
 
 def try_queries():
     c = Client()
-    search_list = [
-        {"coordinates": { "ra": 181.368791666667, "dec": -45.5396111111111 }},
-        {"filename": 
-         '/data/json-scrape/20170701/ct15m/smarts/c15e_170702_114228_cri.fits.json'
-         },
-        { "exposure_time": [10.0, 19.9] },
-        { "obs_date": ["2017-07-01", "2017-07-03"] },
-    ]
+    af='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_114228_cri.fits.json'
+    of='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_105436_cri.fits.json'
+    search_dict = dict(
+        coordinates = {"coordinates": { "ra": 181.368, "dec": -45.5396}},
+        exposure    = {"exposure_time": [10.0, 19.9] },
+        filename    = {"filename": af},      
+        image_filter = {"image_filter": ["raw", "calibrated"]},
+        obs_date    = {"obs_date": ["2017-07-01", "2017-07-03"] },
+        orig_file   = {"original_filename": of},
+        pi          = {"pi": "Schlegel"},
+        prop_id     = {"prop_id": "2014B-0404"},
+        release     = {"release_date": ["2017-07-25", "2017-07-27"]},
+        box_min     = {"search_box_min": 99,
+                       "coordinates": { "ra": 181.3, "dec": -45.5 }},
+        #tele_inst   = {"telescope_instrument": [["ct4m","mosaic_2"],]},
+        tele_inst   = {"telescope_instrument":
+                       [['CTIO 4.0-m telescope', 'DECam'],]}, #!!! non-std vals
+        #xtension    = {"xtension": "IMAGE"},
+        )
     tic()
     qlist = list()
-    for jsearch in search_list:
+    for name,jsearch in search_dict.items():
         response = c.post('/natica/search/',
                           content_type='application/json',
                           data=json.dumps(wrap(jsearch)))
         meta=response.json().get('meta')
-        meta.pop('api_version')
-        meta.pop('comment')
-        meta.pop('query')
-        #meta.pop('to_here_count')
-        #meta.pop('to_page_result_count')
-        qlist.append(dict(meta=meta,
-                          queries=connection.queries))
+        queries=connection.queries
+        query = OrderedDict.fromkeys(['name',
+                                      'time',
+                                      'sql',
+                                      'total_count',
+                                      'timestamp',
+                                      ])
+        query.update(
+            name = name,
+            sql = queries[0]['sql'],
+            time = queries[0]['time'],
+            total_count = meta['total_count'],
+            #to_here_count = meta['to_here_count'],
+            #page_result_count = meta['page_result_count'],
+            timestamp = meta['timestamp'],
+            )
+        qlist.append(query)
 
     total = toc()
     return(dict(total_time=total,
-                query_count=len(search_list),
+                query_count=len(search_dict),
                 query_list=qlist,
                 ))
 

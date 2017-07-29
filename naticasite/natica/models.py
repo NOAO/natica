@@ -15,8 +15,8 @@ class FitsFile(models.Model):
     instrument = models.CharField(max_length=80, help_text = "INSTRUME")
     telescope  = models.CharField(max_length=80, help_text = "TELESCOP")
     date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
-    ra = models.CharField(null=True, max_length=20)
-    dec = models.CharField(null=True, max_length=20)
+    ra = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
+    dec = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
 
     extras = JSONField(default={})  
 
@@ -42,8 +42,8 @@ class Hdu(models.Model):
     telescope  = models.CharField(max_length=80,blank=True,help_text="TELESCOP")
     date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
     obj  = models.CharField(max_length=80, blank=True, help_text = 'OBJECT')
-    ra = models.CharField(null=True, max_length=20)
-    dec = models.CharField(null=True, max_length=20)
+    ra = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
+    dec = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
 
     # Other FITS field content not stored above
     extras = JSONField() 
@@ -53,7 +53,8 @@ class Hdu(models.Model):
 ##############################################################################
 ### New schema (PROPOSED) to replace Legacy Science Archive 
 ###
-#!    
+#!                           [["ct4m","mosaic_2"],]},
+
 #!class Hdu(models.Model):
 #!    hdu_index = models.IntegerField() # Primary HDU: hdu_index=0
 #!    primary_hdu_id = models.ForeignKey('self', on_delete=models.CASCADE)

@@ -21,13 +21,11 @@ def coordinates(val, slop):
 
 def pi(val):
     if val == None: return Q()
-    #return Q(pi=val)
-    return Q(hdu__extras__PROPOSER=val)
+    return Q(extras__PROPOSER=val)
 
 def prop_id(val):
-    return Q() # !!! DISABLED
     if val == None: return Q()
-    return Q(propid=val)
+    return Q(extras__DTPROPID=val)
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def dateobs(val):
@@ -53,8 +51,7 @@ def original_filename(val):
 def telescope_instrument(val):
     if val == None: return Q()
     tele_list,inst_list = zip(*val)
-    return (Q(telescope__in=tele_list)
-            & Q(instrument__in=inst_list) )
+    return (Q(telescope__in=tele_list) & Q(instrument__in=inst_list) )
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def release_date(val):
@@ -66,14 +63,11 @@ def release_date(val):
     else:
         return Q(release_date=val)
     
-def flag_raw(val):
-    if val == None: return Q()
-    return Q(hdu__extras__PROCTYPE='raw')
 
 def image_filter(val):
     if val == None: return Q()
     # Case insensitive match against extras['PRODTYPE'] (json field)
-    return Q(hdu__extras__PRODTYPE__iexact='image')
+    return Q(extras__PRODTYPE__iexact='image')
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def exposure_time(val):
@@ -81,10 +75,14 @@ def exposure_time(val):
     if isinstance(val, list):
         minval,maxval,*xtra = val
         # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
-        return Q(hdu__extras__EXPTIME__range=(minval, maxval))
+        return Q(extras__EXPTIME__range=(minval, maxval))
     else:
-        return Q(hdu__extras__EXPTIME=val)
-    
+        return Q(extras__EXPTIME=val)
+
+#!def xtension(val):
+#!    if val == None: return Q()
+#!    return Q(xtension=val)
+
 def extras(val):
     if val == None: return Q()
     return Q(**val) 

@@ -9,24 +9,46 @@ import datetime
 import pytz
 from collections import OrderedDict, defaultdict
 
+import astropy.coordinates as coord
+import astropy.units as u
 
 import dateutil.parser
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from rest_framework.decorators import api_view, renderer_classes
 
+from django.test import Client
 from django.utils import timezone
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management.base import CommandError
 from django.views.decorators.cache import never_cache
+import django_tables2 as tables
 
 from .models import FitsFile, Hdu
+from .forms import SearchForm
 from . import exceptions as nex
 from . import search_filters as sf
 from . import proto
 
-api_version = '0.0.1' # prototype only
+api_version = '0.0.2' # prototype only
+
+def todeg(sexstr):
+    return coord.Angle(sexstr, unit=u.deg).degree
+
+def proto_html(ttime, qcount, query_list):
+    html = '''<ul>
+<li>Total Time: {total_time}</li>
+<li>Number of queries: {query_count}</li>
+</ul>
+'''.format(total_time=ttime, query_count=qcount)
+
+    html+='<table><tr><th>Time</th><th>Name</th><th>Count</th><th>SQL</th></tr>'
+    for q in query_list:
+        html += '<tr> <td>{time}</td><td>{name}</td><td>{total_count}</td><td>{sql}</td> </tr>'.format(**q)
+    html += '</table>'
+    return html
+    
 
 @api_view(['GET'])
 @never_cache
@@ -36,7 +58,11 @@ def prot(request):
     """
     #elapsed = proto.try_queries()
     response = proto.try_queries()
-    return JsonResponse(response, json_dumps_params=dict(indent=4))
+
+    #return JsonResponse(response, json_dumps_params=dict(indent=4))
+    return HttpResponse(proto_html(response['total_time'],
+                                   response['query_count'],
+                                   response['query_list']))
 
 
 
@@ -129,7 +155,7 @@ api_extras = [
     'PROPOSER',
     'SEEING',
     ]
-def aggregate_extras(hdudict_list):
+def aggregate_extras_as_list(hdudict_list):
     agg = defaultdict(set)   
     for hdudict in hdudict_list:
         for k in api_extras:
@@ -140,15 +166,28 @@ def aggregate_extras(hdudict_list):
         jagg[k] = val if (len(val) > 0) else None
 
     return jagg
+
+# as single value (='' if none found in HDUs)
+def aggregate_extras(hdudict_list):
+    agg = dict()
+    for k in api_extras:
+        for hdudict in hdudict_list:
+            if k in hdudict:
+                agg[k] = hdudict.get(k)
+                continue # got one, ignore rest of HDUs
+    return agg
     
 
 def PATCH_store_metadata():
+    print('PATCHING: ', end='', flush=True)
     for fobj in FitsFile.objects.all():
         agg = aggregate_extras([hobj.extras for hobj in fobj.hdu_set.all()])
         fobj.extras = agg
         #print('DBG: agg={}'.format(agg))
         fobj.save()
-        print('PATCHED {}'.format(fobj.original_filename))
+        #print('PATCHED {}'.format(fobj.original_filename))
+        print('.', end='', flush=True)
+    print('\nDone!')
     
 #src_fname, arch_fname, md5sum, size,  
 def store_metadata(hdudict_list, vals):
@@ -229,33 +268,53 @@ def ingest(request):
     return JsonResponse(dict(result='file uploaded: {}'
                              .format(request.FILES['file'].name)))
 
+search_fields = set([
+    'search_box_min',
+    'coordinates',
+    'pi',
+    'prop_id',
+    'obs_date',
+    'filename',
+    'original_filename',
+    'telescope_instrument',
+    'release_date',
+    'flag_raw',
+    'image_filter',
+    'exposure_time',
+    #'xtension', # new
+    'extras',
+])
 
-# Key is native name, value is name to use in response
-response_fields = dict(
-    archive_filename = 'reference',
-    ra = 'ra',
-    dec = 'dec',
-    hdu__extras__DTPROPID = 'prop_id',
-    #!surveyid = 'survey_id',
-    date_obs = 'obs_date', 
-    hdu__extras__PROPOSER = 'pi',
-    telescope = 'telescope',
-    instrument = 'instrument',
-    release_date = 'release_date' ,
-    #!hdu__extras__PROCTYPE = 'flag_raw',  
-    hdu__extras__FILTER = 'filter',
-    filesize = 'filesize',
-    #!original_filename = 'filename',
-    original_filename = 'original_filename',
-    md5sum = 'md5sum',
-    hdu__extras__EXPTIME = 'exposure',
-    hdu__extras__OBSTYPE = 'observation_type',  
-    hdu__extras__OBSMODE = 'observation_mode',  
-    hdu__extras__PRODTYPE = 'product',
-    hdu__extras__PROCTYPE = 'proctype',
-    hdu__extras__SEEING = 'seeing',
-    depth = '???'
-)
+def wrap(qdict):
+    return dict(search=qdict)
+
+
+@api_view(['POST'])
+def search2(request):
+    """
+    Search Archive, returns FITS metadata (header field/values).
+    """
+    if request.method != 'POST':
+        raise Exception('Only accepts POST http method')
+    ct = "application/x-www-form-urlencoded"
+    if request.content_type !=  ct :
+        raise Exception("Only accepts content_type = {}. Got '{}'"
+                        .format(ct, request.content_type))
+    formdict = request.POST
+    logging.debug('search2-formdict={}'.format(formdict))    
+    jsearch = dict()
+    for k in formdict.keys():
+        if len(formdict[k]) == 0:
+            continue
+        if k in search_fields:
+            jsearch[k] = formdict[k]
+        
+    logging.debug('search2-jsearch={}'.format(jsearch))
+    #!return JsonResponse(formdict)
+    c = Client()
+    return c.post('/natica/search/',
+                      content_type='application/json',
+                      data=json.dumps(wrap(jsearch)))
 
 
 #curl -H "Content-Type: application/json" -X POST -d @natica/fixtures/request-search-1.json http://localhost:8000/natica/search/ | python -m json.tool
@@ -266,8 +325,9 @@ def search(request):
     """
     if request.method != 'POST':
         raise Exception('Only accepts POST http method')
-    if request.content_type != "application/json":
-        raise Exception('Only accepts content_type = application/json')
+    if request.content_type != "application/json" :
+        raise Exception("Only accepts content_type = application/json. Got '{}'"
+                        .format(request.content_type))
 
     page_limit = int(request.GET.get('limit','100')) # num of records per page
     page = int(request.GET.get('page','1'))
@@ -278,38 +338,22 @@ def search(request):
     
     body = json.loads(request.body.decode('utf-8'))
     jsearch = body['search']
-    logging.debug('jsearch={}'.format(jsearch))
+    logging.debug('search-jsearch={}'.format(jsearch))
 
     #!!! add validation against schema
 
-    avail_fields = set([
-        'search_box_min',
-        'coordinates',
-        'pi',
-        'prop_id',
-        'obs_date',
-        'filename',
-        'original_filename',
-        'telescope_instrument',
-        'release_date',
-        'flag_raw',
-        'image_filter',
-        'exposure_time',
-        'extras',
-    ])
     used_fields = set(jsearch.keys())
-    if not (avail_fields >= used_fields):
-        unavail = used_fields - avail_fields
+    if not (search_fields >= used_fields):
+        unavail = used_fields - search_fields
         raise nex.ExtraSearchFieldError('Extra fields ({}) in search'
                                      .format(unavail))
-    assert(avail_fields >= used_fields)
+    assert(search_fields >= used_fields)
 
     # Construct query (anchored on FitsFile)
     slop = jsearch.get('search_box_min', .001)
     q = (sf.coordinates(jsearch.get('coordinates', None), slop)
          & sf.exposure_time(jsearch.get('exposure_time', None))
          & sf.filename(jsearch.get('filename', None))
-         & sf.flag_raw(jsearch.get('flag_raw', None))
          & sf.image_filter(jsearch.get('image_filter', None))
          & sf.obs_date(jsearch.get('obs_date', None))
          & sf.original_filename(jsearch.get('original_filename', None))
@@ -317,11 +361,13 @@ def search(request):
          & sf.prop_id(jsearch.get('propid', None))
          & sf.release_date(jsearch.get('release_date', None))
          & sf.telescope_instrument(jsearch.get('telescope_instrument', None))
+         #& sf.xtension(jsearch.get('xtension', None))
 
          & sf.extras(jsearch.get('extras', None))
          )
     #logging.debug('DBG: q={}'.format(str(q)))
-    fullqs = FitsFile.objects.filter(q).distinct().order_by(order_fields)
+    #fullqs = FitsFile.objects.filter(q).distinct().order_by(order_fields)
+    fullqs = FitsFile.objects.filter(q).order_by(order_fields)
     query = str(fullqs.query)
     total_count = len(fullqs) #.count()   tot seconds: 2.8
     #total_count = fullqs.count() #       tot seconds: 4.9
@@ -351,13 +397,13 @@ def search(request):
     ) for fobj in qs]
         
   
-    meta = OrderedDict.fromkeys(['api_version',
-                                 'timestamp',
-                                 'comment',
-                                 'query',
+    meta = OrderedDict.fromkeys(['total_count',
                                  'page_result_count',
                                  'to_here_count',
-                                 'total_count'])
+                                 'api_version',
+                                 'timestamp',
+                                 'comment',
+                                 'query', ])
     meta.update(
         api_version = api_version,
         timestamp = datetime.datetime.now(),
@@ -370,7 +416,7 @@ def search(request):
         total_count = total_count,
     )
     #logging.debug('DBG: query={}'.format(qs.query))
-    return JsonResponse(dict(meta=meta, results=results))
+    return JsonResponse(OrderedDict(meta=meta, results=results))
                         
 def submit_fits_file(fits_file_path):
     """For use in a natica MANAGE command"""
@@ -385,3 +431,20 @@ def submit_fits_file(fits_file_path):
         raise CommandError(r.json()['errorMessage'])
     return False
     
+def query(request):
+   # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SearchForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SearchForm()
+
+    return render(request, 'search.html', {'form': form})    

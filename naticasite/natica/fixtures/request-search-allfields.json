@@ -3,7 +3,6 @@
         "coordinates": { "ra": 181.368791666667, "dec": -45.5396111111111 },
         "exposure_time": 15
         "filename": "",
-        "flag_raw": "",
         "image_filter":["raw", "calibrated"],
         "obs_date": ["2009-04-01", "2009-04-03", "[]"],
         "original_filename": "/ua84/mosaic/tflagana/3103/stdr1_012.fits",
