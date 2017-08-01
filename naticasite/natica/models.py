@@ -12,11 +12,14 @@ class FitsFile(models.Model):
     release_date     = models.DateTimeField()
 
     # (Possibly aggregated) from HDU(s)
-    instrument = models.CharField(max_length=80, help_text = "INSTRUME")
-    telescope  = models.CharField(max_length=80, help_text = "TELESCOP")
-    date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
-    ra = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
-    dec = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
+    instrument = models.CharField(max_length=80, help_text="INSTRUME")
+    telescope = models.CharField(max_length=80, help_text="TELESCOP")
+    #date_obs  = models.DateTimeField(null=True,
+    #ra = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
+    #dec = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
+    date_obs = models.DateRangeField(null=True, help_text='DATE-OBS min,max')
+    ra = models.FloatRangeField(help_text='RA min,max')
+    dec = models.FloatRangeField(help_text='DEC min,max')
 
     extras = JSONField(default={})  
 
