@@ -1,27 +1,40 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField, JSONField
+from django.contrib.postgres.fields import ArrayField, JSONField, DateRangeField, FloatRangeField
 
+
+class Proposal(models.Model):
+    prop_id = models.CharField(null=True, max_length=10, unique=True)
+    pi = models.CharField(max_length=40)
+    proprietary_period = models.SmallIntegerField() # months
+    extras = JSONField()     
 
 class FitsFile(models.Model):
     # md5sum of file as stored in MSS
     md5sum = models.CharField(max_length=32, unique=True)
-    #id = models.CharField(max_length=32, primary_key=True)
-    original_filename = models.CharField(max_length=256)
+    filesize  = models.BigIntegerField()
+    proposal = models.ForeignKey(Proposal, null=True, on_delete=models.SET_NULL)
+    extras = JSONField(default={})  
+
+    ############################################
+    ### Fields that LSA Portal can query against
+    # calibration images might have to be stored. No RA, DEC for those.
+    ra = FloatRangeField(null=True, help_text='RA min,max')
+    dec = FloatRangeField(null=True, help_text='DEC min,max')
+    #
+    exposure = FloatRangeField()
     archive_filename = models.CharField(max_length=256)
-    filesize         = models.BigIntegerField()
+    #!prodtype = models.CharField(max_length=8)
+    date_obs = DateRangeField(null=True, help_text='DATE-OBS min,max')
+    original_filename = models.CharField(max_length=256)
+    #pi = models.CharField(max_length=40)
+    #prop_id = models.CharField(max_length=10)
     release_date     = models.DateTimeField()
 
-    # (Possibly aggregated) from HDU(s)
     instrument = models.CharField(max_length=80, help_text="INSTRUME")
     telescope = models.CharField(max_length=80, help_text="TELESCOP")
-    #date_obs  = models.DateTimeField(null=True,
-    #ra = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
-    #dec = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
-    date_obs = models.DateRangeField(null=True, help_text='DATE-OBS min,max')
-    ra = models.FloatRangeField(help_text='RA min,max')
-    dec = models.FloatRangeField(help_text='DEC min,max')
-
-    extras = JSONField(default={})  
+    ###
+    ############################################
+    
 
 class Hdu(models.Model):
     """Required header fields per FITS Std 3.0"""
@@ -34,24 +47,24 @@ class Hdu(models.Model):
     # Required For Primary, Extension HDU
     bitpix = models.IntegerField()
     naxis = models.PositiveSmallIntegerField()
-    naxisN = ArrayField(models.PositiveSmallIntegerField(), default=list)
+    naxisN = ArrayField(models.PositiveSmallIntegerField(), default=list)#!!!
     
     # Required For Conformant Extensions HDU (not Primary)
     pcount = models.PositiveIntegerField(null=True)
     gcount = models.PositiveIntegerField(null=True)
 
     # Others (not required by STD, but we need them in at least one HDU)
-    instrument = models.CharField(max_length=80,blank=True,help_text="INSTRUME")
-    telescope  = models.CharField(max_length=80,blank=True,help_text="TELESCOP")
-    date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
-    obj  = models.CharField(max_length=80, blank=True, help_text = 'OBJECT')
-    ra = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
-    dec = models.CharField(null=True, max_length=20) #!!! should be float (decimal degrees)
+    #!instrument =models.CharField(max_length=80,blank=True,help_text="INSTRUME")
+    #!telescope  =models.CharField(max_length=80,blank=True,help_text="TELESCOP")
+    #!date_obs  = models.DateTimeField(null=True, help_text = 'DATE-OBS')
+    #!obj  = models.CharField(max_length=80, blank=True, help_text = 'OBJECT')
+    #!# RA,DEC in dms e.g. "16:18:37.00"
+    #!ra = models.CharField(null=True, max_length=20) 
+    #!dec = models.CharField(null=True, max_length=20) 
 
     # Other FITS field content not stored above
     extras = JSONField() 
 
-    
 
 ##############################################################################
 ### New schema (PROPOSED) to replace Legacy Science Archive 

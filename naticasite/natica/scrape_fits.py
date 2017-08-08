@@ -1,17 +1,20 @@
 #! /usr/bin/env python
 # EXAMPLES:
 # find /data/tada-test-data \( -name "*.fits" -o -name "*.fits.fz" \) -print0 | xargs -0 python3 natica/scrape_fits.py -r /data/tada-test-data/ -d /data/json
+#
+# nohup find /net/archive/pipe/201707* -name "*.fits.fz" -print0 | xargs -0 python3 -W"ignore" scrape_fits.py -r /net/archive/ -d ~/json-scrape
 
 import sys
 import argparse
 import logging
 import json
 from pathlib import Path,PurePath
+imprt collections
 
 import astropy.io.fits as pyfits
 
 def hdudictlist(hdulist):
-    return [dict(hdu.header.items()) for hdu in hdulist]
+    return [collections.OrderedDict(hdu.header.items()) for hdu in hdulist]
 
 def scrape_file(fitsfile, outdir, rootdir):
     """The work-horse function."""

@@ -1,3 +1,4 @@
+# Loads DB from FITS files headers (extracted on the fly).
 from django.core.management.base import BaseCommand, CommandError
 from natica.views import submit_fits_file
 

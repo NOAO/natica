@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FitsFile, Hdu
+from .models import FitsFile, Hdu, Proposal
 from pathlib import PurePath
 
 
@@ -24,7 +24,8 @@ class InstrumFilter(admin.SimpleListFilter):
 @admin.register(Hdu)
 class HduAdmin(admin.ModelAdmin):
     list_display = ('hdu_idx', 'fitsfile_archive_filename', 'xtension',
-                    'date_obs', 'extras')
+                    #'date_obs',     'ra', 'dec',
+                    'extras')
 
     def fitsfile_archive_filename(self, obj):
         return PurePath(obj.fitsfile.archive_filename).name
@@ -34,13 +35,16 @@ class HduAdmin(admin.ModelAdmin):
 @admin.register(FitsFile)
 class FitsFileAdmin(admin.ModelAdmin):
     #!inlines = [HduInline,]  # allow HDU edit within FitsFile obj
-    list_filter = (InstrumFilter, 'date_obs',)
+    list_filter = (InstrumFilter,
+                   #'date_obs',
+    )
 
     list_display = (
         'id',
-        'instrument',
-        'telescope', 'date_obs',
-        'release_date',
+        #'instrument',
+        #'telescope',
+        #'date_obs',
+        #'release_date',
         'original_filename',
         'archive_filename',
         #'extras',
@@ -48,3 +52,6 @@ class FitsFileAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(Proposal)
+class ProposalAdmin(admin.ModelAdmin):
+    pass

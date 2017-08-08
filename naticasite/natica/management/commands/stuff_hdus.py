@@ -8,7 +8,7 @@ import natica.exceptions
 # EXAMPLES:
 #   python3 manage.py stuff_hdus /data/json/basic/kp109391.fits.json /data/json/drop-test/20160314/kp4m-mosaic3/mos3.75870.fits.json
 #
-#  find /data/json -name "*.json" -print0 | xargs -0 python3 manage.py stuff_hdus 
+#  find /data/json-scrape -name "*.json" -print0 | xargs -0 python3 manage.py stuff_hdus 
 # ./manage.py shell -c "from natica.models import FitsFile; FitsFile.objects.all().delete()"
 # find /data/json-scrape -name "*.json" -print0 | xargs -0 python3 manage.py stuff_hdus 
 #
@@ -52,7 +52,7 @@ class Command(BaseCommand):
                                           ending='')
                         hdudict_list[0].setdefault(k,defaults[k])
                 #!self.stdout.write('loaded ', ending='')
-                valdict.update(validate_header(hdudict_list))
+                #valdict.update(validate_header(hdudict_list))
                 #!self.stdout.write('validated ', ending='')
                 store_metadata(hdudict_list,valdict)
                 #!self.stdout.write('stored ', ending='')

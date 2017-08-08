@@ -1,13 +1,8 @@
 from django.db.models import Q
 
-proc_LUT = dict(raw = 'raw',
-                calibrated = 'InstCal',
-                reprojected = 'projected',
-                stacked = 'stacked',
-                master_calibration = 'mastercal',
-                image_tiles = 'tiled',
-                sky_subtracted = 'skysub')
-
+##############################################################################
+### for LSA API
+### These are ALL the fields that can be queried against using the Portal
 def coordinates(val, slop):
     if val == None: return Q()
     ra = val['ra']
@@ -19,13 +14,25 @@ def coordinates(val, slop):
         & Q(ra__gte=(ra - slop))
         )
 
-def pi(val):
+#!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
+def exposure_time(val):
     if val == None: return Q()
-    return Q(extras__PROPOSER=val)
+    if isinstance(val, list):
+        minval,maxval,*xtra = val
+        # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
+        return Q(extras__EXPTIME__range=(minval, maxval))
+    else:
+        return Q(extras__EXPTIME=val)
 
-def prop_id(val):
+def archive_filename(val):
     if val == None: return Q()
-    return Q(extras__DTPROPID=val)
+    return Q(archive_filename=val)
+filename=archive_filename
+
+def image_filter(val):
+    if val == None: return Q()
+    # Case insensitive match against extras['PRODTYPE'] (json field)
+    return Q(extras__PRODTYPE__iexact='image')
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def dateobs(val):
@@ -36,22 +43,19 @@ def dateobs(val):
         return Q(date_obs__range=(mindate, maxdate))
     else:
         return Q(date_obs=val)
-obs_date = dateobs
-
-def archive_filename(val):
-    if val == None: return Q()
-    return Q(archive_filename=val)
-filename=archive_filename
-
+obs_date = dateobs     
 
 def original_filename(val):
     if val == None: return Q()
     return Q(original_filename=val)
 
-def telescope_instrument(val):
+def pi(val):
     if val == None: return Q()
-    tele_list,inst_list = zip(*val)
-    return (Q(telescope__in=tele_list) & Q(instrument__in=inst_list) )
+    return Q(extras__PROPOSER=val)
+
+def prop_id(val):
+    if val == None: return Q()
+    return Q(extras__DTPROPID=val)
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def release_date(val):
@@ -62,22 +66,14 @@ def release_date(val):
         return Q(release_date__range=(mindate, maxdate))
     else:
         return Q(release_date=val)
+
+def telescope_instrument(val):
+    if val == None: return Q()
+    tele_list,inst_list = zip(*val)
+    return (Q(telescope__in=tele_list) & Q(instrument__in=inst_list) )
+
+##############################################################################
     
-
-def image_filter(val):
-    if val == None: return Q()
-    # Case insensitive match against extras['PRODTYPE'] (json field)
-    return Q(extras__PRODTYPE__iexact='image')
-
-#!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
-def exposure_time(val):
-    if val == None: return Q()
-    if isinstance(val, list):
-        minval,maxval,*xtra = val
-        # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
-        return Q(extras__EXPTIME__range=(minval, maxval))
-    else:
-        return Q(extras__EXPTIME=val)
 
 #!def xtension(val):
 #!    if val == None: return Q()
@@ -89,3 +85,11 @@ def extras(val):
 
 # All PROCTYPE values
 # [e['extras']['PROCTYPE'] for e in Hdu.objects.filter(extras__has_key='PROCTYPE').values('extras')]
+
+proc_LUT = dict(raw = 'raw',
+                calibrated = 'InstCal',
+                reprojected = 'projected',
+                stacked = 'stacked',
+                master_calibration = 'mastercal',
+                image_tiles = 'tiled',
+                sky_subtracted = 'skysub')

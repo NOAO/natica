@@ -28,7 +28,7 @@ class SearchSyntaxEerror(BaseNaticaException):
 class BadFakeError(BaseNaticaException):
     status_code = 400    
 
-class ContentTypeErrpr(BaseNaticaException):
+class ContentTypeError(BaseNaticaException):
     status_code = 400
     
     
@@ -44,3 +44,9 @@ class MissingFieldError(BaseNaticaException):
 class ConflictingValuesError(BaseNaticaException):
     status_code = 400
 
+class FitsError(BaseNaticaException):
+    status_code = 400
+    
+class PropNotFound(BaseNaticaException):
+    status_code = 400
+    
