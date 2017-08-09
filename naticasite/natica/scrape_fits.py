@@ -2,14 +2,14 @@
 # EXAMPLES:
 # find /data/tada-test-data \( -name "*.fits" -o -name "*.fits.fz" \) -print0 | xargs -0 python3 natica/scrape_fits.py -r /data/tada-test-data/ -d /data/json
 #
-# nohup find /net/archive/pipe/201707* -name "*.fits.fz" -print0 | xargs -0 python3 -W"ignore" scrape_fits.py -r /net/archive/ -d ~/json-scrape
+# nohup find /net/archive/pipe/201707* -name "*.fits.fz" -print0 | xargs -0 python3 -W"ignore" ~/natica/scrape_fits.py -r /net/archive/ -d /data1/json-fits-headers/
 
 import sys
 import argparse
 import logging
 import json
 from pathlib import Path,PurePath
-imprt collections
+import collections
 
 import astropy.io.fits as pyfits
 
