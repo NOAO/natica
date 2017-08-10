@@ -3,6 +3,7 @@ from django.test import Client
 import json
 import time
 from collections import OrderedDict
+import logging
 
 def wrap(qdict):
     return dict(search=qdict)
@@ -20,27 +21,31 @@ def try_queries():
     search_dict = dict(
         coordinates = {"coordinates": { "ra": 181.368, "dec": -45.5396}},
         exposure    = {"exposure_time": [10.0, 19.9] },
+
         filename    = {"filename": af},      
-        image_filter = {"image_filter": ["raw", "calibrated"]},
+        image_filter = {"image_filter": ["raw", "calibrated"]},#!!! MEMORY
         obs_date    = {"obs_date": ["2017-07-01", "2017-07-03"] },
         orig_file   = {"original_filename": of},
-        pi          = {"pi": "Schlegel"},
-        prop_id     = {"prop_id": "2014B-0404"},
+
+        pi          = {"pi": "Schlegel"}, # 3.366 8/10/17
+        prop_id     = {"prop_id": "2014B-0404"}, #!!! MEMORY
         release     = {"release_date": ["2017-07-25", "2017-07-27"]},
         box_min     = {"search_box_min": 99,
                        "coordinates": { "ra": 181.3, "dec": -45.5 }},
-        #tele_inst   = {"telescope_instrument": [["ct4m","mosaic_2"],]},
-        tele_inst   = {"telescope_instrument":
-                       [['CTIO 4.0-m telescope', 'DECam'],]}, #!!! non-std vals
-        #xtension    = {"xtension": "IMAGE"},
+        tele_inst   = {"telescope_instrument": [["ct4m","mosaic_2"],]},
+        #tele_inst   = {"telescope_instrument":
+        #               [['CTIO 4.0-m telescope', 'DECam'],]}, #!!! non-std vals
         )
     tic()
     qlist = list()
     for name,jsearch in search_dict.items():
+        logging.debug('proto.try_queries(); name={}'.format(name))    
         response = c.post('/natica/search/',
                           content_type='application/json',
-                          data=json.dumps(wrap(jsearch)))
+                          data=json.dumps(jsearch))
         meta=response.json().get('meta')
+        logging.debug('proto.try_queries(); result cnt={}'
+                      .format(meta['total_count']))
         queries=connection.queries
         query = OrderedDict.fromkeys(['name',
                                       'time',
@@ -50,7 +55,8 @@ def try_queries():
                                       ])
         query.update(
             name = name,
-            sql = queries[0]['sql'],
+            #sql = queries[0]['sql'],
+            sql = meta['query'],
             time = queries[0]['time'],
             total_count = meta['total_count'],
             #to_here_count = meta['to_here_count'],

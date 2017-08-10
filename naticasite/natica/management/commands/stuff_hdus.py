@@ -30,8 +30,6 @@ class Command(BaseCommand):
         goodjfits = set()
         valdict= dict()
         defaults = dict(INSTRUME='NA',
-                        RA='NA',
-                        DEC='NA',
                         )
 
         for jfits in options['jfits']:

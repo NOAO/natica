@@ -6,7 +6,11 @@ class Proposal(models.Model):
     prop_id = models.CharField(null=True, max_length=10, unique=True)
     pi = models.CharField(max_length=40)
     proprietary_period = models.SmallIntegerField() # months
-    extras = JSONField()     
+    extras = JSONField()
+
+    def __str__(self):
+        return ("{}({}): {}"
+                .format(self.prop_id, self.proprietary_period, self.pi))
 
 class FitsFile(models.Model):
     # md5sum of file as stored in MSS
@@ -28,7 +32,7 @@ class FitsFile(models.Model):
     original_filename = models.CharField(max_length=256)
     #pi = models.CharField(max_length=40)
     #prop_id = models.CharField(max_length=10)
-    release_date     = models.DateTimeField()
+    release_date     = models.DateField()
 
     instrument = models.CharField(max_length=80, help_text="INSTRUME")
     telescope = models.CharField(max_length=80, help_text="TELESCOP")

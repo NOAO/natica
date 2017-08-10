@@ -191,6 +191,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+        'django.db.backends': { # emits SQL, their params, and time to execute SQL (DEBUG level)
+            'handlers': ['debugfile'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         #!'django.server': {
         #!    'handlers': ['django.server'],
         #!    'level': 'INFO',

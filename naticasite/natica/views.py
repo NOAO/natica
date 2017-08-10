@@ -8,6 +8,7 @@ import requests
 import datetime
 import pytz
 import warnings
+import random
 from collections import OrderedDict, defaultdict
 
 import astropy.coordinates as coord
@@ -26,6 +27,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.management.base import CommandError
 from django.views.decorators.cache import never_cache
 import django_tables2 as tables
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import FitsFile, Hdu, Proposal
 from .forms import SearchForm
@@ -299,31 +301,72 @@ def load_fitsfile(fobj):
     #!#fobj.full_clean()
     #!fobj.save()
     
+
+def attach_prop(fobj):
+    """From data found in FitsFile (fobj) and related Hdu, create new Proposal if
+ it doesn't exist. Attach it to fobj.  If we don't have a PROPID, do nothing."""
+    if fobj.proposal != None: return
+    propid = fobj.extras.get('DTPROPID')
+    if propid == None:  return
+
+    try:
+        # No related Proposal, but one is found with our DTPROPID
+        prop = Proposal.objects.get(prop_id=propid)
+    except ObjectDoesNotExist:
+        # No related or found Proposal, but we have a DTPROPID
+        prop = Proposal(prop_id = propid,
+                        pi = fobj.extras.get('PROPOSER','NA'),
+                        proprietary_period = random.choice([0, 1,12]), #months
+                        extras={}  )
+        prop.save()
+        
+    fobj.proposal = prop
+    fobj.save()
+
+def localize(dateval):
+    if dateval == None:
+        return None
+    else:
+        return pytz.utc.localize(dateutil.parser.parse(dateval))
+
+def set_release_date_by_prop(fobj):
+    """Assign Release_Date by adding Proprietary_Period to DATE-OBS"""
+    #!reldate = pytz.utc.localize(datetime.datetime.combine(
+    #!    fobj.date_obs.lower
+    #!    + datetime.timedelta(days=30*fobj.proposal.proprietary_period),
+    #!    datetime.time(hour=12)
+    #!    ))
+    reldate = (fobj.date_obs.lower
+               + datetime.timedelta(days=30*fobj.proposal.proprietary_period))
+    fobj.release_date = reldate
+    fobj.save()
+
     
 def PATCH(progress=100):
     """Change some fields around.  I muck with this frequently."""
-    print('(Display dot every {} objects)'.format(progress))
-    print('PATCHING: ', end='', flush=True)
+    pfunc = set_release_date_by_prop
+    print('\n\n{}\n(Display dot every {} objects)'
+          .format(pfunc.__doc__, progress))
+    
+    print('PATCHING ', end='', flush=True)
     cnt = FitsFile.objects.all().count()
-    print('y, cnt={}'.format(cnt), end='', flush=True)
+    print('(cnt={}): '.format(cnt), end='', flush=True)
     idx=0
-    for fobj in FitsFile.objects.all():
+    for fobj in FitsFile.objects.all().iterator():
         if (idx % progress) == 0:
             print('.', end='', flush=True)
         #load_fitsfile(fobj)
-        reset_singletons(fobj)
+        #reset_singletons(fobj)
+        #attach_prop(fobj)
+        pfunc(fobj)
         idx += 1
     print('\nDone!', flush=True)
     return cnt
 
+
 #src_fname, arch_fname, md5sum, size,  
 def store_metadata(hdudict_list, non_hdu_vals):
     """Store ALL of the FITS header values into DB. Assumed to be validated."""
-    def localize(dateval):
-        if dateval == None:
-            return None
-        else:
-            return pytz.utc.localize(dateutil.parser.parse(dateval))
 
 
     ## FITS File
@@ -474,8 +517,8 @@ def search(request):
 
     
     body = json.loads(request.body.decode('utf-8'))
-    jsearch = body['search']
-    logging.debug('search-jsearch={}'.format(jsearch))
+    jsearch = body # ['search']
+    logging.debug('jsearch={}'.format(jsearch))
 
     #!!! add validation against schema
 
@@ -498,29 +541,31 @@ def search(request):
          & sf.prop_id(jsearch.get('propid', None))
          & sf.release_date(jsearch.get('release_date', None))
          & sf.telescope_instrument(jsearch.get('telescope_instrument', None))
+         )
+         #& sf.extras(jsearch.get('extras', None))
          #& sf.xtension(jsearch.get('xtension', None))
 
-         & sf.extras(jsearch.get('extras', None))
-         )
     #logging.debug('DBG: q={}'.format(str(q)))
     #fullqs = FitsFile.objects.filter(q).distinct().order_by(order_fields)
-    fullqs = FitsFile.objects.filter(q).order_by(order_fields)
-    query = str(fullqs.query)
-    total_count = len(fullqs) #.count()   tot seconds: 2.8
-    #total_count = fullqs.count() #       tot seconds: 4.9
-    qs = fullqs[offset:page_limit]
+    fullqs = FitsFile.objects.filter(q)
+    #total_count = len(fullqs) #.count()   tot seconds: 2.8
+    total_count = fullqs.count() #       tot seconds: 4.9
+    logging.debug('DBG: do query')
+    qs = fullqs.order_by(order_fields)[offset:page_limit]
+    query = str(qs.query)
+    logging.debug('DBG: query={}'.format(query))
     results = [dict(
-        ra=fobj.ra,
-        dec=fobj.dec,
+        ra=[fobj.ra.lower, fobj.ra.upper],
+        dec=[fobj.dec.lower, fobj.dec.upper],
         #depth,
-        exposure=fobj.extras.get('EXPTIME'),
+        exposure=[fobj.exposure.lower,fobj.exposure.upper],
         filename=fobj.archive_filename,
         filesize=fobj.filesize,
         filter=fobj.extras.get('FILTER'), # FILTER, FILTERS, FILTER1, FILTER2
         image_type=fobj.extras.get('IMAGETYP'), 
         instrument=fobj.instrument,
         md5sum=fobj.md5sum,
-        obs_date=fobj.date_obs,
+        obs_date=[fobj.date_obs.lower, fobj.date_obs.upper],
         observation_mode=fobj.extras.get('OBSMODE'),
         observation_type=fobj.extras.get('OBSTYPE'), 
         original_filename=fobj.original_filename,
@@ -531,7 +576,7 @@ def search(request):
         seeing=fobj.extras.get('SEEING'),
         #survey_id
         telescope=fobj.telescope,
-    ) for fobj in qs]
+    ) for fobj in qs.iterator()]
         
   
     meta = OrderedDict.fromkeys(['total_count',
@@ -553,7 +598,9 @@ def search(request):
         total_count = total_count,
     )
     #logging.debug('DBG: query={}'.format(qs.query))
-    return JsonResponse(OrderedDict(meta=meta, results=results))
+    jresponse = OrderedDict(meta=meta, results=results)
+    #!logging.debug('DBG: jresponse={}'.format(jresponse)) # BIG
+    return JsonResponse(jresponse)
                         
 def submit_fits_file(fits_file_path):
     """For use in a natica MANAGE command"""

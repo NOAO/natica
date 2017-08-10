@@ -1,4 +1,5 @@
 from django.db.models import Q
+from psycopg2.extras import NumericRange, DateRange
 
 ##############################################################################
 ### for LSA API
@@ -7,12 +8,11 @@ def coordinates(val, slop):
     if val == None: return Q()
     ra = val['ra']
     dec = val['dec']
-    return (
-        Q(dec__lte=(dec + slop))
-        & Q(dec__gte=(dec - slop))
-        & Q(ra__lte=(ra + slop))
-        & Q(ra__gte=(ra - slop))
-        )
+    #!return ( Q(dec__lte=(dec + slop)) & Q(dec__gte=(dec - slop))
+    #!    & Q(ra__lte=(ra + slop)) & Q(ra__gte=(ra - slop))       )
+    return (Q(dec__overlap=NumericRange(dec-slop, dec+slop))
+            & Q(ra__overlap=NumericRange(ra-slop, ra+slop)))
+              
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def exposure_time(val):
@@ -20,9 +20,9 @@ def exposure_time(val):
     if isinstance(val, list):
         minval,maxval,*xtra = val
         # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
-        return Q(extras__EXPTIME__range=(minval, maxval))
+        return Q(exposure__overlap=NumericRange(minval, maxval))
     else:
-        return Q(extras__EXPTIME=val)
+        return Q(exposure__overlap=NumericRange(val, val))
 
 def archive_filename(val):
     if val == None: return Q()
@@ -40,9 +40,9 @@ def dateobs(val):
     if isinstance(val, list):
         mindate,maxdate,*xtra = val
         # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
-        return Q(date_obs__range=(mindate, maxdate))
+        return Q(date_obs__overlap=DateRange(mindate, maxdate))
     else:
-        return Q(date_obs=val)
+        return Q(date_obs__overlap=DateRange(val,val))
 obs_date = dateobs     
 
 def original_filename(val):
@@ -51,11 +51,13 @@ def original_filename(val):
 
 def pi(val):
     if val == None: return Q()
-    return Q(extras__PROPOSER=val)
+    #return Q(extras__PROPOSER=val)
+    return Q(proposal__pi=val)
 
 def prop_id(val):
     if val == None: return Q()
-    return Q(extras__DTPROPID=val)
+    #return Q(extras__DTPROPID=val)
+    return Q(proposal__prop_id=val)
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def release_date(val):
