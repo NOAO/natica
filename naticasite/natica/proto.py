@@ -19,7 +19,7 @@ def try_queries():
     af='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_114228_cri.fits.json'
     of='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_105436_cri.fits.json'
     search_dict = dict(
-        coordinates = {"coordinates": { "ra": 181.368, "dec": -45.5396}},
+        coordinates = {"coordinates": { "ra": 19.9616, "dec": 0.8161}},
         exposure    = {"exposure_time": [10.0, 19.9] },
 
         filename    = {"filename": af},      
@@ -30,9 +30,9 @@ def try_queries():
         pi          = {"pi": "Schlegel"}, # 3.366 8/10/17
         prop_id     = {"prop_id": "2014B-0404"}, #!!! MEMORY
         release     = {"release_date": ["2017-07-25", "2017-07-27"]},
-        box_min     = {"search_box_min": 99,
-                       "coordinates": { "ra": 181.3, "dec": -45.5 }},
-        tele_inst   = {"telescope_instrument": [["ct4m","mosaic_2"],]},
+        box_min     = {"search_box_min": 2,
+                       "coordinates": { "ra": 20.0, "dec": 0.5 }},
+        tele_inst   = {"telescope_instrument": [["ct4m","decam"],]},
         #tele_inst   = {"telescope_instrument":
         #               [['CTIO 4.0-m telescope', 'DECam'],]}, #!!! non-std vals
         )
@@ -65,10 +65,11 @@ def try_queries():
                                       'total_count',
                                       'timestamp',
                                       ])
+        hide = 'SELECT natica_fitsfile.id, natica_fitsfile.md5sum, natica_fitsfile.filesize, natica_fitsfile.proposal_id, natica_fitsfile.extras, natica_fitsfile.ra, natica_fitsfile.dec, natica_fitsfile.exposure, natica_fitsfile.archive_filename, natica_fitsfile.date_obs, natica_fitsfile.original_filename, natica_fitsfile.release_date, natica_fitsfile.instrument, natica_fitsfile.telescope FROM natica_fitsfile'
         query.update(
             name = name,
             #sql = queries[0]['sql'],
-            sql = meta['query'],
+            sql = meta['query'].replace('"','').replace(hide,'...'),
             time = queries[0]['time'],
             total_count = meta['total_count'],
             #to_here_count = meta['to_here_count'],

@@ -48,7 +48,7 @@ def proto_html(ttime, qcount, query_list):
 </ul>
 '''.format(total_time=ttime, query_count=qcount)
 
-    html+='<table><tr><th>Time</th><th>Name</th><th>Count</th><th>SQL</th></tr>'
+    html+='<table border=1 cellspacing=0><tr><th>Time</th><th>Name</th><th>Count</th><th>SQL</th></tr>'
     for q in query_list:
         html += '<tr> <td>{time}</td><td>{name}</td><td>{total_count}</td><td>{sql}</td> </tr>'.format(**q)
     html += '</table>'
