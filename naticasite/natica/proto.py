@@ -39,10 +39,22 @@ def try_queries():
     tic()
     qlist = list()
     for name,jsearch in search_dict.items():
-        logging.debug('proto.try_queries(); name={}'.format(name))    
-        response = c.post('/natica/search/',
-                          content_type='application/json',
-                          data=json.dumps(jsearch))
+        logging.debug('proto.try_queries(); name={}'.format(name))
+        try:
+            logging.debug('DBG1')
+            response = c.post('/natica/search/',
+                              content_type='application/json',
+                              data=json.dumps(jsearch))
+            logging.debug('DBG2')
+        except Exception as err:
+            logging.debug('DBG3')
+            return dict(errorMessage = 'proto.try_queries: {}'.format(err))
+
+        logging.debug('DBG: response.json()={}'.format(response.json()))
+
+        if response.status_code != 200:
+            return response.json()
+        
         meta=response.json().get('meta')
         logging.debug('proto.try_queries(); result cnt={}'
                       .format(meta['total_count']))
@@ -66,9 +78,9 @@ def try_queries():
         qlist.append(query)
 
     total = toc()
-    return(dict(total_time=total,
+    return dict(total_time=total,
                 query_count=len(search_dict),
                 query_list=qlist,
-                ))
+                )
 
 

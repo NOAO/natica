@@ -4,6 +4,7 @@ import argparse
 import logging
 import hashlib
 import json
+import jsonschema
 import requests
 import datetime
 import pytz
@@ -61,12 +62,15 @@ def prot(request):
     Try some queries.
     """
     #elapsed = proto.try_queries()
-    response = proto.try_queries()
-
-    #return JsonResponse(response, json_dumps_params=dict(indent=4))
-    return HttpResponse(proto_html(response['total_time'],
-                                   response['query_count'],
-                                   response['query_list']))
+    rdict = proto.try_queries()
+    logging.debug('DBG: prot.rdict={}'.format(rdict))
+    if 'errorMessage' in rdict:
+        return JsonResponse(rdict, json_dumps_params=dict(indent=4))
+    
+    #return JsonResponse(rdict, json_dumps_params=dict(indent=4))
+    return HttpResponse(proto_html(rdict['total_time'],
+                                   rdict['query_count'],
+                                   rdict['query_list']))
 
 
 @api_view(['GET'])
@@ -506,7 +510,7 @@ def search2(request):
             continue
         if k in search_fields:
             jsearch[k] = formdict[k]
-        
+    
     logging.debug('search2-jsearch={}'.format(jsearch))
     #!return JsonResponse(formdict)
     c = Client()
@@ -521,11 +525,14 @@ def search(request):
     """
     Search Archive, returns FITS metadata (header field/values).
     """
+    logging.debug('DBG-0 search({})'.format(request))
     if request.method != 'POST':
         raise Exception('Only accepts POST http method')
     if request.content_type != "application/json" :
         raise Exception("Only accepts content_type = application/json. Got '{}'"
                         .format(request.content_type))
+
+    logging.debug('DBG-1 search.request.body={}'.format(request.body))
 
     page_limit = int(request.GET.get('limit','100')) # num of records per page
     page = int(request.GET.get('page','1'))
@@ -536,9 +543,19 @@ def search(request):
     
     body = json.loads(request.body.decode('utf-8'))
     jsearch = body # ['search']
-    logging.debug('jsearch={}'.format(jsearch))
 
-    #!!! add validation against schema
+    logging.debug('DBG jsearch={}'.format(jsearch))
+
+    # Validate against schema
+    try:
+        schemafile = '/etc/natica/search-schema.json'
+        with open(schemafile) as f:
+            schema = json.load(f)
+            jsonschema.validate(jsearch, schema)
+    except Exception as err:
+        raise dex.BadSearchSyntax('JSON did not validate against'
+                                  ' {}; {}'.format(scemafile, err))
+
 
     used_fields = set(jsearch.keys())
     if not (search_fields >= used_fields):
