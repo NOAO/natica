@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {},
+    "id": "http://example.com/example.json",
+    "items": {
+        "id": "/items",
+        "properties": {
+            "DATE-OBS": {
+                "id": "/items/properties/DATE-OBS",
+                "type": "string"
+            },
+            "DTINSTRU": {
+                "id": "/items/properties/DTINSTRU",
+                "type": "string"
+            },
+            "DTPROPID": {
+                "id": "/items/properties/DTPROPID",
+                "type": "string"
+            },
+            "DTSITE": {
+                "id": "/items/properties/DTSITE",
+                "type": "string"
+            },
+            "DTTELESC": {
+                "id": "/items/properties/DTTELESC",
+                "type": "string"
+            },
+            "PROCTYPE": {
+                "id": "/items/properties/PROCTYPE",
+                "type": "string"
+            },
+            "PRODTYPE": {
+                "id": "/items/properties/PRODTYPE",
+                "type": "string"
+            },
+        },
+        "type": "object"
+    },
+    "type": "array"
+}
+

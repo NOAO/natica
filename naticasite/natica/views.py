@@ -9,7 +9,7 @@ import datetime
 import pytz
 import warnings
 import random
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict, defaultdict, Counter
 
 import astropy.coordinates as coord
 import astropy.units as u
@@ -69,6 +69,42 @@ def prot(request):
                                    response['query_list']))
 
 
+@api_view(['GET'])
+def analysis(request):
+    """
+    Extract info about the data over the whole database.
+    """
+    # required fields
+    rf = {'DATE-OBS', 'DTINSTRU','DTPROPID','DTSITE', 'DTTELESC',
+          'PROCTYPE','PRODTYPE'}
+    
+    numerous = {'DATE-OBS', 'DTPROPID'} #lots of distinct values
+    used = {'EXPTIME','RA','DEC'}
+    rarevals = rf - numerous
+    
+    ei = Hdu.objects.filter(extras__has_any_keys=(rf | used))\
+                    .values_list('extras',flat=True).iterator()
+    counts = OrderedDict.fromkeys(['FitsFile', 'HDU', 'Proposal', '']
+                                  + sorted(list(numerous | used)))
+    counts.update(dict(FitsFile=FitsFile.objects.count(),
+                       HDU=Hdu.objects.all().count(),
+                       Proposal=Proposal.objects.all().count() ))
+    ctr = Counter()
+    valcounters = dict()
+    for k in rarevals:
+        valcounters['{}-vals'.format(k)] = Counter()
+    for e in ei:
+        ctr.update((rf | used) & e.keys()) # count keys in our select set
+        for k in (rarevals & e.keys()):
+            valcounters['{}-vals'.format(k)].update([e.get(k)])
+    for k in valcounters.keys():
+        ctr[k] = valcounters[k]
+    for k in sorted(ctr.keys()):
+        counts[k] = None  # for ordering
+    counts.update(ctr)
+        
+    return JsonResponse(counts, json_dumps_params=dict(indent=4))
+
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -82,7 +118,7 @@ def get_client_ip(request):
 @api_view(['GET'])
 def index(request):
     """
-    Return the number of reach kind of records.
+    Return the number of each kind of records.
     """
     ip = get_client_ip(request)
     counts = dict(FitsFile=FitsFile.objects.count(),
@@ -90,11 +126,11 @@ def index(request):
                   ip=ip,
                   )
     #return JsonResponse(counts)
+    #<tr> <th align="left">IP</th> <td>{ip}</td> </tr>
     return HttpResponse('''<h3>Object Counts</h3>
     <table>
     <tr> <th align="left">FitsFile</th> <td>{FitsFile}</td> </tr>
     <tr> <th align="left">HDU</th> <td>{HDU}</td> </tr>
-    <tr> <th align="left">IP</th> <td>{ip}</td> </tr>
     </table>'''.format(**counts))
 
 def md5(fname):
@@ -222,6 +258,7 @@ def aggregate_extras_single_value(hdudict_list):
     return agg
     
 
+# a Patch func
 def reset_singletons(fobj):
     """Replace list with first val for selected flds."""
     #!print('DBG-0:', flush=True)
@@ -234,6 +271,7 @@ def reset_singletons(fobj):
     #!fobj.save()
     
           
+# a Patch func
 def load_fitsfile(fobj):
     """Load one FitsFile from content of HDUs (mostly EXTRAS field)"""
     agg,rkeys = aggregate_extras([ob.extras for ob in fobj.hdu_set.all()])
@@ -279,29 +317,8 @@ def load_fitsfile(fobj):
     #valdict = validate_header(hdudictlist(hdulist))
     fobj.save()
 
-    #!ra_set = {}
-    #!dec_set = {}
-    #!try:
-    #!    ra_set = set([todeg(val) for val in agg.get('RA',[]) if val != 'NA'])
-    #!    dec_set = set([todeg(val) for val in agg.get('DEC',[]) if val != 'NA'])
-    #!except Exception as ex:
-    #!    warnings.warn('Failed RA/DEC conversion for FitsFile {}; {}'
-    #!                  .format(fobj.id, ex))
-    #!
-    #!    #astropy.coordinates.errors.IllegalMinuteError: An invalid value for 'minute' was found ('134552774'); should be in the range [0,60)    
-    #!    #!raise nex.FitsError('Failed RA/DEC conversion for FitsFile {}; {}'
-    #!    #!                    .format(fobj.id, ex))
-    #!
-    #!if len(ra_set) > 0:
-    #!    fobj.ra=NumericRange(lower=min(ra_set), upper=max(ra_set),
-    #!                         bounds='[]')
-    #!if len(dec_set) > 0:
-    #!    fobj.dec=NumericRange(lower=min(dec_set), upper=max(dec_set),
-    #!                          bounds='[]')
-    #!#fobj.full_clean()
-    #!fobj.save()
-    
 
+# a Patch func
 def attach_prop(fobj):
     """From data found in FitsFile (fobj) and related Hdu, create new Proposal if
  it doesn't exist. Attach it to fobj.  If we don't have a PROPID, do nothing."""
@@ -329,6 +346,7 @@ def localize(dateval):
     else:
         return pytz.utc.localize(dateutil.parser.parse(dateval))
 
+# a Patch func
 def set_release_date_by_prop(fobj):
     """Assign Release_Date by adding Proprietary_Period to DATE-OBS"""
     #!reldate = pytz.utc.localize(datetime.datetime.combine(
@@ -632,3 +650,4 @@ def query(request):
         form = SearchForm()
 
     return render(request, 'search.html', {'form': form})    
+
