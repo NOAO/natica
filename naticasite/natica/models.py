@@ -3,21 +3,21 @@ from django.contrib.postgres.fields import ArrayField, JSONField, DateRangeField
 
 
 class Proposal(models.Model):
+    extras = JSONField()
     prop_id = models.CharField(null=True, max_length=10, unique=True)
     pi = models.CharField(max_length=40)
     proprietary_period = models.SmallIntegerField() # months
-    extras = JSONField()
 
     def __str__(self):
         return ("{}({}): {}"
                 .format(self.prop_id, self.proprietary_period, self.pi))
 
 class FitsFile(models.Model):
+    extras = JSONField(default={})  
     # md5sum of file as stored in MSS
     md5sum = models.CharField(max_length=32, unique=True)
     filesize  = models.BigIntegerField()
     proposal = models.ForeignKey(Proposal, null=True, on_delete=models.SET_NULL)
-    extras = JSONField(default={})  
 
     ############################################
     ### Fields that LSA Portal can query against
@@ -42,6 +42,9 @@ class FitsFile(models.Model):
 
 class Hdu(models.Model):
     """Required header fields per FITS Std 3.0"""
+    # Other FITS field content not stored below
+    extras = JSONField() 
+
     fitsfile = models.ForeignKey(FitsFile, on_delete=models.CASCADE)
     hdu_idx  = models.PositiveSmallIntegerField() # hdu_idx[0] :: Primary HDU
     # (SIMPLE = T) Required For Primary HDU
@@ -66,8 +69,6 @@ class Hdu(models.Model):
     #!ra = models.CharField(null=True, max_length=20) 
     #!dec = models.CharField(null=True, max_length=20) 
 
-    # Other FITS field content not stored above
-    extras = JSONField() 
 
 
 ##############################################################################

@@ -75,28 +75,45 @@ def prot(request):
 
 @api_view(['GET'])
 def analysis(request):
-    """
-    Extract info about the data over the whole database.
-    """
-    # required fields
+    """Extract info about the data over the whole database."""
+    # Required Fields
     rf = {'DATE-OBS', 'DTINSTRU','DTPROPID','DTSITE', 'DTTELESC',
           'PROCTYPE','PRODTYPE'}
-    
     numerous = {'DATE-OBS', 'DTPROPID'} #lots of distinct values
     used = {'EXPTIME','RA','DEC'}
     rarevals = rf - numerous
     
-    ei = Hdu.objects.filter(extras__has_any_keys=(rf | used))\
-                    .values_list('extras',flat=True).iterator()
     counts = OrderedDict.fromkeys(['FitsFile', 'HDU', 'Proposal', '']
                                   + sorted(list(numerous | used)))
     counts.update(dict(FitsFile=FitsFile.objects.count(),
                        HDU=Hdu.objects.all().count(),
-                       Proposal=Proposal.objects.all().count() ))
+                       Proposal= Proposal.objects.all().count(),
+                   ))
+    # Ranges (truncated to DAYS, truncated to INT)
+    dateobs_span = Counter()
+    exposure_span = Counter()
+    ra_span = Counter()
+    dec_span = Counter()
+    for fobj in FitsFile.objects.all().iterator():
+        dateobs_span.update([(fobj.date_obs.upper-fobj.date_obs.lower).days])
+        exposure_span.update([int(fobj.exposure.upper-fobj.exposure.lower)])
+        if fobj.ra:
+            ra_span.update([int(fobj.ra.upper-fobj.ra.lower)])
+        if fobj.dec:
+            dec_span.update([int(fobj.dec.upper-fobj.dec.lower)])
+    counts['DATE-OBS span over file'] = dateobs_span
+    counts['EXPOSURE span over file'] = exposure_span
+    counts['RA span over file'] = ra_span
+    counts['DEC span over file'] = dec_span
+        
+
+    # Count HDUs that have selected fields, and distinct values of some fields
     ctr = Counter()
     valcounters = dict()
     for k in rarevals:
         valcounters['{}-vals'.format(k)] = Counter()
+    ei = Hdu.objects.filter(extras__has_any_keys=(rf | used))\
+                    .values_list('extras',flat=True).iterator()
     for e in ei:
         ctr.update((rf | used) & e.keys()) # count keys in our select set
         for k in (rarevals & e.keys()):
@@ -125,10 +142,10 @@ def index(request):
     Return the number of each kind of records.
     """
     ip = get_client_ip(request)
-    counts = dict(FitsFile=FitsFile.objects.count(),
-                  HDU=Hdu.objects.all().count(),
-                  ip=ip,
-                  )
+    counts = {'Number of FitsFile objects': FitsFile.objects.count(),
+              'Number of Hdu objects': Hdu.objects.all().count(),
+              'Client IP': ip,
+              }
     #return JsonResponse(counts)
     #<tr> <th align="left">IP</th> <td>{ip}</td> </tr>
     return HttpResponse('''<h3>Object Counts</h3>
@@ -494,7 +511,7 @@ def wrap(qdict):
 @api_view(['POST'])
 def search2(request):
     """
-    Search Archive, returns FITS metadata (header field/values).
+    Search Archive, returns FITS metadata (header field/values). Use with form.
     """
     if request.method != 'POST':
         raise Exception('Only accepts POST http method')

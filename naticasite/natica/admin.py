@@ -48,7 +48,8 @@ class FitsFileAdmin(admin.ModelAdmin):
         'original_filename',
         'archive_filename',
         #'extras',
-        #'ra', 'dec',
+        'ra', 'dec',
+        'exposure',
     )
 
 
