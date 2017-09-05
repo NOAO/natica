@@ -38,7 +38,13 @@ from . import proto
 
 api_version = '0.0.2' # prototype only
 
-def todeg(sexstr):
+# Sean: RA is measured in units of time (hours, minutes, seconds)
+# while Dec is measured in the usual units of angular measurement
+# (degrees, minutes, seconds),
+# https://community.dur.ac.uk/physics.astrolab/one_lab/pm_coord.html
+def RAtodeg(sexstr):
+    return coord.Angle(sexstr, unit=u.h).degree
+def DECtodeg(sexstr):
     return coord.Angle(sexstr, unit=u.deg).degree
 
 def proto_html(ttime, qcount, query_list):
@@ -96,15 +102,19 @@ def analysis(request):
     dec_span = Counter()
     for fobj in FitsFile.objects.all().iterator():
         dateobs_span.update([(fobj.date_obs.upper-fobj.date_obs.lower).days])
-        exposure_span.update([int(fobj.exposure.upper-fobj.exposure.lower)])
+        exposure_span.update([round(fobj.exposure.upper-fobj.exposure.lower, 2)])
         if fobj.ra:
-            ra_span.update([int(fobj.ra.upper-fobj.ra.lower)])
+            ra_span.update([round(fobj.ra.upper-fobj.ra.lower, 2)])
         if fobj.dec:
-            dec_span.update([int(fobj.dec.upper-fobj.dec.lower)])
-    counts['DATE-OBS span over file'] = dateobs_span
-    counts['EXPOSURE span over file'] = exposure_span
-    counts['RA span over file'] = ra_span
-    counts['DEC span over file'] = dec_span
+            dec_span.update([round(fobj.dec.upper-fobj.dec.lower, 2)])
+    counts['DATE-OBS span over file'] = [(str(k),v)
+                                         for (k,v) in dateobs_span.items()]
+    counts['EXPOSURE span over file'] = [(str(k),v)
+                                         for (k,v) in exposure_span.items()]
+    counts['RA span over file'] = [(str(k),v)
+                                         for (k,v) in ra_span.items()]
+    counts['DEC span over file'] = [(str(k),v)
+                                         for (k,v) in dec_span.items()]
         
 
     # Count HDUs that have selected fields, and distinct values of some fields
@@ -124,6 +134,7 @@ def analysis(request):
         counts[k] = None  # for ordering
     counts.update(ctr)
         
+    logging.debug('DBG-ana counts={}'.format(counts))
     return JsonResponse(counts, json_dumps_params=dict(indent=4))
 
 
@@ -142,16 +153,21 @@ def index(request):
     Return the number of each kind of records.
     """
     ip = get_client_ip(request)
-    counts = {'Number of FitsFile objects': FitsFile.objects.count(),
-              'Number of Hdu objects': Hdu.objects.all().count(),
-              'Client IP': ip,
+    counts = {'FitsFile': FitsFile.objects.count(),
+              'HDU': Hdu.objects.all().count(),
+              'ip': ip,
               }
     #return JsonResponse(counts)
-    #<tr> <th align="left">IP</th> <td>{ip}</td> </tr>
     return HttpResponse('''<h3>Object Counts</h3>
     <table>
-    <tr> <th align="left">FitsFile</th> <td>{FitsFile}</td> </tr>
-    <tr> <th align="left">HDU</th> <td>{HDU}</td> </tr>
+    <tr> <th align="left">IP</th> <td>{ip}</td> </tr>
+    <tr> <th align="left">Number of FitsFile objects</th> 
+         <td>{FitsFile}</td> 
+    </tr>
+    <tr> 
+       <th align="left">Number of Hdu objects</th> 
+       <td>{HDU}</td> 
+    </tr>
     </table>'''.format(**counts))
 
 def md5(fname):
@@ -168,7 +184,7 @@ def validate_header(hdudictlist):
     REQ_SINGLETON_KEYS must exist in at least one HDU and have the
     same value in all of them. 
     """
-    #!!! Insure TELESCOP and INSTRUME have known values (enum)
+    #!!! Insure DTTELESC and DTINSTRU have known values (enum)
 
     def hvalues(k):
         return set([hd.get(k, None) for hd in hdudictlist]) - {None}
@@ -203,16 +219,17 @@ def validate_header(hdudictlist):
     
 
 def get_range_values(agg):
+    logging.debug('DBG-get_range_values agg={}'.format(agg))
     ra = None
     dec = None
     exposure = None
-
+    
     dateobs = DateRange(min(agg['DATE-OBS']), max(agg['DATE-OBS']), bounds='[]')
     if 'RA' in agg:
-        vals =  [todeg(val) for val in agg['RA']]
+        vals =  [RAtodeg(val) for val in agg['RA']]
         ra = NumericRange(min(vals), max(vals), '[]')
     if 'DEC' in agg:
-        vals =  [todeg(val) for val in agg['DEC']]
+        vals =  [DECtodeg(val) for val in agg['DEC']]
         dec = NumericRange(min(vals), max(vals), '[]')
     if 'EXPTIME' in agg:
         exposure=NumericRange(min(agg['EXPTIME']), max(agg['EXPTIME']),'[]')
@@ -290,6 +307,18 @@ def reset_singletons(fobj):
         fobj.extras[k] = extras[k][0]
     fobj.extras = extras
     #!fobj.save()
+    
+
+# a Patch func
+def set_range_fields(fobj):
+    """Set ranges for RA, DEC, EXPOSURE, DATE_OBS"""
+    agg,rkeys = aggregate_extras([ob.extras for ob in fobj.hdu_set.all()])
+    #range_vals = get_range_values(agg)
+    fobj.ra = agg['RA']
+    fobj.dec = agg['DEC']
+    fobj.exposure = agg['EXPTIME']
+    fobj.date_obs = agg['DATE-OBS']
+    fobj.save()
     
           
 # a Patch func
@@ -383,7 +412,8 @@ def set_release_date_by_prop(fobj):
     
 def PATCH(progress=100):
     """Change some fields around.  I muck with this frequently."""
-    pfunc = set_release_date_by_prop
+    #pfunc = set_release_date_by_prop
+    pfunc = set_range_fields
     print('\n\n{}\n(Display dot every {} objects)'
           .format(pfunc.__doc__, progress))
     
@@ -407,7 +437,6 @@ def PATCH(progress=100):
 def store_metadata(hdudict_list, non_hdu_vals):
     """Store ALL of the FITS header values into DB. Assumed to be validated."""
 
-
     ## FITS File
     agg,rkeys = aggregate_extras(hdudict_list)
     #!print('\nDBG: agg=',agg)
@@ -415,9 +444,6 @@ def store_metadata(hdudict_list, non_hdu_vals):
     fits_extras = dict()
     for k in set(agg.keys()) - fits_core - rkeys:
         fits_extras[k] = agg[k]
-    #!print('DBG: fits_extras=',fits_extras)
-
-    # release_date
     
     fits = FitsFile(md5sum=non_hdu_vals['md5sum'],
                     original_filename=non_hdu_vals['src_fname'],
@@ -458,6 +484,13 @@ def store_metadata(hdudict_list, non_hdu_vals):
         )
         #!!! Add to naxisN array if appropriate
         hduobj.save()
+
+def protected_store_metadata(hdudict_list, non_hdu_vals):
+    try:
+        store_metadata(hdudict_list, non_hdu_vals)
+    except Exception as err:
+        raise nex.FitsError('Could not store metadata; {}'.format(err))
+    
 
 def hdudictlist(hdulist):
     return [dict(hdu.header.items()) for hdu in hdulist]
@@ -570,8 +603,8 @@ def search(request):
             schema = json.load(f)
             jsonschema.validate(jsearch, schema)
     except Exception as err:
-        raise dex.BadSearchSyntax('JSON did not validate against'
-                                  ' {}; {}'.format(scemafile, err))
+        raise nex.BadSearchSyntax('JSON did not validate against'
+                                  ' {}; {}'.format(schemafile, err))
 
 
     used_fields = set(jsearch.keys())
