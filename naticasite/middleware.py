@@ -31,7 +31,7 @@ class RequestExceptionHandler(object):
             status = 500
             exception_dict = {'errorMessage':
                               'Unexpected Error!: {}'.format(exception),
-                              #!'traceback': traceback.format_exc(),
+                              'traceback': traceback.format_exc(),
             }
         
         print('DBG: middleware, exception_dict={}'.format(exception_dict))

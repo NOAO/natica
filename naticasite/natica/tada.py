@@ -17,6 +17,7 @@ import hashlib
 from pathlib import PurePath
 import astropy.io.fits as pyfits
 import requests
+import settings
 
 ##############################################################################
 
@@ -76,7 +77,8 @@ def md5(fname):
 def http_archive_ingest(modifiedfits):
     """Deliver FITS to NATICA webservice for ingest."""
     f = open(modifiedfits, 'rb')
-    urls = 'http://0.0.0.0:8000/natica/ingest/'
+    #urls = 'http://0.0.0.0:8000/natica/ingest/'
+    urls = settings.natica_ingest_url
     r = requests.post(urls,
                       data=dict(md5sum=md5(modifiedfits)),
                       files={'file':f})
@@ -113,19 +115,20 @@ md5sum:: checksum of original file from dome
     # ingest NATICA service
     (status,error) = http_archive_ingest(fitscache)
     
-    if status == 200:
-        # SUCCESS
+    if status == 200:  # SUCCESS
         # Remove cache files; FITS + YAML
         os.remove(fitscache) 
         os.remove(pers_file)
         logging.debug('Ingest SUCCESS: {}'.format(fitspath))
-    else:
-        # FAILURE
+    else:  # FAILURE
+        logging.error('Ingest FAIL: {} ({}); {}'
+                      .format(fitspath, fitscache, error))
+
         # move FITS + YAML on failure
         shutil.move(fitscache, anticachedir)
         shutil.move(pers_file, anticachedir)
-        logging.error('Ingest FAIL: {} ({}); {}'
-                      .format(fitspath, fitscache, error))
+        raise Exception('Failed to ingest using NATICA webservice on {}'
+                        .format(fitscache))
 
     # !!! update AUDIT record. At-rest in Archive(success), or Anti-cache(fail)
     
@@ -154,7 +157,7 @@ def main():
     #!print('EXECUTING: %s\n\n' % (' '.join(sys.argv)))
     parser = argparse.ArgumentParser(
         description='Apply personality modification to FITS. Ingest with NATICA',
-        epilog='EXAMPLE: %(prog)s {}'.format(testfile),
+        epilog='EXAMPLE: %(prog)s  --loglevel DEBUG {}'.format(testfile),
         formatter_class=argparse.RawTextHelpFormatter
         )
     parser.add_argument('--version', action='version', version='1.0.1')

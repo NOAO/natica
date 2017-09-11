@@ -11,6 +11,8 @@ import pytz
 import warnings
 import random
 from collections import OrderedDict, defaultdict, Counter
+import shutil
+import os
 
 import astropy.coordinates as coord
 import astropy.units as u
@@ -35,6 +37,7 @@ from .forms import SearchForm
 from . import exceptions as nex
 from . import search_filters as sf
 from . import proto
+from . import file_naming as fn
 
 api_version = '0.0.2' # prototype only
 
@@ -505,12 +508,17 @@ def handle_uploaded_file(f, md5sum):
 
         for chunk in f.chunks():
             destination.write(chunk)
-        valdict = dict(src_fname = f.name,
-                       arch_fname = tgtfile,
+        hdudicts = hdudictlist(hdulist)
+        archive_path = fn.generate_archive_path(hdudicts[0])
+        valdict = dict(src_fname = hdudicts[0].get('DTACQNAM',''),
+                       arch_fname = archive_path,
                        md5sum = md5sum,
                        size = f.size)
-        store_metadata(hdudictlist(hdulist),valdict)
-    
+        logging.debug('DBG: archive_path={}'.format(archive_path))
+        os.makedirs(str(archive_path.parent), exist_ok=True)
+        shutil.move(tgtfile, str(archive_path))
+        store_metadata(hdudicts, valdict)
+        
 #@csrf_exempt
 @api_view(['POST'])
 def ingest(request):
