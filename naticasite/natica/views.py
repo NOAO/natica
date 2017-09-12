@@ -182,7 +182,8 @@ def md5(fname):
 
 
 def validate_header(hdudictlist):
-    """Raise exception if FITS header is not good enuf for Archive.
+    """Raise exception if FITS header (after personality modifications) 
+is not good enuf for Archive.
 
     REQ_SINGLETON_KEYS must exist in at least one HDU and have the
     same value in all of them. 
@@ -218,6 +219,16 @@ def validate_header(hdudictlist):
     #! proposer = just_one('PROPOSER')
     #! obj_set = at_least_one('OBJECT') 
 
+    # Validate against schema
+    try:
+        schemafile = '/etc/natica/fits-header-schema.json'
+        with open(schemafile) as f:
+            schema = json.load(f)
+            jsonschema.validate(hdudictlist, schema)
+    except Exception as err:
+        raise nex.BadFitsHdrContent('JSON did not validate against'
+                                  ' {}; {}'.format(schemafile, err))
+    
     return True # exception on invalid
     
 

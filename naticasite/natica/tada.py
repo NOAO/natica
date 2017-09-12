@@ -127,8 +127,8 @@ md5sum:: checksum of original file from dome
         # move FITS + YAML on failure
         shutil.move(fitscache, anticachedir)
         shutil.move(pers_file, anticachedir)
-        raise Exception('Failed to ingest using NATICA webservice on {}'
-                        .format(fitscache))
+        raise Exception('Failed to ingest using NATICA webservice on {}; {}'
+                        .format(fitscache, error))
 
     # !!! update AUDIT record. At-rest in Archive(success), or Anti-cache(fail)
     
