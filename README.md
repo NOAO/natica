@@ -1,2 +1,2 @@
 # natica
- National Astronomy Telescope Image &amp; Catalog Archive
+ National Astronomy Telescope Image and Catalog Archive
