@@ -39,7 +39,7 @@ from . import search_filters as sf
 from . import proto
 from . import file_naming as fn
 
-api_version = '0.0.2' # prototype only
+api_version = '0.1.7' # prototype only
 
 # Sean: RA is measured in units of time (hours, minutes, seconds)
 # while Dec is measured in the usual units of angular measurement
@@ -658,30 +658,38 @@ def search(request):
     qs = fullqs.order_by(order_fields)[offset:page_limit]
     query = str(qs.query)
     logging.debug('DBG: query={}'.format(query))
-    results = [dict(
-        ra=[fobj.ra.lower, fobj.ra.upper],
-        dec=[fobj.dec.lower, fobj.dec.upper],
-        #depth,
-        exposure=[fobj.exposure.lower,fobj.exposure.upper],
-        filename=fobj.archive_filename,
-        filesize=fobj.filesize,
-        filter=fobj.extras.get('FILTER'), # FILTER, FILTERS, FILTER1, FILTER2
-        image_type=fobj.extras.get('IMAGETYP'), 
-        instrument=fobj.instrument,
-        md5sum=fobj.md5sum,
-        obs_date=[fobj.date_obs.lower, fobj.date_obs.upper],
-        observation_mode=fobj.extras.get('OBSMODE'),
-        observation_type=fobj.extras.get('OBSTYPE'), 
-        original_filename=fobj.original_filename,
-        pi=fobj.extras.get('PROPOSER'),
-        product=fobj.extras.get('PRODTYPE'),
-        prop_id=fobj.extras.get('DTPROPID'),
-        release_date=fobj.release_date,
-        seeing=fobj.extras.get('SEEING'),
-        #survey_id
-        telescope=fobj.telescope,
-    ) for fobj in qs.iterator()]
-        
+    
+
+    results = list()
+    for fobj in qs.iterator():
+        ra = [fobj.ra.lower, fobj.ra.upper] if fobj.ra != None else None
+        dec = [fobj.dec.lower, fobj.dec.upper] if fobj.dec != None else None
+        exposure = [fobj.exposure.lower, fobj.exposure.upper] if fobj.exposure != None else None
+        obsdate = [fobj.date_obs.lower, fobj.date_obs.upper] if fobj.date_obs != None else None
+        results.extend(
+            dict(
+                ra=ra,
+                dec=dec,
+                #depth,
+                exposure=exposure,
+                filename=fobj.archive_filename,
+                filesize=fobj.filesize,
+                filter=fobj.extras.get('FILTER'), # FILTER, FILTERS, FILTER1, FILTER2
+                image_type=fobj.extras.get('IMAGETYP'), 
+                instrument=fobj.instrument,
+                md5sum=fobj.md5sum,
+                obs_date=obsdate,
+                observation_mode=fobj.extras.get('OBSMODE'),
+                observation_type=fobj.extras.get('OBSTYPE'), 
+                original_filename=fobj.original_filename,
+                pi=fobj.extras.get('PROPOSER'),
+                product=fobj.extras.get('PRODTYPE'),
+                prop_id=fobj.extras.get('DTPROPID'),
+                release_date=fobj.release_date,
+                seeing=fobj.extras.get('SEEING'),
+                #survey_id
+                telescope=fobj.telescope,
+            ))
   
     meta = OrderedDict.fromkeys(['total_count',
                                  'page_result_count',
