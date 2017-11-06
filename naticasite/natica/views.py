@@ -649,7 +649,7 @@ def search(request):
          #& sf.extras(jsearch.get('extras', None))
          #& sf.xtension(jsearch.get('xtension', None))
 
-    #logging.debug('DBG: q={}'.format(str(q)))
+    logging.debug('DBG: q={}'.format(str(q)))
     #fullqs = FitsFile.objects.filter(q).distinct().order_by(order_fields)
     fullqs = FitsFile.objects.filter(q)
     #total_count = len(fullqs) #.count()   tot seconds: 2.8
@@ -710,7 +710,7 @@ def search(request):
         total_count = total_count,
     )
     #logging.debug('DBG: query={}'.format(qs.query))
-    jresponse = OrderedDict(meta=meta, results=results)
+    jresponse = OrderedDict(meta=meta, resultset=results)
     #!logging.debug('DBG: jresponse={}'.format(jresponse)) # BIG
     return JsonResponse(jresponse)
                         

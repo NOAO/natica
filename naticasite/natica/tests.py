@@ -9,6 +9,27 @@ import json
 #from . import expected as exp
 from . import views
 import logging
+import sys
+from contextlib import contextmanager
+
+@contextmanager
+def streamhandler_to_console(lggr):
+    # Use 'up to date' value of sys.stdout for StreamHandler,
+    # as set by test runner.
+    stream_handler = logging.StreamHandler(sys.stdout)
+    lggr.addHandler(stream_handler)
+    yield
+    lggr.removeHandler(stream_handler)
+
+def testcase_log_console(lggr):
+    def testcase_decorator(func):
+        def testcase_log_console(*args, **kwargs):
+            with streamhandler_to_console(lggr):
+                return func(*args, **kwargs)
+        return testcase_log_console
+    return testcase_decorator
+
+logger = logging.getLogger('django_test')
 
 
 class SearchTest(TestCase):
@@ -100,34 +121,34 @@ class SearchTest(TestCase):
                          '"0.1.7"',
                          msg='Unexpected API version')
         self.assertEqual(response.status_code, 200)
-#!
-#!    def test_search_1(self):
-#!        "MVP-1. Basics. No validation of input"
-#!        #! "filename": "foo",
-#!        req = '''{
-#!        "coordinates": {
-#!            "ra": 181.368791666667,
-#!            "dec": -45.5396111111111
-#!        },
-#!        "pi": "Cypriano",
-#!        "search_box_min": 5.0,
-#!        "prop_id": "noao",
-#!        "obs_date": ["2009-04-01", "2009-04-03", "[]"],
-#!        "original_filename": "/ua84/mosaic/tflagana/3103/stdr1_012.fits",
-#!        "telescope_instrument": [["ct4m","mosaic_2"],["foobar", "bar"]],
-#!        "exposure_time": 15,
-#!        "release_date": "2010-10-01T00:00:00",
-#!        "image_filter":["raw", "calibrated"]
-#!    }
-#!'''
-#!        response = self.client.post('/natica/search/',
-#!                                    content_type='application/json',
-#!                                    data=req  )
-#!        #print('DBG: response={}'.format(response.content.decode()))
-#!        self.assertJSONEqual(json.dumps(response.json()['resultset']),
-#!                             json.dumps(json.loads(exp.search_1)['resultset']),
-#!                             msg='Unexpected resultset')
-#!        self.assertEqual(response.status_code, 200)
+
+    @testcase_log_console(logger)
+    def test_search_1(self):
+        "MVP-1. Basics. No validation of input"
+        #! "filename": "foo",
+        req = '''{
+        "coordinates": {
+            "ra": 181.368791666667,
+            "dec": -45.5396111111111
+        },
+        "pi": "Cypriano",
+        "search_box_min": 5.0,
+        "prop_id": "noao",
+        "obs_date": ["2009-04-01", "2009-04-03", "[]"],
+        "original_filename": "/ua84/mosaic/tflagana/3103/stdr1_012.fits",
+        "telescope_instrument": [["ct4m","mosaic_2"],["foobar", "bar"]],
+        "exposure_time": 15,
+        "release_date": "2010-10-01T00:00:00",
+        "image_filter":["raw", "calibrated"]
+        }'''
+        response = self.client.post('/natica/search/',
+                                    content_type='application/json',
+                                    data=req  )
+        #print('DBG: response={}'.format(response.content.decode()))
+        self.assertJSONEqual(json.dumps(response.json()['resultset']),
+                             json.dumps(json.loads(exp.search_1)['resultset']),
+                             msg='Unexpected resultset')
+        self.assertEqual(response.status_code, 200)
 #!
 #!    def test_search_fakeerror_0(self):
 #!        "Fake Error for client testing: unknown type (return allowables)"
