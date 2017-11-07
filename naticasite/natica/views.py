@@ -588,7 +588,7 @@ def search2(request):
                       data=json.dumps(wrap(jsearch)))
 
 
-#curl -H "Content-Type: application/json" -X POST -d @natica/fixtures/request-search-1.json http://localhost:8000/natica/search/ | python -m json.tool
+#curl -H "Content-Type: application/json" -X POST -d @natica/fixtures/request-search-1.json http://localhost:8080/natica/search/ | python -m json.tool
 @api_view(['POST'])
 def search(request):
     """

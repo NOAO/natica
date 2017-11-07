@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, Client, RequestFactory
 from naticasite import settings
 import json
-#from . import expected as exp
+from . import expected as exp
 from . import views
 import logging
 import sys
@@ -34,6 +34,8 @@ logger = logging.getLogger('django_test')
 
 class SearchTest(TestCase):
 
+    maxDiff = None # too see full values in DIFF on assert failure
+    
     #############################################################################
     ### /natica/search
     ###
@@ -86,7 +88,6 @@ class SearchTest(TestCase):
 #!            meta=response.json().get('meta')
 #!            self.assertContains(response.get('results','MISSING_RESULTS'),resp)
         
-        
     def test_search_0(self):
         "No filter. Verify: API version."
         req = '{ }'
@@ -125,21 +126,23 @@ class SearchTest(TestCase):
     @testcase_log_console(logger)
     def test_search_1(self):
         "MVP-1. Basics. No validation of input"
-        #! "filename": "foo",
+
+        REMOVED = {
+            "filename": "foo",
+            "pi": "Cypriano",
+            "prop_id": "noao",
+            "image_filter":["raw", "calibrated"],
+
+            "original_filename": "/sandbox/tada/tests/smoke/tada-test-data/scrape/20110101/wiyn-whirc/obj_355.fits.fz",
+            "telescope_instrument": [["WIYN","whirc"],["foobar", "bar"]],
+            "exposure_time": 60,
+            "release_date": "2017-09-12",
+            "search_box_min": 5.0,
+            "obs_date": ["2012-12-20", "2012-12-21", "[]"],
+            
+        }
         req = '''{
-        "coordinates": {
-            "ra": 181.368791666667,
-            "dec": -45.5396111111111
-        },
-        "pi": "Cypriano",
-        "search_box_min": 5.0,
-        "prop_id": "noao",
-        "obs_date": ["2009-04-01", "2009-04-03", "[]"],
-        "original_filename": "/ua84/mosaic/tflagana/3103/stdr1_012.fits",
-        "telescope_instrument": [["ct4m","mosaic_2"],["foobar", "bar"]],
-        "exposure_time": 15,
-        "release_date": "2010-10-01T00:00:00",
-        "image_filter":["raw", "calibrated"]
+        "coordinates": {"ra": 137.2,"dec": 44.8}
         }'''
         response = self.client.post('/natica/search/',
                                     content_type='application/json',

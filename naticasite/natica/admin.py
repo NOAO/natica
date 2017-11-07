@@ -50,6 +50,7 @@ class FitsFileAdmin(admin.ModelAdmin):
         #'extras',
         'ra', 'dec',
         'exposure',
+        'proposal',
     )
 
 
