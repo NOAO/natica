@@ -608,11 +608,7 @@ def search(request):
     offset = (page-1) * page_limit
     # order:: comma delimitied, leading +/-  (ascending/descending)
     order_fields = request.GET.get('order','original_filename')
-
-    
-    body = json.loads(request.body.decode('utf-8'))
-    jsearch = body # ['search']
-
+    jsearch = json.loads(request.body.decode('utf-8'))
     logging.debug('DBG jsearch={}'.format(jsearch))
 
     # Validate against schema
