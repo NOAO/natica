@@ -20,9 +20,9 @@ def exposure_time(val):
     if isinstance(val, list):
         minval,maxval,*xtra = val
         # bounds = xtra[0] if (len(xtra) > 0) else '[)'  
-        return Q(exposure__overlap=NumericRange(minval, maxval))
+        return Q(exposure__overlap=NumericRange(minval, maxval, bounds='[]'))
     else:
-        return Q(exposure__overlap=NumericRange(val, val))
+        return Q(exposure__overlap=NumericRange(val, val, bounds='[]'))
 
 def archive_filename(val):
     if val == None: return Q()

@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+"""
+Store, Search, Retrieve
+"""
 import sys
 import argparse
 import logging
@@ -453,23 +455,45 @@ def store_metadata(hdudict_list, non_hdu_vals):
 
     ## FITS File
     agg,rkeys = aggregate_extras(hdudict_list)
+    propid = list(agg.get('DTPROPID'))[0]
+    pi = list(agg.get('DTPI'))[0]
+    fid = non_hdu_vals['md5sum']
     #!print('\nDBG: agg=',agg)
+    try:
+        prop = Proposal.objects.get(prop_id=propid)
+    except ObjectDoesNotExist:
+        # No related or found Proposal, but we have a DTPROPID
+        prop = Proposal(
+            prop_id = propid,
+            pi = pi,
+            proprietary_period = random.choice([0, 1,12]), #months !!!
+            extras={}  )
+        prop.save()
+    except Exception as err:
+        msg = ('Propid "{}" not found in DB. No proposal assigned to file {}.'
+               .format(propid, fid))
+        logging.error(msg)
+        prop = None
+    logging.debug('DBG: store_metadata propid={}, prop={}; id={}'.format(propid, prop,fid))
+    
     fits_core = set([ f.name.upper() for f in FitsFile._meta.get_fields()])
     fits_extras = dict()
     for k in set(agg.keys()) - fits_core - rkeys:
         fits_extras[k] = agg[k]
     
     fits = FitsFile(md5sum=non_hdu_vals['md5sum'],
-                    original_filename=non_hdu_vals['src_fname'],
-                    archive_filename=non_hdu_vals['arch_fname'],
                     filesize=non_hdu_vals['size'],
-                    release_date=timezone.now(), #!!!
-                    instrument=agg['DTINSTRU'][0],
-                    telescope=agg['DTTELESC'][0],
+                    proposal=prop,
                     ra =  agg['RA'],
                     dec = agg['DEC'],
                     exposure = agg['EXPTIME'],
+                    archive_filename=non_hdu_vals['arch_fname'],
                     date_obs = agg['DATE-OBS'],
+                    original_filename=non_hdu_vals['src_fname'],
+                    release_date=timezone.now(), #!!!
+                    instrument=agg['DTINSTRU'][0],
+                    telescope=agg['DTTELESC'][0],
+                    
                     extras = fits_extras
     )
     reset_singletons(fits)
@@ -587,8 +611,28 @@ def search2(request):
                       content_type='application/json',
                       data=json.dumps(wrap(jsearch)))
 
+def make_qobj(jsearch):
+    """Construct query (anchored on FitsFile)"""
+    slop = jsearch.get('search_box_min', .001)
+    q = (sf.coordinates(jsearch.get('coordinates', None), slop)
+#!         & sf.exposure_time(jsearch.get('exposure_time', None))  
+         & sf.archive_filename(jsearch.get('filename', None))
+         & sf.image_filter(jsearch.get('image_filter', None))
+#!         & sf.dateobs(jsearch.get('obs_date', None))
+#!         & sf.original_filename(jsearch.get('original_filename', None))
+#!         & sf.pi(jsearch.get('pi', None))
+#!         & sf.prop_id(jsearch.get('propid', None))
+#!         & sf.release_date(jsearch.get('release_date', None))
+#!         & sf.telescope_instrument(jsearch.get('telescope_instrument', None))
+         )
+         #& sf.extras(jsearch.get('extras', None))
+         #& sf.xtension(jsearch.get('xtension', None))
+    #!q = (sf.telescope_instrument(jsearch.get('telescope_instrument', None))   )
+    logging.debug('DBG: q={}'.format(str(q)))
+    return q
 
-#curl -H "Content-Type: application/json" -X POST -d @natica/fixtures/request-search-1.json http://localhost:8080/natica/search/ | python -m json.tool
+# pushd /home/pothiers/sandbox/natica/naticasite/natica/search-requests
+# curl -H "Content-Type: application/json" -X POST -d @search-1.json http://localhost:8080/natica/search/ | python -m json.tool
 @api_view(['POST'])
 def search(request):
     """
@@ -629,40 +673,29 @@ def search(request):
                                      .format(unavail))
     assert(search_fields >= used_fields)
 
-    # Construct query (anchored on FitsFile)
-    slop = jsearch.get('search_box_min', .001)
-    q = (sf.coordinates(jsearch.get('coordinates', None), slop)
-         & sf.exposure_time(jsearch.get('exposure_time', None))
-         & sf.filename(jsearch.get('filename', None))
-         & sf.image_filter(jsearch.get('image_filter', None))
-         & sf.obs_date(jsearch.get('obs_date', None))
-         & sf.original_filename(jsearch.get('original_filename', None))
-         & sf.pi(jsearch.get('pi', None))
-         & sf.prop_id(jsearch.get('propid', None))
-         & sf.release_date(jsearch.get('release_date', None))
-         & sf.telescope_instrument(jsearch.get('telescope_instrument', None))
-         )
-         #& sf.extras(jsearch.get('extras', None))
-         #& sf.xtension(jsearch.get('xtension', None))
+    q = make_qobj(jsearch)
 
-    logging.debug('DBG: q={}'.format(str(q)))
     #fullqs = FitsFile.objects.filter(q).distinct().order_by(order_fields)
     fullqs = FitsFile.objects.filter(q)
     #total_count = len(fullqs) #.count()   tot seconds: 2.8
     total_count = fullqs.count() #       tot seconds: 4.9
     logging.debug('DBG: do query')
-    qs = fullqs.order_by(order_fields)[offset:page_limit]
+    try:
+        qs = fullqs.order_by(order_fields)[offset:page_limit]
+    except Exception as err:
+        return JsonResponse(dict(error='query failed: {}'.format(err)))
     query = str(qs.query)
     logging.debug('DBG: query={}'.format(query))
-    
 
     results = list()
-    for fobj in qs.iterator():
+    #!for fobj in qs.iterator():
+    for fobj in qs:
+        logging.debug('DBG: fobj.md5sum={}, instrum={}'.format(fobj.md5sum, fobj.instrument))
         ra = [fobj.ra.lower, fobj.ra.upper] if fobj.ra != None else None
         dec = [fobj.dec.lower, fobj.dec.upper] if fobj.dec != None else None
         exposure = [fobj.exposure.lower, fobj.exposure.upper] if fobj.exposure != None else None
         obsdate = [fobj.date_obs.lower, fobj.date_obs.upper] if fobj.date_obs != None else None
-        results.extend(
+        results.append(
             dict(
                 ra=ra,
                 dec=dec,
@@ -686,7 +719,7 @@ def search(request):
                 #survey_id
                 telescope=fobj.telescope,
             ))
-  
+    logging.debug('DBG: results={}'.format(results))
     meta = OrderedDict.fromkeys(['total_count',
                                  'page_result_count',
                                  'to_here_count',
@@ -704,6 +737,9 @@ def search(request):
         page_result_count = len(results),
         to_here_count = offset + len(results),
         total_count = total_count,
+        offset = offset,
+        page_limit = page_limit,
+        debug=1
     )
     #logging.debug('DBG: query={}'.format(qs.query))
     jresponse = OrderedDict(meta=meta, resultset=results)

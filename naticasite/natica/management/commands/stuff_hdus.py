@@ -1,4 +1,4 @@
-1import traceback
+import traceback
 import json
 import os.path
 from django.core.management.base import BaseCommand, CommandError
@@ -10,7 +10,7 @@ import natica.exceptions as nex
 #
 #  find /data/json-scrape -name "*.json" -print0 | xargs -0 python3 manage.py stuff_hdus 
 # ./manage.py shell -c "from natica.models import FitsFile; FitsFile.objects.all().delete()"
-# find /data/json-scrape -name "*.json" -print0 | xargs -0 python3 manage.py stuff_hdus 
+# find /data/small-json-scrape -name "*.json" -print0 | xargs -0 python3 manage.py stuff_hdus 
 #
 # FitsFile.objects.all().delete()
 # psql

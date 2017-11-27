@@ -41,16 +41,16 @@ class FitsFileAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',
-        'instrument',
         'telescope',
+        'instrument',
         'date_obs',
         'release_date',
         'original_filename',
         'archive_filename',
-        #'extras',
+        #'extras', #['PRODTYPE',]
         'ra', 'dec',
         'exposure',
-        'proposal',
+        'proposal', #pi,prop_id
     )
 
 

@@ -122,7 +122,10 @@ class SearchTest(TestCase):
                          '"0.1.7"',
                          msg='Unexpected API version')
         self.assertEqual(response.status_code, 200)
-
+        #!self.assertJSONEqual(json.dumps(response.json()['resultset']),
+        #!                     json.dumps(json.loads(exp.search_0)['resultset']),
+        #!                     msg='Unexpected resultset')
+        
     @testcase_log_console(logger)
     def test_search_1(self):
         "MVP-1. Basics. No validation of input"
