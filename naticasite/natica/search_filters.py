@@ -10,8 +10,10 @@ def coordinates(val, slop):
     dec = val['dec']
     #!return ( Q(dec__lte=(dec + slop)) & Q(dec__gte=(dec - slop))
     #!    & Q(ra__lte=(ra + slop)) & Q(ra__gte=(ra - slop))       )
-    return (Q(dec__overlap=NumericRange(dec-slop, dec+slop))
-            & Q(ra__overlap=NumericRange(ra-slop, ra+slop)))
+    qq = Q(dec__overlap=NumericRange(dec-slop, dec+slop)) \
+         & Q(ra__overlap=NumericRange(ra-slop, ra+slop))
+    return qq
+            
               
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)

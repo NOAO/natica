@@ -1,12 +1,12 @@
 {
-    "coordinates": { "ra": 311.6, "dec": -11.8 },
-    "search_box_min": 5.0,
-    "pi": "Cypriano",
-    "prop_id": "noao",
-    "obs_date": ["2009-04-01", "2009-04-03", "[]"],
-    "original_filename": "/ua84/mosaic/tflagana/3103/stdr1_012.fits",
-    "telescope_instrument": [["ct4m","mosaic_2"],["foobar", "bar"]],
+    "coordinates": { "ra": 284, "dec": -50 },
+    "search_box_min": 2.0,
+    "pi": "Walker",
+    "prop_id": "2013A-9999",
+    "obs_date": ["2017-08-14", "2017-08-17", "[]"],
+    "original_filename": "/data/small-json-scrape/c4d_170815_013114_ori.fits.json",
+    "telescope_instrument": [["ct4m","decam"],["foobar", "bar"]],
     "exposure_time": 30,	
-    "release_date": "2010-10-01",
+    "release_date": "2017-11-27",
     "image_filter":["raw", "calibrated"]
 }

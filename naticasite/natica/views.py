@@ -617,7 +617,7 @@ def make_qobj(jsearch):
     q = (sf.coordinates(jsearch.get('coordinates', None), slop)
 #!         & sf.exposure_time(jsearch.get('exposure_time', None))  
          & sf.archive_filename(jsearch.get('filename', None))
-         & sf.image_filter(jsearch.get('image_filter', None))
+#!         & sf.image_filter(jsearch.get('image_filter', None))
 #!         & sf.dateobs(jsearch.get('obs_date', None))
 #!         & sf.original_filename(jsearch.get('original_filename', None))
 #!         & sf.pi(jsearch.get('pi', None))
