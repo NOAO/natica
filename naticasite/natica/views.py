@@ -455,10 +455,11 @@ def store_metadata(hdudict_list, non_hdu_vals):
 
     ## FITS File
     agg,rkeys = aggregate_extras(hdudict_list)
+    #print('\nDBG: agg=',agg)
+
     propid = list(agg.get('DTPROPID'))[0]
-    pi = list(agg.get('DTPI'))[0]
+    pi = list(agg.get('DTPI',['No PI Provided']))[0]
     fid = non_hdu_vals['md5sum']
-    #!print('\nDBG: agg=',agg)
     try:
         prop = Proposal.objects.get(prop_id=propid)
     except ObjectDoesNotExist:
@@ -474,8 +475,8 @@ def store_metadata(hdudict_list, non_hdu_vals):
                .format(propid, fid))
         logging.error(msg)
         prop = None
-    logging.debug('DBG: store_metadata propid={}, prop={}; id={}'.format(propid, prop,fid))
-    
+    logging.debug('DBG: store_metadata propid={}, prop={}; id={}, date-obs={}'
+                  .format(propid, prop,fid, agg['DATE-OBS']))
     fits_core = set([ f.name.upper() for f in FitsFile._meta.get_fields()])
     fits_extras = dict()
     for k in set(agg.keys()) - fits_core - rkeys:
@@ -496,6 +497,10 @@ def store_metadata(hdudict_list, non_hdu_vals):
                     
                     extras = fits_extras
     )
+    logging.debug('DBG-2: store_metadata, early date-obs={}'
+                  .format(fits.date_obs.lower))
+    fits.release_date = (dateutil.parser.parse(fits.date_obs.lower)
+                         + datetime.timedelta(days=30*prop.proprietary_period))
     reset_singletons(fits)
     fits.save()
 

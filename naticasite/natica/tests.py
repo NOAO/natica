@@ -1,5 +1,7 @@
 # Regression test of NATICA services
 # MODIFIED from ~/sandbox/mars/marssite/dal/tests.py
+# EXAMPLE:
+#   
 
 
 from django.core.urlresolvers import reverse
@@ -10,6 +12,7 @@ from . import expected as exp
 from . import views
 import logging
 import sys
+import pprint
 from contextlib import contextmanager
 
 @contextmanager
@@ -35,6 +38,8 @@ logger = logging.getLogger('django_test')
 class SearchTest(TestCase):
 
     maxDiff = None # too see full values in DIFF on assert failure
+    #fixtures = ['dump-natica.json',]
+    fixtures = ['small-dump.json']
     
     #############################################################################
     ### /natica/search
@@ -88,6 +93,7 @@ class SearchTest(TestCase):
 #!            meta=response.json().get('meta')
 #!            self.assertContains(response.get('results','MISSING_RESULTS'),resp)
         
+    #@testcase_log_console(logger)
     def test_search_0(self):
         "No filter. Verify: API version."
         req = '{ }'
@@ -104,11 +110,13 @@ class SearchTest(TestCase):
                 "page_result_count": 100,
                 "to_here_count": 100,
                 "total_count": 11583954}
-        print('DBG: response={}'.format(response.content.decode()))
+        jresponse=response.json()
+        del jresponse['meta']['query']
+        logger.debug('DBG: search_0 response={}'.format(pprint.pformat(jresponse)))
         self.assertIn('meta', response.json())
         self.assertIn('timestamp', response.json()['meta'])
         self.assertIn('comment', response.json()['meta'])
-        self.assertIn('query', response.json()['meta'])
+        #self.assertIn('query', response.json()['meta'])
         self.assertIn('page_result_count', response.json()['meta'])
         self.assertIn('to_here_count', response.json()['meta'])
         self.assertIn('total_count', response.json()['meta'])
@@ -126,7 +134,7 @@ class SearchTest(TestCase):
         #!                     json.dumps(json.loads(exp.search_0)['resultset']),
         #!                     msg='Unexpected resultset')
         
-    @testcase_log_console(logger)
+    #@testcase_log_console(logger)
     def test_search_1(self):
         "MVP-1. Basics. No validation of input"
 
@@ -145,12 +153,25 @@ class SearchTest(TestCase):
             
         }
         req = '''{
-        "coordinates": {"ra": 137.2,"dec": 44.8}
-        }'''
+    "coordinates": { "ra": 284, "dec": -50 },
+    "search_box_min": 2.0,
+    "pi": "Walker",
+    "prop_id": "2013A-9999",
+    "obs_date": ["2017-08-14", "2017-08-17", "[]"],
+    "original_filename": "/data/small-json-scrape/c4d_170815_013114_ori.fits.json",
+    "telescope_instrument": [["ct4m","decam"],["foobar", "bar"]],
+    "exposure_time": 30,	
+    "release_date": "2017-11-28"
+}
+'''
+#    "image_filter":["raw", "calibrated"]
+
         response = self.client.post('/natica/search/',
                                     content_type='application/json',
                                     data=req  )
-        #print('DBG: response={}'.format(response.content.decode()))
+        jresponse=response.json()
+        del jresponse['meta']['query']
+        logger.debug('DBG: search_1 response={}'.format(pprint.pformat(jresponse)))
         self.assertJSONEqual(json.dumps(response.json()['resultset']),
                              json.dumps(json.loads(exp.search_1)['resultset']),
                              msg='Unexpected resultset')

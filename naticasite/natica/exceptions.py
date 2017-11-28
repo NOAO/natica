@@ -1,3 +1,6 @@
+#!import logging
+#!import traceback
+
 class BaseNaticaException(Exception):
     status_code = None
     error_message = None
@@ -6,6 +9,7 @@ class BaseNaticaException(Exception):
     def __init__(self, error_message):
         Exception.__init__(self)
         self.error_message = error_message
+        #logging.error('{}; {}'.format(error_message, traceback.format_stack()))
         
     def to_dict(self):
         return {'errorMessage': self.error_message}
@@ -47,6 +51,10 @@ class ConflictingValuesError(BaseNaticaException):
 class FitsError(BaseNaticaException):
     status_code = 400
     
+    
 class PropNotFound(BaseNaticaException):
     status_code = 400
+
+
+
     

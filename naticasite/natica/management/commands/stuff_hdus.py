@@ -45,15 +45,16 @@ class Command(BaseCommand):
                 protected_store_metadata(hdudict_list,valdict)
             except nex.BaseNaticaException as bna:
                 self.stdout.write(self.style.ERROR(bna.error_message))
+                self.stdout.write(traceback.format_exc())
                 error = True
                 badjfits.add(jfits)
                 continue
             except Exception as err:
                 self.stdout.write(self.style.ERROR('Not stored: {}'
                                                    .format(err)))
+                self.stdout.write(traceback.format_exc())
                 error = True
                 badjfits.add(jfits)
-                traceback.print_exc()
                 continue
             goodjfits.add(jfits)
             self.stdout.write(self.style.SUCCESS('OK'))

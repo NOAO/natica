@@ -23,12 +23,15 @@ class InstrumFilter(admin.SimpleListFilter):
     
 @admin.register(Hdu)
 class HduAdmin(admin.ModelAdmin):
-    list_display = ('hdu_idx', 'fitsfile_archive_filename', 'xtension',
+    list_display = ('hdu_idx', 'fitsfile_archive_filename', 'xtension', 'fitsfile_pk',
                     #'date_obs',     'ra', 'dec',
                     'extras')
 
     def fitsfile_archive_filename(self, obj):
         return PurePath(obj.fitsfile.archive_filename).name
+
+    def fitsfile_pk(self, obj):
+        return obj.fitsfile.pk
     
 
 

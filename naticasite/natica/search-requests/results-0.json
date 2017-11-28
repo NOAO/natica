@@ -1,0 +1,3648 @@
+{
+    "meta": {
+        "api_version": "0.1.7", 
+        "comment": "WARNING: RESULTS missing values: surve_id, depth.  (Where do they come from???)", 
+        "debug": 1, 
+        "offset": 0, 
+        "page_limit": 100, 
+        "page_result_count": 100, 
+        "query": "SELECT \"natica_fitsfile\".\"id\", \"natica_fitsfile\".\"extras\", \"natica_fitsfile\".\"md5sum\", \"natica_fitsfile\".\"filesize\", \"natica_fitsfile\".\"proposal_id\", \"natica_fitsfile\".\"ra\", \"natica_fitsfile\".\"dec\", \"natica_fitsfile\".\"exposure\", \"natica_fitsfile\".\"archive_filename\", \"natica_fitsfile\".\"date_obs\", \"natica_fitsfile\".\"original_filename\", \"natica_fitsfile\".\"release_date\", \"natica_fitsfile\".\"instrument\", \"natica_fitsfile\".\"telescope\" FROM \"natica_fitsfile\" ORDER BY \"natica_fitsfile\".\"original_filename\" ASC LIMIT 100", 
+        "timestamp": "2017-11-27T10:26:02.336", 
+        "to_here_count": 100, 
+        "total_count": 192
+    }, 
+    "resultset": [
+        {
+            "dec": [
+                "-11.802805555555556", 
+                "-11.802805555555556"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_040811_050458_ori.fits.json", 
+            "filesize": 3888, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "9d5bdf17a9415691d2e5ced3fac20e67", 
+            "obs_date": [
+                "2004-08-11", 
+                "2004-08-12"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_040811_050458_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "noprop", 
+            "ra": [
+                "311.6758333333333", 
+                "311.6758333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-11.802750000000001", 
+                "-11.802750000000001"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_040811_050750_ori.fits.json", 
+            "filesize": 3888, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "61345e65cb09c68314845cb5045eff4f", 
+            "obs_date": [
+                "2004-08-11", 
+                "2004-08-12"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_040811_050750_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "noprop", 
+            "ra": [
+                "311.6758333333333", 
+                "311.6758333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-11.802694444444445", 
+                "-11.802694444444445"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_040811_050957_ori.fits.json", 
+            "filesize": 3886, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "76d38ec830600cac5a0458505936ad1a", 
+            "obs_date": [
+                "2004-08-11", 
+                "2004-08-12"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_040811_050957_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "noprop", 
+            "ra": [
+                "311.6758333333333", 
+                "311.6758333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-16.97175", 
+                "-16.97175"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_040811_051619_ori.fits.json", 
+            "filesize": 3887, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "4c1a978c9971caec0553f2902de52c75", 
+            "obs_date": [
+                "2004-08-11", 
+                "2004-08-12"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_040811_051619_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "noprop", 
+            "ra": [
+                "313.12833333333333", 
+                "313.12833333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-27.894", 
+                "-27.894"
+            ], 
+            "exposure": [
+                "300.0", 
+                "300.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_040811_055242_ori.fits.json", 
+            "filesize": 3903, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "aea3f6f9db49d46bd800cbcf3659322f", 
+            "obs_date": [
+                "2004-08-11", 
+                "2004-08-12"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_040811_055242_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "noprop", 
+            "ra": [
+                "316.0958333333333", 
+                "316.0958333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-28.034833333333335", 
+                "-28.034833333333335"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_071019_184812_zri.fits.json", 
+            "filesize": 4463, 
+            "filter": null, 
+            "image_type": [
+                "BIAS"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "133b165a1e1a33a82800801484bef94a", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_071019_184812_zri.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "202.1283333333333", 
+                "202.1283333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-28.034833333333335", 
+                "-28.034833333333335"
+            ], 
+            "exposure": [
+                "150.0", 
+                "150.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_071019_200729_fri.fits.json", 
+            "filesize": 4501, 
+            "filter": null, 
+            "image_type": [
+                "DOME FLAT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "8a07f8e0d5b0e9ce1c31f9abcc0154d2", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_071019_200729_fri.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "222.05083333333332", 
+                "222.05083333333332"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "13.471277777777777", 
+                "13.471277777777777"
+            ], 
+            "exposure": [
+                "180.0", 
+                "180.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_071020_031244_ori.fits.json", 
+            "filesize": 3894, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "a9c80fa01b303a874ea4f52f6666d801", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_071020_031244_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "3.8941666666666666", 
+                "3.8941666666666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-5.643388888888889", 
+                "-5.643388888888889"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_071020_065646_ori.fits.json", 
+            "filesize": 3865, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "5700b7892a77b508907bd4468b2b26b3", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_071020_065646_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "70.11708333333333", 
+                "70.11708333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "-5.643388888888889", 
+                "-5.643388888888889"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c09i_071020_065843_ori.fits.json", 
+            "filesize": 3864, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "7ecdc3e35df0eee0b7e7abaf4d389958", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c09i_071020_065843_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "70.12708333333333", 
+                "70.12708333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": [
+                "21.736416666666667", 
+                "21.736416666666667"
+            ], 
+            "exposure": [
+                "13.0", 
+                "13.0"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_071019_174828_fri.fits.json", 
+            "filesize": 3546, 
+            "filter": null, 
+            "image_type": [
+                "FLAT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "53da7e5c1c8ef9a07328361f091d1a54", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c13a_071019_174828_fri.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "216.57174999999998", 
+                "216.57174999999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "0.5793888888888888", 
+                "0.5793888888888888"
+            ], 
+            "exposure": [
+                "70.03", 
+                "70.03"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_071020_005423_ori.fits.json", 
+            "filesize": 2958, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "00da74546067a20a094a2a21f76be9d4", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c13a_071020_005423_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "287.81554166666666", 
+                "287.81554166666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-5.611333333333333", 
+                "-5.611333333333333"
+            ], 
+            "exposure": [
+                "30.04", 
+                "30.04"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_071020_050448_ori.fits.json", 
+            "filesize": 2957, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "6e030b1e18bd441c67b954710226fecf", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c13a_071020_050448_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "83.80054166666665", 
+                "83.80054166666665"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-19.05227777777778", 
+                "-19.05227777777778"
+            ], 
+            "exposure": [
+                "50.0", 
+                "50.0"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_071020_080242_ori.fits.json", 
+            "filesize": 3542, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "c77a825eefd5f0c332b5cd698649feee", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c13a_071020_080242_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "123.7815", 
+                "123.7815"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-19.051916666666667", 
+                "-19.051916666666667"
+            ], 
+            "exposure": [
+                "50.0", 
+                "50.0"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_071020_090429_ori.fits.json", 
+            "filesize": 3543, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "aef468f69292e58ecf6f74fba4680813", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c13a_071020_090429_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "123.78295833333331", 
+                "123.78295833333331"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-62.364694444444446", 
+                "-62.364694444444446"
+            ], 
+            "exposure": [
+                "30.04", 
+                "30.04"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_170815_024745_ori.fits.json", 
+            "filesize": 2440, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "758e799274acd3a1c5a14c24e8a125ef", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/c13a_170815_024745_ori.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "281.22495833333335", 
+                "281.22495833333335"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-62.364666666666665", 
+                "-62.364666666666665"
+            ], 
+            "exposure": [
+                "5.0", 
+                "5.0"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_170815_024750_ori.fits.json", 
+            "filesize": 3029, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "89d98d337db518258d916c2f42793439", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/c13a_170815_024750_ori.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "281.2249166666666", 
+                "281.2249166666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "0.5844166666666667", 
+                "0.5844166666666667"
+            ], 
+            "exposure": [
+                "70.03", 
+                "70.03"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_170815_032745_ori.fits.json", 
+            "filesize": 2446, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "3864da1f7159111087c5368f21247f0a", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/c13a_170815_032745_ori.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "287.817125", 
+                "287.817125"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-43.41777777777777", 
+                "-43.41777777777777"
+            ], 
+            "exposure": [
+                "150.0", 
+                "150.0"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_170815_062443_ori.fits.json", 
+            "filesize": 2451, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "e0e536ef0501d3ccd4e6bb59e064e914", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/c13a_170815_062443_ori.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "29.670416666666664", 
+                "29.670416666666664"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-51.02477777777778", 
+                "-51.02477777777778"
+            ], 
+            "exposure": [
+                "30.04", 
+                "30.04"
+            ], 
+            "filename": "/data/small-json-scrape/c13a_170815_064224_ori.fits.json", 
+            "filesize": 2452, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "0f9aa96f67305373330ebc5c7aaed2f3", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/c13a_170815_064224_ori.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "32.66633333333333", 
+                "32.66633333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-76.15041666666667", 
+                "-76.15041666666667"
+            ], 
+            "exposure": [
+                "14.0", 
+                "14.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15e_170814_193542_cri.fits.json", 
+            "filesize": 5104, 
+            "filter": null, 
+            "image_type": [
+                "Calibration"
+            ], 
+            "instrument": "chiron", 
+            "md5sum": "e3e6f6cfca7f2fd4a38911acb5fb7af7", 
+            "obs_date": [
+                "2017-08-14", 
+                "2017-08-15"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "Calibration"
+            ], 
+            "original_filename": "/data/small-json-scrape/c15e_170814_193542_cri.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "6.137458333333333", 
+                "6.137458333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": [
+                1.204
+            ], 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-76.15033333333334", 
+                "-76.15033333333334"
+            ], 
+            "exposure": [
+                "14.0", 
+                "14.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15e_170814_193749_cri.fits.json", 
+            "filesize": 5104, 
+            "filter": null, 
+            "image_type": [
+                "Calibration"
+            ], 
+            "instrument": "chiron", 
+            "md5sum": "8278426fc38b3c6e50d707e3b3309917", 
+            "obs_date": [
+                "2017-08-14", 
+                "2017-08-15"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "Calibration"
+            ], 
+            "original_filename": "/data/small-json-scrape/c15e_170814_193749_cri.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "6.670583333333333", 
+                "6.670583333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": [
+                1.204
+            ], 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-76.15", 
+                "-76.15"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15e_170814_194343_zri.fits.json", 
+            "filesize": 5030, 
+            "filter": null, 
+            "image_type": [
+                "bias"
+            ], 
+            "instrument": "chiron", 
+            "md5sum": "d83919dd5868d0a4825947e72229930e", 
+            "obs_date": [
+                "2017-08-14", 
+                "2017-08-15"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "bias"
+            ], 
+            "original_filename": "/data/small-json-scrape/c15e_170814_194343_zri.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "8.159749999999999", 
+                "8.159749999999999"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": [
+                1.204
+            ], 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-76.14975000000001", 
+                "-76.14975000000001"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15e_170814_194745_zri.fits.json", 
+            "filesize": 5066, 
+            "filter": null, 
+            "image_type": [
+                "bias"
+            ], 
+            "instrument": "chiron", 
+            "md5sum": "c19890f683bc8cee8e8aa3086741e30e", 
+            "obs_date": [
+                "2017-08-14", 
+                "2017-08-15"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "bias"
+            ], 
+            "original_filename": "/data/small-json-scrape/c15e_170814_194745_zri.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "9.176749999999998", 
+                "9.176749999999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": [
+                1.204
+            ], 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-76.14722222222223", 
+                "-76.14722222222223"
+            ], 
+            "exposure": [
+                "40.0", 
+                "40.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15e_170814_201518_cri.fits.json", 
+            "filesize": 5135, 
+            "filter": null, 
+            "image_type": [
+                "Calibration"
+            ], 
+            "instrument": "chiron", 
+            "md5sum": "6cfc3790d39d6d05d54ea6b9d1bdc0d6", 
+            "obs_date": [
+                "2017-08-14", 
+                "2017-08-15"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "Calibration"
+            ], 
+            "original_filename": "/data/small-json-scrape/c15e_170814_201518_cri.fits.json", 
+            "pi": null, 
+            "product": "image", 
+            "prop_id": "smarts", 
+            "ra": [
+                "16.132375", 
+                "16.132375"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": [
+                1.204
+            ], 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-30.151027777777777", 
+                "-30.151027777777777"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15s_071019_194847_zri.fits.json", 
+            "filesize": 3837, 
+            "filter": [
+                "Clear"
+            ], 
+            "image_type": [
+                "BIAS"
+            ], 
+            "instrument": "ccd_spec", 
+            "md5sum": "53c70aab4143d20c3641eeb961e0a660", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c15s_071019_194847_zri.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "254.17487499999996", 
+                "254.17487499999996"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-30.168555555555557", 
+                "-30.168555555555557"
+            ], 
+            "exposure": [
+                "8.0", 
+                "8.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15s_071019_212326_fri.fits.json", 
+            "filesize": 3851, 
+            "filter": [
+                "Clear"
+            ], 
+            "image_type": [
+                "PROJECTOR FLAT"
+            ], 
+            "instrument": "ccd_spec", 
+            "md5sum": "06f8084019506026a4dbd1f938ee4ced", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c15s_071019_212326_fri.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "277.9006666666666", 
+                "277.9006666666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-30.169472222222222", 
+                "-30.169472222222222"
+            ], 
+            "exposure": [
+                "8.0", 
+                "8.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15s_071019_212810_fri.fits.json", 
+            "filesize": 3851, 
+            "filter": [
+                "Clear"
+            ], 
+            "image_type": [
+                "PROJECTOR FLAT"
+            ], 
+            "instrument": "ccd_spec", 
+            "md5sum": "f30e6e630d26c39629d852e03fa1907d", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c15s_071019_212810_fri.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "279.0888333333333", 
+                "279.0888333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-49.00636111111111", 
+                "-49.00636111111111"
+            ], 
+            "exposure": [
+                "1020.0", 
+                "1020.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15s_071020_021357_ori.fits.json", 
+            "filesize": 3861, 
+            "filter": [
+                "Clear"
+            ], 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_spec", 
+            "md5sum": "d3de40eef1f940334465d2c613527816", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c15s_071020_021357_ori.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "321.88075", 
+                "321.88075"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-72.3295", 
+                "-72.3295"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c15s_071020_035645_cri.fits.json", 
+            "filesize": 3872, 
+            "filter": [
+                "Clear"
+            ], 
+            "image_type": [
+                "COMPARISON"
+            ], 
+            "instrument": "ccd_spec", 
+            "md5sum": "d59fdcc6b290b700041ad2fb5c4348af", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/c15s_071020_035645_cri.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "46.70975", 
+                "46.70975"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-0.07186111111111111", 
+                "-0.07186111111111111"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_130802_084313_oow_z_a1.fits.json", 
+            "filesize": 274497, 
+            "filter": [
+                "z DECam SDSS c0004 9260.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "93f650d1e4cabd53d463d855b3078634", 
+            "obs_date": [
+                "2013-08-02", 
+                "2013-08-03"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_130802_084313_oow_z_a1.fits.json", 
+            "pi": "Walker", 
+            "product": "wtmap", 
+            "prop_id": "2013A-9999", 
+            "ra": [
+                "340.42674999999997", 
+                "340.42674999999997"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-41.501194444444444", 
+                "-41.501194444444444"
+            ], 
+            "exposure": [
+                "45.0", 
+                "45.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_150925_003221_oki_Y_v1.fits.json", 
+            "filesize": 264593, 
+            "filter": [
+                "Y DECam c0005 10095.0 1130.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "26bd4e1846aca5f9c4c9f12f82860eea", 
+            "obs_date": [
+                "2015-09-25", 
+                "2015-09-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_150925_003221_oki_Y_v1.fits.json", 
+            "pi": "Frieman", 
+            "product": "image", 
+            "prop_id": "2012B-0001", 
+            "ra": [
+                "306.676875", 
+                "306.676875"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-49.81980555555556", 
+                "-49.81980555555556"
+            ], 
+            "exposure": [
+                "45.0", 
+                "45.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_150925_025730_ooi_Y_v1.fits.json", 
+            "filesize": 264197, 
+            "filter": [
+                "Y DECam c0005 10095.0 1130.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "593196aad1dbe461e4b83287bce1c568", 
+            "obs_date": [
+                "2015-09-25", 
+                "2015-09-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_150925_025730_ooi_Y_v1.fits.json", 
+            "pi": "Frieman", 
+            "product": "image", 
+            "prop_id": "2012B-0001", 
+            "ra": [
+                "334.1075833333333", 
+                "334.1075833333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-37.647", 
+                "-37.647"
+            ], 
+            "exposure": [
+                "600.0", 
+                "600.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_013306_osw_r_v1.fits.json", 
+            "filesize": 17848, 
+            "filter": [
+                "r DECam SDSS c0002 6415.0 1480.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "4b40843003c54288730189a1a2b2cf3c", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_013306_osw_r_v1.fits.json", 
+            "pi": "Briceno", 
+            "product": "wtmap", 
+            "prop_id": "2015A-0632", 
+            "ra": [
+                "245.62520833333332", 
+                "245.62520833333332"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-33.69927777777777", 
+                "-33.69927777777777"
+            ], 
+            "exposure": [
+                "300.0", 
+                "300.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_022821_opw_z_v1.fits.json", 
+            "filesize": 225397, 
+            "filter": [
+                "z DECam SDSS c0004 9260.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "ff083ddc6f879c5e29cf86e11c9fb222", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_022821_opw_z_v1.fits.json", 
+            "pi": "Briceno", 
+            "product": "wtmap", 
+            "prop_id": "2015A-0632", 
+            "ra": [
+                "235.50499999999997", 
+                "235.50499999999997"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-35.49872222222222", 
+                "-35.49872222222222"
+            ], 
+            "exposure": [
+                "300.0", 
+                "300.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_024450_opi_i_v1.fits.json", 
+            "filesize": 218780, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "73fa73b821189e086fdf348b4dd8ac56", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_024450_opi_i_v1.fits.json", 
+            "pi": "Briceno", 
+            "product": "image", 
+            "prop_id": "2015A-0632", 
+            "ra": [
+                "235.75316666666666", 
+                "235.75316666666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-35.49875", 
+                "-35.49875"
+            ], 
+            "exposure": [
+                "300.0", 
+                "300.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_025015_ood_z_v1.fits.json", 
+            "filesize": 274428, 
+            "filter": [
+                "z DECam SDSS c0004 9260.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "932206dd001d9e2c87401e4833e7087a", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_025015_ood_z_v1.fits.json", 
+            "pi": "Briceno", 
+            "product": "dqmask", 
+            "prop_id": "2015A-0632", 
+            "ra": [
+                "235.75237499999997", 
+                "235.75237499999997"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "0.002111111111111111", 
+                "0.002111111111111111"
+            ], 
+            "exposure": [
+                "15.0", 
+                "15.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_040741_ooi_i_v1.fits.json", 
+            "filesize": 273517, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "b3b54a83e43b33cc05600aa064498260", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_040741_ooi_i_v1.fits.json", 
+            "pi": "Briceno", 
+            "product": "image", 
+            "prop_id": "2015A-0632", 
+            "ra": [
+                "325.0020833333333", 
+                "325.0020833333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-0.7386666666666666", 
+                "-0.7386666666666666"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_042940_oki_r_v1.fits.json", 
+            "filesize": 273778, 
+            "filter": [
+                "r DECam SDSS c0002 6415.0 1480.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "37231e2982c74c9d422715f3faaa5610", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_042940_oki_r_v1.fits.json", 
+            "pi": "Vivas", 
+            "product": "image", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "323.365375", 
+                "323.365375"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-0.7386666666666666", 
+                "-0.7386666666666666"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_042940_opw_r_v1.fits.json", 
+            "filesize": 225598, 
+            "filter": [
+                "r DECam SDSS c0002 6415.0 1480.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "a18cb4d0d1a8ed983f933920b3c3d326", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_042940_opw_r_v1.fits.json", 
+            "pi": "Vivas", 
+            "product": "wtmap", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "323.365375", 
+                "323.365375"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-0.7394166666666666", 
+                "-0.7394166666666666"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_043306_oki_Y_v1.fits.json", 
+            "filesize": 274182, 
+            "filter": [
+                "Y DECam c0005 10095.0 1130.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "1c1077388a01afe822b9ed0716045091", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_043306_oki_Y_v1.fits.json", 
+            "pi": "Vivas", 
+            "product": "image", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "323.3657916666666", 
+                "323.3657916666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "12.250333333333334", 
+                "12.250333333333334"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_045035_opd_g_v1.fits.json", 
+            "filesize": 221814, 
+            "filter": [
+                "g DECam SDSS c0001 4720.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "cb8647f6a45cb86a0971bfa066c58a18", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_045035_opd_g_v1.fits.json", 
+            "pi": "Vivas", 
+            "product": "dqmask", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "322.4967083333333", 
+                "322.4967083333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "12.249638888888889", 
+                "12.249638888888889"
+            ], 
+            "exposure": [
+                "20.0", 
+                "20.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170806_045239_opw_z_v1.fits.json", 
+            "filesize": 223784, 
+            "filter": [
+                "z DECam SDSS c0004 9260.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "6cca5a9242a63f7004232e430e7b9bce", 
+            "obs_date": [
+                "2017-08-06", 
+                "2017-08-07"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170806_045239_opw_z_v1.fits.json", 
+            "pi": "Vivas", 
+            "product": "wtmap", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "322.497125", 
+                "322.497125"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-45.40083305555555", 
+                "-45.40083305555555"
+            ], 
+            "exposure": [
+                "3.0", 
+                "3.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_000528_uri.fits.json", 
+            "filesize": 233429, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "c60d24fb7367e208031292835bf08441", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "standard"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_000528_uri.fits.json", 
+            "pi": "Walker", 
+            "product": "image", 
+            "prop_id": "2013A-9999", 
+            "ra": [
+                "181.04582916666664", 
+                "181.04582916666664"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-50.362500000000004", 
+                "-50.362500000000004"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_002935_ori.fits.json", 
+            "filesize": 234174, 
+            "filter": [
+                "g DECam SDSS c0001 4720.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "7d638e5a7eb248ac948edfa1d0a43f12", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_002935_ori.fits.json", 
+            "pi": "Walker", 
+            "product": "image", 
+            "prop_id": "2013A-9999", 
+            "ra": [
+                "285.76105416666667", 
+                "285.76105416666667"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-50.649721944444444", 
+                "-50.649721944444444"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_005831_ori.fits.json", 
+            "filesize": 234166, 
+            "filter": [
+                "r DECam SDSS c0002 6415.0 1480.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "e11080f4205c3c7583b8c11830430bbf", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_005831_ori.fits.json", 
+            "pi": "Walker", 
+            "product": "image", 
+            "prop_id": "2013A-9999", 
+            "ra": [
+                "285.97810416666664", 
+                "285.97810416666664"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-49.962221944444444", 
+                "-49.962221944444444"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_013114_ori.fits.json", 
+            "filesize": 233943, 
+            "filter": [
+                "z DECam SDSS c0004 9260.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "a7dfc250baf51844c1a2a3dd01269cba", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_013114_ori.fits.json", 
+            "pi": "Walker", 
+            "product": "image", 
+            "prop_id": "2013A-9999", 
+            "ra": [
+                "284.8848", 
+                "284.8848"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-50.0", 
+                "-50.0"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_021253_ori.fits.json", 
+            "filesize": 233309, 
+            "filter": [
+                "u DECam c0006 3500.0 1000.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "72e8e62f9be7143e1041066d8856e6f0", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_021253_ori.fits.json", 
+            "pi": "Walker", 
+            "product": "image", 
+            "prop_id": "2013A-9999", 
+            "ra": [
+                "284.99999999999994", 
+                "284.99999999999994"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-0.7410988888888889", 
+                "-0.7410988888888889"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_053043_ori.fits.json", 
+            "filesize": 233887, 
+            "filter": [
+                "Y DECam c0005 10095.0 1130.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "aabf9f6076f914c2c2e19ae7e9b10a33", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_053043_ori.fits.json", 
+            "pi": "Vivas", 
+            "product": "image", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "323.36257499999994", 
+                "323.36257499999994"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "12.24915111111111", 
+                "12.24915111111111"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_053314_ori.fits.json", 
+            "filesize": 233279, 
+            "filter": [
+                "u DECam c0006 3500.0 1000.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "1f058b89ea71d3b45914e54b4f871565", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_053314_ori.fits.json", 
+            "pi": "Vivas", 
+            "product": "image", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "322.49304166666667", 
+                "322.49304166666667"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "12.24915111111111", 
+                "12.24915111111111"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_053514_ori.fits.json", 
+            "filesize": 232776, 
+            "filter": [
+                "g DECam SDSS c0001 4720.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "73f509a6150bff7890579050e6630ffe", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_053514_ori.fits.json", 
+            "pi": "Vivas", 
+            "product": "image", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "322.49304166666667", 
+                "322.49304166666667"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-0.7410988888888889", 
+                "-0.7410988888888889"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_054546_ori.fits.json", 
+            "filesize": 233191, 
+            "filter": [
+                "g DECam SDSS c0001 4720.0 1520.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "48c33967420e9e7ee04690ebb2836c94", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_054546_ori.fits.json", 
+            "pi": "Vivas", 
+            "product": "image", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "323.36257499999994", 
+                "323.36257499999994"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-0.7410988888888889", 
+                "-0.7410988888888889"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_054701_ori.fits.json", 
+            "filesize": 233783, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "13e2e94c08b95b2c6b2c7412f66e6158", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_054701_ori.fits.json", 
+            "pi": "Vivas", 
+            "product": "image", 
+            "prop_id": "2017B-0951", 
+            "ra": [
+                "323.36257499999994", 
+                "323.36257499999994"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-53.7447", 
+                "-53.7447"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_060021_ori.fits.json", 
+            "filesize": 233823, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "f19f40fdc8e75752e1420e91389a06b4", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_060021_ori.fits.json", 
+            "pi": "Berger", 
+            "product": "image", 
+            "prop_id": "2017B-0110", 
+            "ra": [
+                "33.08101666666666", 
+                "33.08101666666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-47.6579", 
+                "-47.6579"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_070542_ori.fits.json", 
+            "filesize": 234388, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "8b85b2637157b35a3f6c6f7224238e28", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_070542_ori.fits.json", 
+            "pi": "Berger", 
+            "product": "image", 
+            "prop_id": "2017B-0110", 
+            "ra": [
+                "44.089666666666666", 
+                "44.089666666666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-35.4841", 
+                "-35.4841"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_070811_ori.fits.json", 
+            "filesize": 234245, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "69cbaa28791d1669b7c2ab26ad35c7e1", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_070811_ori.fits.json", 
+            "pi": "Berger", 
+            "product": "image", 
+            "prop_id": "2017B-0110", 
+            "ra": [
+                "44.20714583333333", 
+                "44.20714583333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-47.691716111111106", 
+                "-47.691716111111106"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_092932_ori.fits.json", 
+            "filesize": 234307, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "9d0c6569ba802103ae16835d8841cd07", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_092932_ori.fits.json", 
+            "pi": "Berger", 
+            "product": "image", 
+            "prop_id": "2017B-0110", 
+            "ra": [
+                "38.09870833333333", 
+                "38.09870833333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-44.64821611111111", 
+                "-44.64821611111111"
+            ], 
+            "exposure": [
+                "90.0", 
+                "90.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4d_170815_093939_ori.fits.json", 
+            "filesize": 234260, 
+            "filter": [
+                "i DECam SDSS c0003 7835.0 1470.0"
+            ], 
+            "image_type": null, 
+            "instrument": "decam", 
+            "md5sum": "bf3becfd8b85cad84964dde12fb4d4a8", 
+            "obs_date": [
+                "2017-08-15", 
+                "2017-08-16"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4d_170815_093939_ori.fits.json", 
+            "pi": "Berger", 
+            "product": "image", 
+            "prop_id": "2017B-0110", 
+            "ra": [
+                "40.72164166666667", 
+                "40.72164166666667"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "20.701638888888887", 
+                "20.701638888888887"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071019_171209_zri.fits.json", 
+            "filesize": 57504, 
+            "filter": [
+                "g SDSS c6017"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "c34a81379785b61e2e6ab1d82880cb75", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071019_171209_zri.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2007B-0329", 
+            "ra": [
+                "214.9190833333333", 
+                "214.9190833333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "20.697608333333335", 
+                "20.697608333333335"
+            ], 
+            "exposure": [
+                "12.0", 
+                "12.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071019_174529_fri.fits.json", 
+            "filesize": 57965, 
+            "filter": [
+                "r SDSS c6018"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "cb2cfce5eea987dde5091be4a4fbbb7b", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "dome flat"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071019_174529_fri.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2007B-0329", 
+            "ra": [
+                "223.27679166666664", 
+                "223.27679166666664"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "20.695805555555555", 
+                "20.695805555555555"
+            ], 
+            "exposure": [
+                "9.0", 
+                "9.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071019_175842_fri.fits.json", 
+            "filesize": 57832, 
+            "filter": [
+                "i SDSS c6019"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "b9b888b8dba83e992e94cb43f5683021", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "dome flat"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071019_175842_fri.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2007B-0329", 
+            "ra": [
+                "226.58862499999998", 
+                "226.58862499999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": null, 
+            "exposure": [
+                "12.0", 
+                "12.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071019_191405_fri.fits.json", 
+            "filesize": 34538, 
+            "filter": [
+                "R Harris c6004"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "9804193a531da4680a2a308d99bdf1c2", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "dome flat"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071019_191405_fri.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2002B-0007", 
+            "ra": null, 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-25.271358333333332", 
+                "-25.271358333333332"
+            ], 
+            "exposure": [
+                "0.5", 
+                "0.5"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071019_234015_ori.fits.json", 
+            "filesize": 57329, 
+            "filter": [
+                "i SDSS c6019"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "d2aa0a46dc48cd02fd7cc61825622fcc", 
+            "obs_date": [
+                "2007-10-19", 
+                "2007-10-20"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071019_234015_ori.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2007B-0329", 
+            "ra": [
+                "311.5252083333333", 
+                "311.5252083333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-30.372858333333333", 
+                "-30.372858333333333"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071020_000426_ori.fits.json", 
+            "filesize": 57363, 
+            "filter": [
+                "i SDSS c6019"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "a9c11bc51065888a20599b42e2662448", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071020_000426_ori.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2007B-0329", 
+            "ra": [
+                "3.5819583333333327", 
+                "3.5819583333333327"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-3.7443583333333335", 
+                "-3.7443583333333335"
+            ], 
+            "exposure": [
+                "200.0", 
+                "200.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071020_065538_ori.fits.json", 
+            "filesize": 57543, 
+            "filter": [
+                "R Harris c6004"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "322e235e89f13c553373d48246a12dd1", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071020_065538_ori.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2002B-0007", 
+            "ra": [
+                "32.50825", 
+                "32.50825"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-4.33225", 
+                "-4.33225"
+            ], 
+            "exposure": [
+                "200.0", 
+                "200.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071020_070127_ori.fits.json", 
+            "filesize": 57424, 
+            "filter": [
+                "R Harris c6004"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "1dcb1fffad93f5f55a9f81e77bd876da", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071020_070127_ori.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2002B-0007", 
+            "ra": [
+                "32.507749999999994", 
+                "32.507749999999994"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-9.002358333333333", 
+                "-9.002358333333333"
+            ], 
+            "exposure": [
+                "400.0", 
+                "400.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071020_083728_ori.fits.json", 
+            "filesize": 57334, 
+            "filter": [
+                "I c6028"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "27c86201850f022c5e10605713a2d5e4", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071020_083728_ori.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2002B-0007", 
+            "ra": [
+                "37.159416666666665", 
+                "37.159416666666665"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-9.002805555555556", 
+                "-9.002805555555556"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/c4m_071020_084600_zri.fits.json", 
+            "filesize": 57469, 
+            "filter": [
+                "I c6028"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "949fcd6c5552272a73c8888e36b9303d", 
+            "obs_date": [
+                "2007-10-20", 
+                "2007-10-21"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/c4m_071020_084600_zri.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2002B-0007", 
+            "ra": [
+                "37.222458333333336", 
+                "37.222458333333336"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "-22.45259888888889", 
+                "-22.45259888888889"
+            ], 
+            "exposure": [
+                "20.0", 
+                "20.0"
+            ], 
+            "filename": "/data/small-json-scrape/cp408886.fits.json", 
+            "filesize": 20470, 
+            "filter": null, 
+            "image_type": null, 
+            "instrument": "soi", 
+            "md5sum": "cb943f8f9e2305af11ddbff6d17aa480", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/cp408886.fits.json", 
+            "pi": "Luis Barrera", 
+            "product": null, 
+            "prop_id": "soar", 
+            "ra": [
+                "271.0081333333333", 
+                "271.0081333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-22.45259888888889", 
+                "-22.45259888888889"
+            ], 
+            "exposure": [
+                "20.0", 
+                "20.0"
+            ], 
+            "filename": "/data/small-json-scrape/cp408929.fits.json", 
+            "filesize": 20466, 
+            "filter": null, 
+            "image_type": null, 
+            "instrument": "soi", 
+            "md5sum": "c3a015cb39c2b12ba8e6c49db5f2a732", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/cp408929.fits.json", 
+            "pi": "Luis Barrera", 
+            "product": null, 
+            "prop_id": "soar", 
+            "ra": [
+                "271.0081333333333", 
+                "271.0081333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-22.45259888888889", 
+                "-22.45259888888889"
+            ], 
+            "exposure": [
+                "20.0", 
+                "20.0"
+            ], 
+            "filename": "/data/small-json-scrape/cp409002.fits.json", 
+            "filesize": 20485, 
+            "filter": null, 
+            "image_type": null, 
+            "instrument": "soi", 
+            "md5sum": "4a075e7c6d35b1917ea69b3d6dbc9bbc", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/cp409002.fits.json", 
+            "pi": "Luis Barrera", 
+            "product": null, 
+            "prop_id": "soar", 
+            "ra": [
+                "271.0081333333333", 
+                "271.0081333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-22.45259888888889", 
+                "-22.45259888888889"
+            ], 
+            "exposure": [
+                "20.0", 
+                "20.0"
+            ], 
+            "filename": "/data/small-json-scrape/cp409252.fits.json", 
+            "filesize": 20460, 
+            "filter": null, 
+            "image_type": null, 
+            "instrument": "soi", 
+            "md5sum": "7886fc2838c370b80b75f2b37c0e31cf", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "OBJECT"
+            ], 
+            "original_filename": "/data/small-json-scrape/cp409252.fits.json", 
+            "pi": "Luis Barrera", 
+            "product": null, 
+            "prop_id": "soar", 
+            "ra": [
+                "271.0081333333333", 
+                "271.0081333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-30.198428055555556", 
+                "-30.198428055555556"
+            ], 
+            "exposure": [
+                "3.24", 
+                "3.24"
+            ], 
+            "filename": "/data/small-json-scrape/cp657950.fits.json", 
+            "filesize": 3564, 
+            "filter": [
+                9
+            ], 
+            "image_type": [
+                "DARK"
+            ], 
+            "instrument": "osiris", 
+            "md5sum": "64924aafc6cc2f92ca55d5e628bb8102", 
+            "obs_date": [
+                "2012-06-01", 
+                "2012-06-02"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/cp657950.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "2010B-0918", 
+            "ra": [
+                "117.36828333333331", 
+                "117.36828333333331"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-17.5251625", 
+                "-17.5251625"
+            ], 
+            "exposure": [
+                "25.04", 
+                "25.04"
+            ], 
+            "filename": "/data/small-json-scrape/cp657986.fits.json", 
+            "filesize": 3590, 
+            "filter": [
+                0
+            ], 
+            "image_type": [
+                "DARK"
+            ], 
+            "instrument": "osiris", 
+            "md5sum": "e17b0403886c9ff9d5e6d42c491bd98e", 
+            "obs_date": [
+                "2012-06-01", 
+                "2012-06-02"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/cp657986.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "2010B-0918", 
+            "ra": [
+                "179.98653749999997", 
+                "179.98653749999997"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-46.92585388888889", 
+                "-46.92585388888889"
+            ], 
+            "exposure": [
+                "150.0", 
+                "150.0"
+            ], 
+            "filename": "/data/small-json-scrape/cp658099.fits.json", 
+            "filesize": 3586, 
+            "filter": [
+                9
+            ], 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "osiris", 
+            "md5sum": "d50b50c461b2283cc2a778a95889e5f5", 
+            "obs_date": [
+                "2012-06-02", 
+                "2012-06-03"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/cp658099.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "2010B-0918", 
+            "ra": [
+                "249.4614458333333", 
+                "249.4614458333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-46.772528055555554", 
+                "-46.772528055555554"
+            ], 
+            "exposure": [
+                "100.02", 
+                "100.02"
+            ], 
+            "filename": "/data/small-json-scrape/cp658137.fits.json", 
+            "filesize": 3590, 
+            "filter": [
+                9
+            ], 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "osiris", 
+            "md5sum": "1d15bf28de8196a6eb46a43740e3fb90", 
+            "obs_date": [
+                "2012-06-02", 
+                "2012-06-03"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/cp658137.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "2010B-0918", 
+            "ra": [
+                "250.19417916666666", 
+                "250.19417916666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "-46.72947305555556", 
+                "-46.72947305555556"
+            ], 
+            "exposure": [
+                "5.0", 
+                "5.0"
+            ], 
+            "filename": "/data/small-json-scrape/cp658191.fits.json", 
+            "filesize": 3586, 
+            "filter": [
+                9
+            ], 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "osiris", 
+            "md5sum": "cfda9bca87b1d891d3069f56b892f6cc", 
+            "obs_date": [
+                "2012-06-02", 
+                "2012-06-03"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/cp658191.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "2010B-0918", 
+            "ra": [
+                "250.5139958333333", 
+                "250.5139958333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "soar"
+        }, 
+        {
+            "dec": [
+                "20.66571944444444", 
+                "20.66571944444444"
+            ], 
+            "exposure": [
+                "8.0", 
+                "8.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct010765.fits.json", 
+            "filesize": 57948, 
+            "filter": [
+                "VR_Supermacho c 6027"
+            ], 
+            "image_type": null, 
+            "instrument": " M      DTCOPYRI= 'mosaic_2          '  /  instrument identifier", 
+            "md5sum": "b48b8f111f008564c91da5ce90266cc9", 
+            "obs_date": [
+                "2004-08-10", 
+                "2004-08-11"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "dome flat"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct010765.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": " M      DTCOPYRI= 'noprop            '  /  observing proposal ID", 
+            "ra": [
+                "238.57920833333333", 
+                "238.57920833333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": " M      DTCOPYRI= 'ct4m              '  /  telescope identifier"
+        }, 
+        {
+            "dec": [
+                "20.667997222222223", 
+                "20.667997222222223"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct010767.fits.json", 
+            "filesize": 57404, 
+            "filter": [
+                "VR_Supermacho c 6027"
+            ], 
+            "image_type": null, 
+            "instrument": " 9      DTCOPYRI= 'mosaic_2          '  /  instrument identifier", 
+            "md5sum": "bb18ab7a2466aeb287622d28ff8439c4", 
+            "obs_date": [
+                "2004-08-10", 
+                "2004-08-11"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct010767.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": " 9      DTCOPYRI= 'noprop            '  /  observing proposal ID", 
+            "ra": [
+                "240.12687499999998", 
+                "240.12687499999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": " 9      DTCOPYRI= 'ct4m              '  /  telescope identifier"
+        }, 
+        {
+            "dec": [
+                "20.666277777777776", 
+                "20.666277777777776"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct010777.fits.json", 
+            "filesize": 57596, 
+            "filter": [
+                "u SDSS c6021"
+            ], 
+            "image_type": null, 
+            "instrument": " M      DTCOPYRI= 'mosaic_2          '  /  instrument identifier", 
+            "md5sum": "67746af44c10f66e8fe6804a4ef031bb", 
+            "obs_date": [
+                "2004-08-10", 
+                "2004-08-11"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct010777.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": " M      DTCOPYRI= 'noprop            '  /  observing proposal ID", 
+            "ra": [
+                "244.951125", 
+                "244.951125"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": " M      DTCOPYRI= 'ct4m              '  /  telescope identifier"
+        }, 
+        {
+            "dec": [
+                "20.665969444444443", 
+                "20.665969444444443"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct010779.fits.json", 
+            "filesize": 57615, 
+            "filter": [
+                "u SDSS c6021"
+            ], 
+            "image_type": null, 
+            "instrument": " 6      DTCOPYRI= 'mosaic_2          '  /  instrument identifier", 
+            "md5sum": "ecb68568ad50284b409710f048efa68c", 
+            "obs_date": [
+                "2004-08-10", 
+                "2004-08-11"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct010779.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": " 6      DTCOPYRI= 'noprop            '  /  observing proposal ID", 
+            "ra": [
+                "245.7899166666666", 
+                "245.7899166666666"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": " 6      DTCOPYRI= 'ct4m              '  /  telescope identifier"
+        }, 
+        {
+            "dec": [
+                "-30.17719166666667", 
+                "-30.17719166666667"
+            ], 
+            "exposure": [
+                "10.0", 
+                "10.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct010825.fits.json", 
+            "filesize": 57397, 
+            "filter": [
+                "R Harris c6004"
+            ], 
+            "image_type": null, 
+            "instrument": "8N      DTCOPYRI= 'mosaic_2          '  /  instrument identifier", 
+            "md5sum": "1691a6749f3e58d6eb43f7c290149c19", 
+            "obs_date": [
+                "2004-08-11", 
+                "2004-08-12"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "object"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct010825.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "8N      DTCOPYRI= 'noprop            '  /  observing proposal ID", 
+            "ra": [
+                "300.229875", 
+                "300.229875"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "8N      DTCOPYRI= 'ct4m              '  /  telescope identifier"
+        }, 
+        {
+            "dec": [
+                "21.72297222222222", 
+                "21.72297222222222"
+            ], 
+            "exposure": [
+                "62.01", 
+                "62.01"
+            ], 
+            "filename": "/data/small-json-scrape/ct2655915.fits.json", 
+            "filesize": 2940, 
+            "filter": null, 
+            "image_type": [
+                "FLAT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "97621b25db7c543aeb0d7084c46e5f61", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2655915.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "111.22149999999999", 
+                "111.22149999999999"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "30.640080555555556", 
+                "30.640080555555556"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2655968.fits.json", 
+            "filesize": 57149, 
+            "filter": [
+                "r SDSS c6018"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "8a6e59bbbc28cf1000dba729295c6f92", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct2655968.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2010A-0441", 
+            "ra": [
+                "73.46462499999998", 
+                "73.46462499999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "30.646469444444445", 
+                "30.646469444444445"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656016.fits.json", 
+            "filesize": 57146, 
+            "filter": [
+                "r SDSS c6018"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "4fad463f10713635649f8d941f80e214", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct2656016.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2010A-0441", 
+            "ra": [
+                "80.13966666666664", 
+                "80.13966666666664"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "30.657080555555556", 
+                "30.657080555555556"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656066.fits.json", 
+            "filesize": 57154, 
+            "filter": [
+                "r SDSS c6018"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "5984f305d6e48b31bb7fa3e91e81fdaf", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct2656066.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2010A-0441", 
+            "ra": [
+                "90.59966666666665", 
+                "90.59966666666665"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "30.669830555555556", 
+                "30.669830555555556"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656111.fits.json", 
+            "filesize": 57155, 
+            "filter": [
+                "r SDSS c6018"
+            ], 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "4802cf74a66bf615dc97ce8b0c5c1159", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct2656111.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2010A-0441", 
+            "ra": [
+                "103.27070833333332", 
+                "103.27070833333332"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "15.05475", 
+                "15.05475"
+            ], 
+            "exposure": [
+                "50.0", 
+                "50.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656155.fits.json", 
+            "filesize": 3196, 
+            "filter": [
+                2
+            ], 
+            "image_type": null, 
+            "instrument": "y4kcam", 
+            "md5sum": "df0176c954407faa76f1bd5be59c7e20", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656155.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "162.8639583333333", 
+                "162.8639583333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct1m"
+        }, 
+        {
+            "dec": [
+                "15.056416666666667", 
+                "15.056416666666667"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656210.fits.json", 
+            "filesize": 3197, 
+            "filter": [
+                5
+            ], 
+            "image_type": null, 
+            "instrument": "y4kcam", 
+            "md5sum": "ba260a9c173a4232fb909112c0e3709e", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656210.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "169.86333333333332", 
+                "169.86333333333332"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct1m"
+        }, 
+        {
+            "dec": [
+                "15.056500000000002", 
+                "15.056500000000002"
+            ], 
+            "exposure": [
+                "30.0", 
+                "30.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656214.fits.json", 
+            "filesize": 3197, 
+            "filter": [
+                3
+            ], 
+            "image_type": null, 
+            "instrument": "y4kcam", 
+            "md5sum": "1be48911513f45232c4430b5c0539de1", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656214.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "170.32329166666662", 
+                "170.32329166666662"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct1m"
+        }, 
+        {
+            "dec": [
+                "-28.034833333333335", 
+                "-28.034833333333335"
+            ], 
+            "exposure": [
+                "130.0", 
+                "130.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656234.fits.json", 
+            "filesize": 3594, 
+            "filter": null, 
+            "image_type": [
+                "DOME FLAT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "d859048456254216d8b4b5ff484a4e08", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656234.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "136.11874999999998", 
+                "136.11874999999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }, 
+        {
+            "dec": null, 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656245.fits.json", 
+            "filesize": 30283, 
+            "filter": null, 
+            "image_type": null, 
+            "instrument": "mosaic_2", 
+            "md5sum": "f2325f608cfda8de92da2651d98190dd", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": [
+                "zero"
+            ], 
+            "original_filename": "/data/small-json-scrape/ct2656245.fits.json", 
+            "pi": "<unknown>", 
+            "product": null, 
+            "prop_id": "2010A-0441", 
+            "ra": null, 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct4m"
+        }, 
+        {
+            "dec": [
+                "15.057194444444445", 
+                "15.057194444444445"
+            ], 
+            "exposure": [
+                "0.0", 
+                "0.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656264.fits.json", 
+            "filesize": 3191, 
+            "filter": [
+                3
+            ], 
+            "image_type": null, 
+            "instrument": "y4kcam", 
+            "md5sum": "d185878bcfbf4f426016cba706cd2b7f", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656264.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "176.85658333333333", 
+                "176.85658333333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct1m"
+        }, 
+        {
+            "dec": [
+                "-45.07644444444445", 
+                "-45.07644444444445"
+            ], 
+            "exposure": [
+                "40.04", 
+                "40.04"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656430.fits.json", 
+            "filesize": 2942, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "andicam", 
+            "md5sum": "a0a6ffaba838ded709e2180e5395989e", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656430.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "153.39987499999998", 
+                "153.39987499999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct13m"
+        }, 
+        {
+            "dec": [
+                "-60.83663888888889", 
+                "-60.83663888888889"
+            ], 
+            "exposure": [
+                "60.0", 
+                "60.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656515.fits.json", 
+            "filesize": 3700, 
+            "filter": null, 
+            "image_type": [
+                "object"
+            ], 
+            "instrument": "echelle", 
+            "md5sum": "e3760e6babdd73dad8e0e13e3719ffb6", 
+            "obs_date": [
+                "2010-07-25", 
+                "2010-07-26"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656515.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "219.876375", 
+                "219.876375"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-60.83694444444445", 
+                "-60.83694444444445"
+            ], 
+            "exposure": [
+                "60.0", 
+                "60.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656660.fits.json", 
+            "filesize": 3700, 
+            "filter": null, 
+            "image_type": [
+                "object"
+            ], 
+            "instrument": "echelle", 
+            "md5sum": "45413ccc10591911105636a6640b1e50", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656660.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "219.87724999999998", 
+                "219.87724999999998"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-60.83688888888889", 
+                "-60.83688888888889"
+            ], 
+            "exposure": [
+                "60.0", 
+                "60.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656694.fits.json", 
+            "filesize": 3699, 
+            "filter": null, 
+            "image_type": [
+                "object"
+            ], 
+            "instrument": "echelle", 
+            "md5sum": "a8853f4196a5f14785623dda5deae6f7", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656694.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "219.8775833333333", 
+                "219.8775833333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-60.83583333333333", 
+                "-60.83583333333333"
+            ], 
+            "exposure": [
+                "20.0", 
+                "20.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656720.fits.json", 
+            "filesize": 3699, 
+            "filter": null, 
+            "image_type": [
+                "object"
+            ], 
+            "instrument": "echelle", 
+            "md5sum": "e4d16d5d76e4af4896ad1f56c3d5f1b7", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656720.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "219.8804583333333", 
+                "219.8804583333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-60.83602777777778", 
+                "-60.83602777777778"
+            ], 
+            "exposure": [
+                "20.0", 
+                "20.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656734.fits.json", 
+            "filesize": 3700, 
+            "filter": null, 
+            "image_type": [
+                "object"
+            ], 
+            "instrument": "echelle", 
+            "md5sum": "1758f44769e8fa838e705f48fadcba5e", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656734.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "219.8809583333333", 
+                "219.8809583333333"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct15m"
+        }, 
+        {
+            "dec": [
+                "-28.034833333333335", 
+                "-28.034833333333335"
+            ], 
+            "exposure": [
+                "40.0", 
+                "40.0"
+            ], 
+            "filename": "/data/small-json-scrape/ct2656771.fits.json", 
+            "filesize": 3586, 
+            "filter": null, 
+            "image_type": [
+                "OBJECT"
+            ], 
+            "instrument": "ccd_imager", 
+            "md5sum": "860e26dd9f589c7da81d8b8bea2458de", 
+            "obs_date": [
+                "2010-07-26", 
+                "2010-07-27"
+            ], 
+            "observation_mode": null, 
+            "observation_type": null, 
+            "original_filename": "/data/small-json-scrape/ct2656771.fits.json", 
+            "pi": null, 
+            "product": null, 
+            "prop_id": "smarts", 
+            "ra": [
+                "291.06999999999994", 
+                "291.06999999999994"
+            ], 
+            "release_date": "2017-08-18", 
+            "seeing": null, 
+            "telescope": "ct09m"
+        }
+    ]
+}
