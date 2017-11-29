@@ -538,7 +538,7 @@ def protected_store_metadata(hdudict_list, non_hdu_vals):
 def hdudictlist(hdulist):
     return [dict(hdu.header.items()) for hdu in hdulist]
                 
-def handle_uploaded_file(f, md5sum):
+def handle_uploaded_file(f, md5sum, overwrite=False):
     import astropy.io.fits as pyfits
     tgtfile = '/data/upload/foo.fits' #!!!
     with open(tgtfile, 'wb+') as destination:
@@ -556,14 +556,20 @@ def handle_uploaded_file(f, md5sum):
                        size = f.size)
         logging.debug('DBG: archive_path={}'.format(archive_path))
         os.makedirs(str(archive_path.parent), exist_ok=True)
-        shutil.move(tgtfile, str(archive_path))
+        if overwrite:
+            FitsFile.objects.filter(archive_filename=archive_path).delete()
+            os.replace(tgtfile, str(archive_path))
+        else:
+            shutil.move(tgtfile, str(archive_path))
         store_metadata(hdudicts, valdict)
         
 #@csrf_exempt
 @api_view(['POST'])
-def ingest(request):
+def store(request):
+    overwrite = (13 == int(request.GET.get('overwrite','123')))
     if request.method == 'POST':
-        handle_uploaded_file(request.FILES['file'],  request.data['md5sum'])
+        handle_uploaded_file(request.FILES['file'], request.data['md5sum'],
+                             overwrite=overwrite)
 
     return JsonResponse(dict(result='file uploaded: {}'
                              .format(request.FILES['file'].name)))

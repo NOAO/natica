@@ -23,7 +23,7 @@ class InstrumFilter(admin.SimpleListFilter):
     
 @admin.register(Hdu)
 class HduAdmin(admin.ModelAdmin):
-    list_display = ('hdu_idx', 'fitsfile_archive_filename', 'xtension', 'fitsfile_pk',
+    list_display = ('hdu_idx', 'fitsfile_archive_filename', 'xtension', 'fitsfile_pk', 
                     #'date_obs',     'ra', 'dec',
                     'extras')
 
@@ -54,6 +54,7 @@ class FitsFileAdmin(admin.ModelAdmin):
         'ra', 'dec',
         'exposure',
         'proposal', #pi,prop_id
+        'md5sum',
     )
 
 

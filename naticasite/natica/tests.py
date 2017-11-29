@@ -161,10 +161,10 @@ class SearchTest(TestCase):
     "original_filename": "/data/small-json-scrape/c4d_170815_013114_ori.fits.json",
     "telescope_instrument": [["ct4m","decam"],["foobar", "bar"]],
     "exposure_time": 30,	
+    "image_filter":["raw", "calibrated"],
     "release_date": "2017-11-28"
 }
 '''
-#    "image_filter":["raw", "calibrated"]
 
         response = self.client.post('/natica/search/',
                                     content_type='application/json',

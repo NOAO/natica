@@ -1,5 +1,4 @@
 archive_root = '/data/natica-archive'
-natica_ingest_url = 'http://0.0.0.0:8000/natica/ingest/'
 
 # !!! REPLACE LUTs with read of files in /etc/natica. Populate those from DB.
 stiLUT = {

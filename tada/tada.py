@@ -74,12 +74,13 @@ def md5(fname):
     return hash_md5.hexdigest()
 
         
-def http_archive_ingest(modifiedfits):
+def http_archive_ingest(modifiedfits, overwrite=False):
     """Deliver FITS to NATICA webservice for ingest."""
     f = open(modifiedfits, 'rb')
     #urls = 'http://0.0.0.0:8000/natica/ingest/'
     urls = settings.natica_ingest_url
     r = requests.post(urls,
+                      params=dict(overwrite=13) if overwrite else dict(),
                       data=dict(md5sum=md5(modifiedfits)),
                       files={'file':f})
     logging.debug('http_archive_ingest: {}, {}'.format(r.status_code,r.json()))
@@ -87,6 +88,7 @@ def http_archive_ingest(modifiedfits):
 
 def submit_to_archive(fitspath,
                       md5sum=None,
+                      overwrite=False,
                       cachedir='/var/tada/cache',
                       anticachedir='/var/tada/anticache'):
     """Ingest a FITS file into the archive if possible.  Involves renaming to 
@@ -113,7 +115,7 @@ md5sum:: checksum of original file from dome
     changed = apply_personality(fitspath, pers_file)
 
     # ingest NATICA service
-    (status,error) = http_archive_ingest(fitscache)
+    (status,error) = http_archive_ingest(fitscache, overwrite=overwrite)
     
     if status == 200:  # SUCCESS
         # Remove cache files; FITS + YAML
@@ -139,6 +141,7 @@ def submit(rec, qname):
     ok = False
     fitsfile = rec['filename']
     md5sum = rec['checksum']
+    print('settings.n_url={}'.format(settings.natica_ingest_url))
     try:
         submit_to_archive(fitsfile)
     except Exception as err:
@@ -150,7 +153,10 @@ def submit(rec, qname):
 
 ##############################################################################
 
-#python3 tada /data/tada-test-data/short-drop/20141220/wiyn-whirc/obj_355.fits.fz
+# On archive:
+# cd /sandbox/natica/tada
+# testfile=/data/tada-test-data/short-drop/20141220/wiyn-whirc/obj_355.fits.fz
+# python3 tada.py $testfile
 testfile='/data/tada-test-data/short-drop/20141220/wiyn-whirc/obj_355.fits.fz'
 def main():
     "Parse command line arguments and do the work."
@@ -163,6 +169,9 @@ def main():
     parser.add_argument('--version', action='version', version='1.0.1')
     parser.add_argument('fitsfile', type=argparse.FileType('r'),
                         help='FITS file to ingest into Archive')
+    parser.add_argument('--overwrite',
+                        action='store_true',
+                        help='Overwrite file if it already exists in archive')
 
     parser.add_argument('--loglevel',
                         help='Kind of diagnostic output',
@@ -181,7 +190,7 @@ def main():
                         datefmt='%m-%d %H:%M')
     logging.debug('Debug output is enabled in %s !!!', sys.argv[0])
 
-    submit_to_archive(args.fitsfile)
+    submit_to_archive(args.fitsfile, overwrite=args.overwrite)
 
 if __name__ == '__main__':
     main()

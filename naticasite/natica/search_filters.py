@@ -31,10 +31,10 @@ def archive_filename(val):
     return Q(archive_filename=val)
 filename=archive_filename
 
-def image_filter(val):
+def image_filter(val):  
     if val == None: return Q()
     # Case insensitive match against extras['PRODTYPE'] (json field)
-    return Q(extras__PRODTYPE__iexact='image')
+    return Q(extras__PRODTYPE__iexact='image') #!!!
 
 #!!! WARNING: this is Inclusive only (ignores the BOUNDS part of tuple)
 def dateobs(val):
