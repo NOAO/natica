@@ -562,17 +562,19 @@ def handle_uploaded_file(f, md5sum, overwrite=False):
         else:
             shutil.move(tgtfile, str(archive_path))
         store_metadata(hdudicts, valdict)
-        
+        return str(archive_path)        
 #@csrf_exempt
 @api_view(['POST'])
 def store(request):
     overwrite = (13 == int(request.GET.get('overwrite','123')))
     if request.method == 'POST':
-        handle_uploaded_file(request.FILES['file'], request.data['md5sum'],
-                             overwrite=overwrite)
+        arc_fname = handle_uploaded_file(request.FILES['file'],
+                                         request.data['md5sum'],
+                                         overwrite=overwrite)
 
     return JsonResponse(dict(result='file uploaded: {}'
-                             .format(request.FILES['file'].name)))
+                             .format(request.FILES['file'].name),
+                             archive_filename=arc_fname ))
 
 search_fields = set([
     'search_box_min',

@@ -47,7 +47,7 @@ def validate_original_fits(fitsfilepath):
 FITS file that is valid to ingest into Archive."""
     assert 'FITS' == file_type(fitsfilepath)
 
-def apply_personality(fitscachepath, pers_file):
+def apply_personality(srcfits, destfits, pers_file):
     """Use personality file in FITS dir to modify FITS hdr in place."""
     # get Personality DICT
     # validate personality file (wrt JSON schema), raise if invalid
@@ -57,13 +57,17 @@ def apply_personality(fitscachepath, pers_file):
 
     #origfname = yd['params']['filename']
     # Apply personality changes
-    hdulist = pyfits.open(fitscachepath)
+    hdulist = pyfits.open(srcfits)
     newhdr = hdulist[0].header
     changed = set()
     for k,v in yd['options'].items():
+        logging.debug('apply_personality {}={}'.format(k,v))
         newhdr[k] = v  # overwrite with explicit fields from personality
         changed.add(k)
-    hdulist.close(output_verify='fix')
+    #!hdulist.close(output_verify='fix')
+    hdulist.writeto(destfits, output_verify='fix')
+    logging.debug('Applied personality file ({}) to {}'
+                  .format(pers_file, destfits))
     return changed
 
 def md5(fname):
@@ -77,7 +81,7 @@ def md5(fname):
 def http_archive_ingest(modifiedfits, overwrite=False):
     """Deliver FITS to NATICA webservice for ingest."""
     f = open(modifiedfits, 'rb')
-    #urls = 'http://0.0.0.0:8000/natica/ingest/'
+    #urls = 'http://0.0.0.0:8000/natica/store/'
     urls = settings.natica_ingest_url
     r = requests.post(urls,
                       params=dict(overwrite=13) if overwrite else dict(),
@@ -89,6 +93,7 @@ def http_archive_ingest(modifiedfits, overwrite=False):
 def submit_to_archive(fitspath,
                       md5sum=None,
                       overwrite=False,
+                      personality_yaml=None,
                       cachedir='/var/tada/cache',
                       anticachedir='/var/tada/anticache'):
     """Ingest a FITS file into the archive if possible.  Involves renaming to 
@@ -104,36 +109,41 @@ md5sum:: checksum of original file from dome
         md5sum = md5(fitspath)
     fitscache = str(PurePath(cachedir,
                              md5sum + ''.join(PurePath(fitspath).suffixes)))
-    shutil.copyfile(fitspath, fitscache)
+    #!shutil.copyfile(fitspath, fitscache)
 
     # Apply personality to FITS in-place (roughly "prep_for_ingest")
-    pers_file = str(PurePath(cachedir,
-                              md5sum
-                              + ''.join(PurePath(fitspath).suffixes)
-                              + '.yaml'))
-    shutil.copyfile(fitspath+'.yaml', pers_file)
-    changed = apply_personality(fitspath, pers_file)
+    if personality_yaml == None:
+        personality_yaml = fitspath+'.yaml'
+    #!pers_file = str(PurePath(cachedir,
+    #!                          md5sum
+    #!                          + ''.join(PurePath(fitspath).suffixes)
+    #!                          + '.yaml'))
+    #!shutil.copyfile(fitspath+'.yaml', pers_file)
+    #! changed = apply_personality(fitspath, pers_file)
+    changed = apply_personality(fitspath, fitscache, personality_yaml)
 
     # ingest NATICA service
-    (status,error) = http_archive_ingest(fitscache, overwrite=overwrite)
+    (status,jmsg) = http_archive_ingest(fitscache, overwrite=overwrite)
     
     if status == 200:  # SUCCESS
         # Remove cache files; FITS + YAML
         os.remove(fitscache) 
-        os.remove(pers_file)
-        logging.debug('Ingest SUCCESS: {}'.format(fitspath))
+        #!os.remove(pers_file)
+        logging.debug('Ingest SUCCESS: {}; {}'.format(fitspath, jmsg))
     else:  # FAILURE
         logging.error('Ingest FAIL: {} ({}); {}'
-                      .format(fitspath, fitscache, error))
+                      .format(fitspath, fitscache, jmsg))
 
         # move FITS + YAML on failure
         shutil.move(fitscache, anticachedir)
-        shutil.move(pers_file, anticachedir)
+        #~shutil.move(pers_file, anticachedir)
+        shutil.move(personality_file, anticachedir)
         raise Exception('Failed to ingest using NATICA webservice on {}; {}'
-                        .format(fitscache, error))
+                        .format(fitscache, jmsg))
 
     # !!! update AUDIT record. At-rest in Archive(success), or Anti-cache(fail)
-    
+
+    return jmsg.get('archive_filename', 'NA')
     # END: submit_to_archive()
     
 def submit(rec, qname):
@@ -190,7 +200,7 @@ def main():
                         datefmt='%m-%d %H:%M')
     logging.debug('Debug output is enabled in %s !!!', sys.argv[0])
 
-    submit_to_archive(args.fitsfile, overwrite=args.overwrite)
+    print(submit_to_archive(args.fitsfile, overwrite=args.overwrite))
 
 if __name__ == '__main__':
     main()
