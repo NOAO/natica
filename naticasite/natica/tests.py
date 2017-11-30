@@ -1,6 +1,11 @@
 # Regression test of NATICA services
 # MODIFIED from ~/sandbox/mars/marssite/dal/tests.py
 # EXAMPLE:
+#  cd /sandbox/natica/naticasite
+#  ./manage.py test natica.tests.StoreTest
+#  ./manage.py test natica.tests.SearchTest.test_search_0
+#  ./manage.py test natica.tests.SearchTest
+#  ./manage.py test
 #   
 
 
@@ -14,6 +19,14 @@ import logging
 import sys
 import pprint
 from contextlib import contextmanager
+import hashlib
+
+def md5(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
 
 @contextmanager
 def streamhandler_to_console(lggr):
@@ -34,6 +47,30 @@ def testcase_log_console(lggr):
 
 logger = logging.getLogger('django_test')
 
+
+class StoreTest(TestCase):
+    maxDiff = None # too see full values in DIFF on assert failure
+    #fixtures = ['dump-natica.json',]
+
+    def setUp(self):
+        self.fits1 = '/data/natica-archive/20141225/ct13m/smarts/c13a_141226_070040_ori.fits.fz'
+
+    def test_store_0(self):
+        overwrite=False
+        expected = {'archive_filename': '/data/natica-archive/20141225/ct13m/smarts/c13a_141226_070040_ori.fits.fz',
+                    'result': 'file uploaded: c13a_141226_070040_ori.fits.fz'}
+        with open(self.fits1, 'rb') as f:
+            response = self.client.post(
+                '/natica/store/',
+                dict(md5sum=md5(self.fits1), file=f))
+        jresponse=response.json()
+        self.assertJSONEqual(json.dumps(jresponse),
+                             json.dumps(expected),
+                             msg='Unexpected response')
+        self.assertEqual(response.status_code, 200)
+
+            
+        
 
 class SearchTest(TestCase):
 

@@ -33,6 +33,7 @@ from django.core.management.base import CommandError
 from django.views.decorators.cache import never_cache
 import django_tables2 as tables
 from django.core.exceptions import ObjectDoesNotExist
+from django.db  import IntegrityError
 
 from .models import FitsFile, Hdu, Proposal
 from .forms import SearchForm
@@ -562,19 +563,25 @@ def handle_uploaded_file(f, md5sum, overwrite=False):
         else:
             shutil.move(tgtfile, str(archive_path))
         store_metadata(hdudicts, valdict)
-        return str(archive_path)        
-#@csrf_exempt
+        return str(archive_path)
+    
+
 @api_view(['POST'])
 def store(request):
     overwrite = (13 == int(request.GET.get('overwrite','123')))
     if request.method == 'POST':
-        arc_fname = handle_uploaded_file(request.FILES['file'],
-                                         request.data['md5sum'],
-                                         overwrite=overwrite)
+        try:
+            arc_fname = handle_uploaded_file(request.FILES['file'],
+                                             request.data['md5sum'],
+                                             overwrite=overwrite)
+            return JsonResponse(dict(result='file uploaded: {}'
+                                     .format(request.FILES['file'].name),
+                                     archive_filename=arc_fname ))
+        except Exception as err:
+            #raise nex.DBStoreError(err)
+            return JsonResponse(dict(reason=err), status=400)
+                        
 
-    return JsonResponse(dict(result='file uploaded: {}'
-                             .format(request.FILES['file'].name),
-                             archive_filename=arc_fname ))
 
 search_fields = set([
     'search_box_min',

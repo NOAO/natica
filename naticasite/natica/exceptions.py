@@ -26,7 +26,7 @@ class TIFormatError(BaseNaticaException):
 class NumericError(BaseNaticaException):
     status_code = 400    
 
-class SearchSyntaxEerror(BaseNaticaException):
+class SearchSyntaxError(BaseNaticaException):
     status_code = 400    
 
 class BadFakeError(BaseNaticaException):

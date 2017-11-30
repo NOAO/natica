@@ -18,9 +18,29 @@ from pathlib import PurePath
 import astropy.io.fits as pyfits
 import requests
 import settings
+import errno
+
+import exceptions as tex
 
 ##############################################################################
 
+def silentremove(filename):
+    try:
+        os.remove(filename)
+    except OSError as e: 
+        if e.errno != errno.ENOENT: 
+            raise # re-raise exception if a different error occurred
+
+def force_move(src_file, dest_dir):
+    dest_file = str(PurePath(dest_dir,PurePath(src_file).name))
+    silentremove(dest_file)
+    shutil.move(src_file, dest_file)
+
+def force_copy(src_file, dest_dir):
+    dest_file = str(PurePath(dest_dir,PurePath(src_file).name))
+    silentremove(dest_file)
+    shutil.copyfile(src_file, dest_file)
+        
 # +++ Add code here if TADA needs to handle additional types of files!!!
 def file_type(filename):
     """Return an abstracted file type string.  MIME isn't always good enough."""
@@ -65,6 +85,7 @@ def apply_personality(srcfits, destfits, pers_file):
         newhdr[k] = v  # overwrite with explicit fields from personality
         changed.add(k)
     #!hdulist.close(output_verify='fix')
+    silentremove(destfits)
     hdulist.writeto(destfits, output_verify='fix')
     logging.debug('Applied personality file ({}) to {}'
                   .format(pers_file, destfits))
@@ -89,6 +110,9 @@ def http_archive_ingest(modifiedfits, overwrite=False):
                       files={'file':f})
     logging.debug('http_archive_ingest: {}, {}'.format(r.status_code,r.json()))
     return (r.status_code, r.json())
+
+
+
 
 def submit_to_archive(fitspath,
                       md5sum=None,
@@ -135,11 +159,13 @@ md5sum:: checksum of original file from dome
                       .format(fitspath, fitscache, jmsg))
 
         # move FITS + YAML on failure
-        shutil.move(fitscache, anticachedir)
-        #~shutil.move(pers_file, anticachedir)
-        shutil.move(personality_file, anticachedir)
-        raise Exception('Failed to ingest using NATICA webservice on {}; {}'
-                        .format(fitscache, jmsg))
+        force_copy(personality_yaml, anticachedir)
+        force_move(fitscache, anticachedir)
+        msg = ('Failed to ingest using natica/store webservice with {}; {}'
+               .format(fitscache, jmsg))
+        #raise tex.WebServiceException(msg)
+        return msg
+
 
     # !!! update AUDIT record. At-rest in Archive(success), or Anti-cache(fail)
 
