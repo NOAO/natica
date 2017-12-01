@@ -29,11 +29,12 @@ class RequestExceptionHandler(object):
             exception_dict = exception.to_dict()
         else:
             status = 500
+
             exception_dict = {'errorMessage':
-                              'Unexpected Error!: {}'.format(exception),
+                              'Unexpected Error: {}'.format(exception),
                               #!'traceback': traceback.format_exc(),
             }
         
-        print('DBG: middleware, exception_dict={}'.format(exception_dict))
-        traceback.print_exc()
+        #print('DBG: middleware, exception_dict={}'.format(exception_dict))
+        #traceback.print_exc()
         return JsonResponse(exception_dict, status=status)

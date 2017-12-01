@@ -1,5 +1,5 @@
-#!import logging
-#!import traceback
+import logging
+import traceback
 
 class BaseNaticaException(Exception):
     status_code = None
@@ -9,7 +9,8 @@ class BaseNaticaException(Exception):
     def __init__(self, error_message):
         Exception.__init__(self)
         self.error_message = error_message
-        #logging.error('{}; {}'.format(error_message, traceback.format_stack()))
+        logging.error('BaseNaticaException: {}; {}'
+                      .format(error_message, traceback.format_stack()))
         
     def to_dict(self):
         return {'errorMessage': self.error_message}

@@ -533,7 +533,7 @@ def protected_store_metadata(hdudict_list, non_hdu_vals):
     try:
         store_metadata(hdudict_list, non_hdu_vals)
     except Exception as err:
-        raise nex.FitsError('Could not store metadata; {}'.format(err))
+        raise nex.DBStoreError('Could not store metadata; {}'.format(err))
     
 
 def hdudictlist(hdulist):
@@ -562,7 +562,7 @@ def handle_uploaded_file(f, md5sum, overwrite=False):
             os.replace(tgtfile, str(archive_path))
         else:
             shutil.move(tgtfile, str(archive_path))
-        store_metadata(hdudicts, valdict)
+        protected_store_metadata(hdudicts, valdict)
         return str(archive_path)
     
 
@@ -570,16 +570,16 @@ def handle_uploaded_file(f, md5sum, overwrite=False):
 def store(request):
     overwrite = (13 == int(request.GET.get('overwrite','123')))
     if request.method == 'POST':
-        try:
-            arc_fname = handle_uploaded_file(request.FILES['file'],
-                                             request.data['md5sum'],
-                                             overwrite=overwrite)
-            return JsonResponse(dict(result='file uploaded: {}'
-                                     .format(request.FILES['file'].name),
-                                     archive_filename=arc_fname ))
-        except Exception as err:
-            #raise nex.DBStoreError(err)
-            return JsonResponse(dict(reason=err), status=400)
+        #try:
+        arc_fname = handle_uploaded_file(request.FILES['file'],
+                                         request.data['md5sum'],
+                                         overwrite=overwrite)
+        return JsonResponse(dict(result='file uploaded: {}'
+                                 .format(request.FILES['file'].name),
+                                 archive_filename=arc_fname ))
+        #!except Exception as err:
+        #!    #raise nex.DBStoreError(err)
+        #!    return HttpResponseBadRequest(err)
                         
 
 

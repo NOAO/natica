@@ -1,7 +1,7 @@
 # Regression test of NATICA services
 # MODIFIED from ~/sandbox/mars/marssite/dal/tests.py
 # EXAMPLE:
-#  cd /sandbox/natica/naticasite
+#   cd /sandbox/natica/naticasite
 #  ./manage.py test natica.tests.StoreTest
 #  ./manage.py test natica.tests.SearchTest.test_search_0
 #  ./manage.py test natica.tests.SearchTest
@@ -56,6 +56,7 @@ class StoreTest(TestCase):
         self.fits1 = '/data/natica-archive/20141225/ct13m/smarts/c13a_141226_070040_ori.fits.fz'
 
     def test_store_0(self):
+        """No duplicate, valid FITS for NATICA"""
         overwrite=False
         expected = {'archive_filename': '/data/natica-archive/20141225/ct13m/smarts/c13a_141226_070040_ori.fits.fz',
                     'result': 'file uploaded: c13a_141226_070040_ori.fits.fz'}
@@ -68,8 +69,31 @@ class StoreTest(TestCase):
                              json.dumps(expected),
                              msg='Unexpected response')
         self.assertEqual(response.status_code, 200)
-
+        
             
+    #@testcase_log_console(logger)
+    def test_store_1(self):
+        """Error: Duplicate"""
+        overwrite=False
+        expected = {'errorMessage': 'Could not store metadata; duplicate key value violates '
+                 'unique constraint "natica_fitsfile_md5sum_key"\n'
+                 'DETAIL:  Key (md5sum)=(8e0cbc0669e8f07427ef0295becfeda8) '
+                 'already exists.\n'}
+        with open(self.fits1, 'rb') as f:
+            response = self.client.post(
+                '/natica/store/',
+                dict(md5sum=md5(self.fits1), file=f))
+        with open(self.fits1, 'rb') as f:
+            response = self.client.post(
+                '/natica/store/',
+                dict(md5sum=md5(self.fits1), file=f))
+        jresponse=response.json()
+        logger.debug('DBG: store_1 jresponse={}'
+                     .format(pprint.pformat(jresponse)))
+        self.assertEqual(response.status_code, 400)
+        self.assertJSONEqual(json.dumps(jresponse), json.dumps(expected),
+                             msg='Unexpected response3')
+
         
 
 class SearchTest(TestCase):

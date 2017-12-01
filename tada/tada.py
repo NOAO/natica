@@ -84,7 +84,6 @@ def apply_personality(srcfits, destfits, pers_file):
         logging.debug('apply_personality {}={}'.format(k,v))
         newhdr[k] = v  # overwrite with explicit fields from personality
         changed.add(k)
-    #!hdulist.close(output_verify='fix')
     silentremove(destfits)
     hdulist.writeto(destfits, output_verify='fix')
     logging.debug('Applied personality file ({}) to {}'
@@ -133,17 +132,10 @@ md5sum:: checksum of original file from dome
         md5sum = md5(fitspath)
     fitscache = str(PurePath(cachedir,
                              md5sum + ''.join(PurePath(fitspath).suffixes)))
-    #!shutil.copyfile(fitspath, fitscache)
 
     # Apply personality to FITS in-place (roughly "prep_for_ingest")
     if personality_yaml == None:
         personality_yaml = fitspath+'.yaml'
-    #!pers_file = str(PurePath(cachedir,
-    #!                          md5sum
-    #!                          + ''.join(PurePath(fitspath).suffixes)
-    #!                          + '.yaml'))
-    #!shutil.copyfile(fitspath+'.yaml', pers_file)
-    #! changed = apply_personality(fitspath, pers_file)
     changed = apply_personality(fitspath, fitscache, personality_yaml)
 
     # ingest NATICA service
@@ -152,18 +144,16 @@ md5sum:: checksum of original file from dome
     if status == 200:  # SUCCESS
         # Remove cache files; FITS + YAML
         os.remove(fitscache) 
-        #!os.remove(pers_file)
         logging.debug('Ingest SUCCESS: {}; {}'.format(fitspath, jmsg))
     else:  # FAILURE
-        logging.error('Ingest FAIL: {} ({}); {}'
-                      .format(fitspath, fitscache, jmsg))
+        #! logging.error('Ingest FAIL: {} ({}); {}'
+        #!               .format(fitspath, fitscache, jmsg))
 
         # move FITS + YAML on failure
         force_copy(personality_yaml, anticachedir)
         force_move(fitscache, anticachedir)
         msg = ('Failed to ingest using natica/store webservice with {}; {}'
                .format(fitscache, jmsg))
-        #raise tex.WebServiceException(msg)
         return msg
 
 
