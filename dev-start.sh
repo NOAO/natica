@@ -1,4 +1,7 @@
 #!/bin/sh
+# EXAMPLE:
+#   on mars as vagrant
+#   /sandbox/natica/dev-start.sh
 
 pushd /sandbox/natica/naticasite
 #source /home/vagrant/venv/bin/activate

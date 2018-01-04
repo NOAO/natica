@@ -16,26 +16,29 @@ def toc():
 
 def try_queries():
     c = Client()
-    af='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_114228_cri.fits.json'
-    of='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_105436_cri.fits.json'
-    search_dict = dict(
-        coordinates = {"coordinates": { "ra": 19.9616, "dec": 0.8161}},
+    af='/data/small-json-scrape/k21i_040811_004959_zri.fits.json'
+    #of='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_105436_cri.fits.json'
+    of='/data/small-json-scrape/c09i_040811_051619_ori.fits.json'
+    dd = dict(
+        box_min     = {"search_box_min": 2,
+                       "coordinates": { "ra": 20.0, "dec": 0.5 }},
+
+        coordinates = {"coordinates": { "ra": 234.343, "dec": 30.599}},
         exposure    = {"exposure_time": [10.0, 19.9] },
 
         filename    = {"filename": af},      
         image_filter = {"image_filter": ["raw", "calibrated"]},#!!! MEMORY
-        obs_date    = {"obs_date": ["2017-07-01", "2017-07-03"] },
+        obs_date    = {"obs_date": ["2004-08-10", "2004-08-12"] },
         orig_file   = {"original_filename": of},
 
-        pi          = {"pi": "Schlegel"}, # 3.366 8/10/17
+        pi          = {"pi": "Matthias Dietrich"}, 
         prop_id     = {"prop_id": "2014B-0404"}, #!!! MEMORY
-        release     = {"release_date": ["2017-07-25", "2017-07-27"]},
-        box_min     = {"search_box_min": 2,
-                       "coordinates": { "ra": 20.0, "dec": 0.5 }},
+        release     = {"release_date": ["2017-09-12", "2017-09-15"]},
         tele_inst   = {"telescope_instrument": [["ct4m","decam"],]},
         #tele_inst   = {"telescope_instrument":
         #               [['CTIO 4.0-m telescope', 'DECam'],]}, #!!! non-std vals
         )
+    search_dict = OrderedDict(sorted(dd.items(), key=lambda t: t[0]))
     tic()
     qlist = list()
     for name,jsearch in search_dict.items():
