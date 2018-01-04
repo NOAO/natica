@@ -53,16 +53,23 @@ def RAtodeg(sexstr):
 def DECtodeg(sexstr):
     return coord.Angle(sexstr, unit=u.deg).degree
 
-def proto_html(ttime, qcount, query_list):
+def proto_html(ttime, qcount, query_list, all_ids):
     html = '''<ul>
 <li>Total Time: {total_time}</li>
 <li>Number of queries: {query_count}</li>
+<li>All matched FitsFile IDs: {ids}</li>
 </ul>
-'''.format(total_time=ttime, query_count=qcount)
+'''.format(total_time=ttime, query_count=qcount, ids=sorted(all_ids))
 
-    html+='<table border=1 cellspacing=0><tr><th>Time</th><th>Name</th><th>Count</th><th>SQL</th></tr>'
+    html+='<table border=1 cellspacing=0><tr><th>Time</th><th>Name</th><th>Count</th><th>ID list</th><th>SQL</th></tr>'
     for q in query_list:
-        html += '<tr> <td>{time}</td><td>{name}</td><td>{total_count}</td><td>{sql}</td> </tr>'.format(**q)
+        html += '''<tr> 
+  <td>{time}</td>
+  <td>{name}</td>
+  <td>{total_count}</td>
+  <td>{id_list}</td>
+  <td>{sql}</td> 
+</tr>'''.format(**q)
     html += '</table>'
     return html
     
@@ -82,7 +89,8 @@ def prot(request):
     #return JsonResponse(rdict, json_dumps_params=dict(indent=4))
     return HttpResponse(proto_html(rdict['total_time'],
                                    rdict['query_count'],
-                                   rdict['query_list']))
+                                   rdict['query_list'],
+                                   rdict['all_ids']  ))
 
 
 @api_view(['GET'])
@@ -717,6 +725,7 @@ def search(request):
         obsdate = [fobj.date_obs.lower, fobj.date_obs.upper] if fobj.date_obs != None else None
         results.append(
             dict(
+                id=fobj.id,
                 ra=ra,
                 dec=dec,
                 #depth,

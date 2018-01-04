@@ -1,0 +1,28 @@
+- model: natica.proposal
+  pk: 60
+  fields:
+    extras: {}
+    prop_id: noprop
+    pi: ''
+    proprietary_period: 12
+- model: natica.proposal
+  pk: 68
+  fields:
+    extras: {}
+    prop_id: 2017B-0951
+    pi: Vivas
+    proprietary_period: 1
+- model: natica.proposal
+  pk: 69
+  fields:
+    extras: {}
+    prop_id: 2004B-0103
+    pi: Matthias Dietrich
+    proprietary_period: 1
+- model: natica.proposal
+  pk: 80
+  fields:
+    extras: {}
+    prop_id: 2017B-0169
+    pi: No PI Provided
+    proprietary_period: 1

@@ -16,6 +16,7 @@ def toc():
 
 def try_queries():
     c = Client()
+    all_match_ids = set()
     af='/data/small-json-scrape/k21i_040811_004959_zri.fits.json'
     #of='/data/json-scrape/20170701/ct15m/smarts/c15e_170702_105436_cri.fits.json'
     of='/data/small-json-scrape/c09i_040811_051619_ori.fits.json'
@@ -66,15 +67,19 @@ def try_queries():
                                       'time',
                                       'sql',
                                       'total_count',
+                                      'id_list',
                                       'timestamp',
                                       ])
         hide = 'SELECT natica_fitsfile.id, natica_fitsfile.md5sum, natica_fitsfile.filesize, natica_fitsfile.proposal_id, natica_fitsfile.extras, natica_fitsfile.ra, natica_fitsfile.dec, natica_fitsfile.exposure, natica_fitsfile.archive_filename, natica_fitsfile.date_obs, natica_fitsfile.original_filename, natica_fitsfile.release_date, natica_fitsfile.instrument, natica_fitsfile.telescope FROM natica_fitsfile'
+        idlist = [res['id'] for res in response.json()['resultset']]
+        all_match_ids.update(idlist)
         query.update(
             name = name,
             #sql = queries[0]['sql'],
             sql = meta['query'].replace('"','').replace(hide,'...'),
             time = queries[0]['time'],
             total_count = meta['total_count'],
+            id_list = sorted(idlist),
             #to_here_count = meta['to_here_count'],
             #page_result_count = meta['page_result_count'],
             timestamp = meta['timestamp'],
@@ -85,6 +90,7 @@ def try_queries():
     return dict(total_time=total,
                 query_count=len(search_dict),
                 query_list=qlist,
+                all_ids=sorted(list(all_match_ids))
                 )
 
 
