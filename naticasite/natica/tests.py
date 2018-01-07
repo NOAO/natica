@@ -12,7 +12,7 @@
 
 import logging
 import sys
-import pprint
+from pprint import pformat
 from contextlib import contextmanager
 import hashlib
 import json
@@ -74,14 +74,15 @@ class StoreTest(TestCase):
         self.assertEqual(response.status_code, 200)
         
             
-    #@testcase_log_console(logger)
+    @testcase_log_console(logger)
     def test_store_1(self):
         """Error: Duplicate"""
         overwrite=False
-        expected = {'errorMessage': 'Could not store metadata; duplicate key value violates '
-                 'unique constraint "natica_fitsfile_md5sum_key"\n'
-                 'DETAIL:  Key (md5sum)=(8e0cbc0669e8f07427ef0295becfeda8) '
-                 'already exists.\n'}
+        expected = {'errorMessage':
+                    'Could not store metadata; duplicate key value violates '
+                    'unique constraint "natica_fitsfile_md5sum_key"\n'
+                    'DETAIL:  Key (md5sum)=(8e0cbc0669e8f07427ef0295becfeda8) '
+                    'already exists.\n'}
         with open(self.fits1, 'rb') as f:
             response = self.client.post(
                 '/natica/store/',
@@ -91,8 +92,7 @@ class StoreTest(TestCase):
                 '/natica/store/',
                 dict(md5sum=md5(self.fits1), file=f))
         jresponse=response.json()
-        logger.debug('DBG: store_1 jresponse={}'
-                     .format(pprint.pformat(jresponse)))
+        #!logger.debug('DBG: store_1 jresponse={}'.format(pformat(jresponse)))
         self.assertEqual(response.status_code, 400)
         self.assertJSONEqual(json.dumps(jresponse), json.dumps(expected),
                              msg='Unexpected response3')
@@ -112,6 +112,7 @@ class SearchTest(TestCase):
     
     @testcase_log_console(logger)
     def test_search_many(self):
+        "Try one of each type of search clause supported by DAL."
         c = Client()
         for name,(jsearch,expected) in search_dict.items():
             #! print('DBG: testing query for: {}'.format(name))
@@ -123,7 +124,7 @@ class SearchTest(TestCase):
                 return dict(errorMessage = 'test_search_many: {}'.format(err))
 
             #!print('DBG: name={}, response.json()=\n{}'
-            #!      .format(name, pprint.pformat(response.json()['resultset'])))
+            #!      .format(name, pformat(response.json()['resultset'])))
             self.assertJSONEqual(json.dumps(response.json()['resultset']),
                                  json.dumps(expected))
         
@@ -146,7 +147,7 @@ class SearchTest(TestCase):
                 "total_count": 11583954}
         jresponse=response.json()
         del jresponse['meta']['query']
-        logger.debug('DBG: search_0 response={}'.format(pprint.pformat(jresponse)))
+        logger.debug('DBG: search_0 response={}'.format(pformat(jresponse)))
         self.assertIn('meta', response.json())
         self.assertIn('timestamp', response.json()['meta'])
         self.assertIn('comment', response.json()['meta'])
@@ -168,44 +169,30 @@ class SearchTest(TestCase):
         #!                     json.dumps(json.loads(exp.search_0)['resultset']),
         #!                     msg='Unexpected resultset')
         
-    #@testcase_log_console(logger)
+    @testcase_log_console(logger)
     def test_search_1(self):
         "MVP-1. Basics. No validation of input"
-
-        REMOVED = {
-            "filename": "foo",
-            "pi": "Cypriano",
-            "prop_id": "noao",
-            "image_filter":["raw", "calibrated"],
-
-            "original_filename": "/sandbox/tada/tests/smoke/tada-test-data/scrape/20110101/wiyn-whirc/obj_355.fits.fz",
-            "telescope_instrument": [["WIYN","whirc"],["foobar", "bar"]],
-            "exposure_time": 60,
-            "release_date": "2017-09-12",
-            "search_box_min": 5.0,
-            "obs_date": ["2012-12-20", "2012-12-21", "[]"],
-            
-        }
         req = '''{
-    "coordinates": { "ra": 284, "dec": -50 },
+    "coordinates": { "ra": 323, "dec": -1 },
     "search_box_min": 2.0,
-    "pi": "Walker",
-    "prop_id": "2013A-9999",
-    "obs_date": ["2017-08-14", "2017-08-17", "[]"],
-    "original_filename": "/data/small-json-scrape/c4d_170815_013114_ori.fits.json",
+    "pi": "Vivas",
+    "prop_id": "2017B-0951",
+    "obs_date": ["2017-08-10", "2017-08-20", "[]"],
+    "original_filename": 
+        "/data/small-json-scrape/c4d_170815_054546_ori.fits.json",
     "telescope_instrument": [["ct4m","decam"],["foobar", "bar"]],
-    "exposure_time": 30,	
-    "image_filter":["raw", "calibrated"],
-    "release_date": "2017-11-28"
+    "exposure_time": 10,	
+    "release_date": "2017-09-14"
 }
 '''
+#@@@    "image_filter":["raw", "calibrated"],
 
         response = self.client.post('/natica/search/',
                                     content_type='application/json',
                                     data=req  )
         jresponse=response.json()
         del jresponse['meta']['query']
-        logger.debug('DBG: search_1 response={}'.format(pprint.pformat(jresponse)))
+        #!logger.debug('DBG: search_1 response={}'.format(pformat(jresponse)))
         self.assertJSONEqual(json.dumps(response.json()['resultset']),
                              json.dumps(json.loads(exp.search_1)['resultset']),
                              msg='Unexpected resultset')
