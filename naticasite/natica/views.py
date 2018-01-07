@@ -690,8 +690,8 @@ def search(request):
             schema = json.load(f)
             jsonschema.validate(jsearch, schema)
     except Exception as err:
-        raise nex.BadSearchSyntax('JSON did not validate against'
-                                  ' {}; {}'.format(schemafile, err))
+        raise nex.SearchSyntaxError('JSON did not validate against'
+                                    ' {}; {}'.format(schemafile, err))
 
 
     used_fields = set(jsearch.keys())
@@ -759,7 +759,7 @@ def search(request):
     meta.update(
         api_version = api_version,
         timestamp = datetime.datetime.now(),
-        comment = ('WARNING: RESULTS missing values: surve_id, depth.'
+        comment = ('WARNING: RESULTS missing values: surver_id, depth.'
                    '  (Where do they come from???)'
                    ),
         query = query,
