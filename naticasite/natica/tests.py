@@ -231,15 +231,14 @@ class SearchTest(TestCase):
         self.assertEqual(response.status_code, 400)
 
 
-#!    ###
-#!    #############################################################################
-#!    
-#!    def test_tipairs_0(self):
-#!        "Return telescope/instrument pairs."
-#!        #print('DBG: Using archive database: {}'.format(settings.DATABASES['archive']['HOST']))
-#!        response = self.client.get('/dal/ti-pairs/')
-#!        #!print('DBG: response={}'.format(response.json()))
-#!        #!print('DBG: expected={}'.format(exp.tipairs_0))
-#!        self.assertJSONEqual(json.dumps(response.json()),
-#!                             json.dumps(exp.tipairs_0))
-#!        self.assertEqual(response.status_code, 200)
+    ###
+    #############################################################################
+    
+    #!def test_tipairs_0(self):
+    #!    "Return telescope/instrument pairs."
+    #!    response = self.client.get('/natica/ti-pairs/')
+    #!    print('DBG: response={}'.format(response.json()))
+    #!    print('DBG: expected={}'.format(exp.tipairs_0))
+    #!    self.assertJSONEqual(json.dumps(response.json()),
+    #!                         json.dumps(exp.tipairs_0))
+    #!    self.assertEqual(response.status_code, 200)
