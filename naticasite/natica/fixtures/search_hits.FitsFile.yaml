@@ -1125,5 +1125,5 @@
     date_obs: '{"bounds": "[)", "lower": "2004-08-11", "upper": "2004-08-12"}'
     original_filename: /data/small-json-scrape/k21i_040811_004959_zri.fits.json
     release_date: 2004-09-10
-    instrument: ''
+    instrument: gtcam
     telescope: kp21m

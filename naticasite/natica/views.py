@@ -35,7 +35,7 @@ import django_tables2 as tables
 from django.core.exceptions import ObjectDoesNotExist
 from django.db  import IntegrityError
 
-from .models import FitsFile, Hdu, Proposal
+from .models import FitsFile, Hdu, Proposal, Site, Telescope, Instrument
 from .forms import SearchForm
 from . import exceptions as nex
 from . import search_filters as sf
@@ -219,8 +219,8 @@ is not good enuf for Archive.
             raise nex.MissingFieldError('Missing FITS field {}'.format(k))
         return vals
 
-    instrument = just_one('DTINSTRU')
     telescope = just_one('DTTELESC')
+    instrument = just_one('DTINSTRU')
     propid = just_one('DTPROPID')
     prodtype = just_one('PRODTYPE')
     proctype = just_one('PROCTYPE')
@@ -229,6 +229,20 @@ is not good enuf for Archive.
     #! dec_set = at_least_one('DEC')  # none for CALIBRATION image
     #! proposer = just_one('PROPOSER')
     #! obj_set = at_least_one('OBJECT') 
+
+    try:
+        Telescope.objects.get(name=telescope)
+    except Exception as err:
+        tele_list = [obj.name for obj in Telescope.objects.all()]
+        raise nex.TelescopeError(
+            'Telescope from hdr ({}) not known DB value {}; {}'.
+                               format(telescope, tele_list, err))
+    try:
+        Instrument.objects.get(name=instrument)
+    except Exception as err:
+        raise nex.InstrumentError(
+            'Instrument from hdr ({}) not known DB value; {}'.
+                               format(instrument, err))
 
     # Validate against schema
     try:
@@ -501,8 +515,8 @@ def store_metadata(hdudict_list, non_hdu_vals):
                     date_obs = agg['DATE-OBS'],
                     original_filename=non_hdu_vals['src_fname'],
                     release_date=timezone.now(), #!!!
-                    instrument=agg['DTINSTRU'][0],
-                    telescope=agg['DTTELESC'][0],
+                    instrument=Instrument.objects.get(pk=agg['DTINSTRU'][0]),
+                    telescope=Telescope.objects.get(pk=agg['DTTELESC'][0]),
                     
                     extras = fits_extras
     )
@@ -541,6 +555,8 @@ def protected_store_metadata(hdudict_list, non_hdu_vals):
     try:
         store_metadata(hdudict_list, non_hdu_vals)
     except Exception as err:
+        logging.error('huddict_list={}, non_hdu_vals={}'
+                      .format(hdudict_list, non_hdu_vals))
         raise nex.DBStoreError('Could not store metadata; {}'.format(err))
     
 
@@ -734,7 +750,7 @@ def search(request):
                 filesize=fobj.filesize,
                 filter=fobj.extras.get('FILTER'), # FILTER, FILTERS, FILTER1, FILTER2
                 image_type=fobj.extras.get('IMAGETYP'), 
-                instrument=fobj.instrument,
+                instrument=fobj.instrument.name,
                 md5sum=fobj.md5sum,
                 obs_date=obsdate,
                 observation_mode=fobj.extras.get('OBSMODE'),
@@ -746,7 +762,7 @@ def search(request):
                 release_date=fobj.release_date,
                 seeing=fobj.extras.get('SEEING'),
                 #survey_id
-                telescope=fobj.telescope,
+                telescope=fobj.telescope.name,
             ))
     logging.debug('DBG: results={}'.format(results))
     meta = OrderedDict.fromkeys(['total_count',

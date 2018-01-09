@@ -1,0 +1,153 @@
+-   model: natica.site
+    pk: 1
+    fields: {name: kp}
+-   model: natica.site
+    pk: 2
+    fields: {name: cp}
+-   model: natica.site
+    pk: 3
+    fields: {name: ct}
+-   model: natica.telescope
+    pk: 1
+    fields: {name: kp09m}
+-   model: natica.telescope
+    pk: 2
+    fields: {name: soar}
+-   model: natica.telescope
+    pk: 3
+    fields: {name: ctlab}
+-   model: natica.telescope
+    pk: 4
+    fields: {name: ct4m}
+-   model: natica.telescope
+    pk: 5
+    fields: {name: kp4m}
+-   model: natica.telescope
+    pk: 6
+    fields: {name: kp21m}
+-   model: natica.telescope
+    pk: 7
+    fields: {name: kp35m}
+-   model: natica.telescope
+    pk: 8
+    fields: {name: ct15m}
+-   model: natica.telescope
+    pk: 9
+    fields: {name: kpcf}
+-   model: natica.telescope
+    pk: 10
+    fields: {name: ct13m}
+-   model: natica.telescope
+    pk: 11
+    fields: {name: wiyn}
+-   model: natica.telescope
+    pk: 12
+    fields: {name: bok23m}
+-   model: natica.telescope
+    pk: 13
+    fields: {name: ct1m}
+-   model: natica.telescope
+    pk: 14
+    fields: {name: ct09m}
+-   model: natica.telescope
+    pk: 15
+    fields: {name: TESTtele}
+-   model: natica.instrument
+    pk: 1
+    fields: {name: mosaic}
+-   model: natica.instrument
+    pk: 2
+    fields: {name: goodman spectrograph}
+-   model: natica.instrument
+    pk: 3
+    fields: {name: cosmos}
+-   model: natica.instrument
+    pk: 4
+    fields: {name: ispi}
+-   model: natica.instrument
+    pk: 5
+    fields: {name: osiris}
+-   model: natica.instrument
+    pk: 6
+    fields: {name: flamingos}
+-   model: natica.instrument
+    pk: 7
+    fields: {name: wildfire}
+-   model: natica.instrument
+    pk: 8
+    fields: {name: arcoiris}
+-   model: natica.instrument
+    pk: 9
+    fields: {name: ice}
+-   model: natica.instrument
+    pk: 10
+    fields: {name: mosaic3}
+-   model: natica.instrument
+    pk: 11
+    fields: {name: minimo/ice}
+-   model: natica.instrument
+    pk: 12
+    fields: {name: arcon}
+-   model: natica.instrument
+    pk: 13
+    fields: {name: mop/ice}
+-   model: natica.instrument
+    pk: 14
+    fields: {name: andicam}
+-   model: natica.instrument
+    pk: 15
+    fields: {name: kosmos}
+-   model: natica.instrument
+    pk: 16
+    fields: {name: spartan}
+-   model: natica.instrument
+    pk: 17
+    fields: {name: newfirm}
+-   model: natica.instrument
+    pk: 18
+    fields: {name: echelle}
+-   model: natica.instrument
+    pk: 19
+    fields: {name: bench}
+-   model: natica.instrument
+    pk: 20
+    fields: {name: goodman}
+-   model: natica.instrument
+    pk: 21
+    fields: {name: hdi}
+-   model: natica.instrument
+    pk: 22
+    fields: {name: 90prime}
+-   model: natica.instrument
+    pk: 23
+    fields: {name: (p)odi}
+-   model: natica.instrument
+    pk: 24
+    fields: {name: sami}
+-   model: natica.instrument
+    pk: 25
+    fields: {name: soi}
+-   model: natica.instrument
+    pk: 26
+    fields: {name: spartan ir camera}
+-   model: natica.instrument
+    pk: 27
+    fields: {name: falmingos}
+-   model: natica.instrument
+    pk: 28
+    fields: {name: chiron}
+-   model: natica.instrument
+    pk: 29
+    fields: {name: whirc}
+-   model: natica.instrument
+    pk: 30
+    fields: {name: decam}
+-   model: natica.instrument
+    pk: 31
+    fields: {name: y4kcam}
+-   model: natica.instrument
+    pk: 32
+    fields: {name: ccd_imager}
+-   model: natica.instrument
+    pk: 33
+    fields: {name: gtcam}

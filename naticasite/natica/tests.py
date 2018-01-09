@@ -53,11 +53,12 @@ logger = logging.getLogger('django_test')
 
 class StoreTest(TestCase):
     maxDiff = None # too see full values in DIFF on assert failure
-    #fixtures = ['dump-natica.json',]
+    fixtures = ['natica.yaml', ]
 
     def setUp(self):
         self.fits1 = '/data/natica-archive/20141225/ct13m/smarts/c13a_141226_070040_ori.fits.fz'
 
+    @testcase_log_console(logger)
     def test_store_0(self):
         """No duplicate, valid FITS for NATICA"""
         overwrite=False
@@ -68,6 +69,7 @@ class StoreTest(TestCase):
                 '/natica/store/',
                 dict(md5sum=md5(self.fits1), file=f))
         jresponse=response.json()
+        #!logger.debug('DBG: store_0 jresponse={}'.format(pformat(jresponse)))
         self.assertJSONEqual(json.dumps(jresponse),
                              json.dumps(expected),
                              msg='Unexpected response')
@@ -104,7 +106,10 @@ class SearchTest(TestCase):
     maxDiff = None # too see full values in DIFF on assert failure
     #fixtures = ['dump-natica.json',]
     #fixtures = ['small-dump.json']
-    fixtures = ['search_hits.Proposal.yaml','search_hits.FitsFile.yaml']
+    fixtures = ['dump.natica.yaml',
+                'search_hits.Proposal.yaml',
+                'search_hits.FitsFile.yaml',
+    ]
     
     #############################################################################
     ### /natica/search
@@ -146,6 +151,7 @@ class SearchTest(TestCase):
                 "to_here_count": 100,
                 "total_count": 11583954}
         jresponse=response.json()
+        #print('DBG: jresponse=',pformat(jresponse))
         del jresponse['meta']['query']
         logger.debug('DBG: search_0 response={}'.format(pformat(jresponse)))
         self.assertIn('meta', response.json())

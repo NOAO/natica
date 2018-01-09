@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FitsFile, Hdu, Proposal
+from .models import FitsFile, Hdu, Proposal, Site, Telescope, Instrument
 from pathlib import PurePath
 
 
@@ -60,4 +60,16 @@ class FitsFileAdmin(admin.ModelAdmin):
 
 @admin.register(Proposal)
 class ProposalAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Site)
+class SiteAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Telescope)
+class TelescopeAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Instrument)
+class InstrumentAdmin(admin.ModelAdmin):
     pass

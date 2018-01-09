@@ -49,6 +49,12 @@ class MissingFieldError(BaseNaticaException):
 class ConflictingValuesError(BaseNaticaException):
     status_code = 400
 
+class TelescopeError(BaseNaticaException):
+    status_code = 400
+
+class InstrumentError(BaseNaticaException):
+    status_code = 400
+
 class FitsError(BaseNaticaException):
     status_code = 400
     
