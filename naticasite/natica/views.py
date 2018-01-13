@@ -562,7 +562,7 @@ def protected_store_metadata(hdudict_list, non_hdu_vals):
     
 
 def hdudictlist(hdulist):
-    return [dict(hdu.header.items()) for hdu in hdulist]
+    return [OrderedDict(hdu.header.items()) for hdu in hdulist]
                 
 def handle_uploaded_file(f, md5sum, overwrite=False):
     import astropy.io.fits as pyfits
