@@ -71,6 +71,7 @@ def apply_personality(srcfits, destfits, pers_file):
     """Use personality file in FITS dir to modify FITS hdr in place."""
     # get Personality DICT
     # validate personality file (wrt JSON schema), raise if invalid
+    logging.debug('apply_personality()'.format(srcfits, destfits, pers_file))
     with open(pers_file) as yy:
         # raise if yaml doesn't exist
         yd = yaml.safe_load(yy)
@@ -78,12 +79,16 @@ def apply_personality(srcfits, destfits, pers_file):
     #origfname = yd['params']['filename']
     # Apply personality changes
     hdulist = pyfits.open(srcfits)
-    newhdr = hdulist[0].header
     changed = set()
     for k,v in yd['options'].items():
         logging.debug('apply_personality {}={}'.format(k,v))
-        newhdr[k] = v  # overwrite with explicit fields from personality
+        # overwrite with explicit fields from personality
+        hdulist[0].header[k] = v  
         changed.add(k)
+    # DB uses lowercase for all Telescopes and Instruments
+    hdulist[0].header['DTTELESC'] = hdulist[0].header['DTTELESC'].lower()
+    hdulist[0].header['DTINSTRU'] = hdulist[0].header['DTINSTRU'].lower()
+
     silentremove(destfits)
     hdulist.writeto(destfits, output_verify='fix')
     logging.debug('Applied personality file ({}) to {}'
@@ -140,7 +145,6 @@ md5sum:: checksum of original file from dome
 
     # ingest NATICA service
     (status,jmsg) = http_archive_ingest(fitscache, overwrite=overwrite)
-    
     if status == 200:  # SUCCESS
         # Remove cache files; FITS + YAML
         os.remove(fitscache) 

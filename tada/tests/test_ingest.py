@@ -49,15 +49,10 @@ class TestTada(unittest.TestCase):
         #with self.assertRaises(Exception) as cm:
         arch_file = tada.submit_to_archive(self.fits1, overwrite=False)
         arch_file = tada.submit_to_archive(self.fits1, overwrite=False)
+        #print('DBG-2: arch_file: "{}"'.format(arch_file))
 
-        #!logger.debug('DBG-2: arch_file: "{}"'.format(arch_file))
-
-        jresponse = {'errorMessage': 'Could not store metadata; duplicate key value violates unique constraint \"natica_fitsfile_md5sum_key\"\nDETAIL:  Key (md5sum)=(06822d2641fc8d332fe2961059138863) already exists.\n'}
-        exp=('Failed to ingest using natica/store webservice with'
-             ' /var/tada/cache/2148387e3e6eec69f04e9360043f61e4.fits.fz; {}')\
-             .format(json.dumps(jresponse))
-        exp='Failed to ingest using natica/store webservice with /var/tada/cache/2148387e3e6eec69f04e9360043f61e4.fits.fz; {\'errorMessage\': \'Could not store metadata; duplicate key value violates unique constraint "natica_fitsfile_md5sum_key"\\nDETAIL:  Key (md5sum)=(06822d2641fc8d332fe2961059138863) already exists.\\n\'}'
-        self.assertEqual(arch_file, exp)
+        expected="Failed to ingest using natica/store webservice with /var/tada/cache/2148387e3e6eec69f04e9360043f61e4.fits.fz; {'errorMessage': 'Could not store metadata; duplicate key value violates unique constraint \"natica_fitsfile_md5sum_key\"\\nDETAIL:  Key (md5sum)=(8db07cedd1dda5098901792e890feb7a) already exists.\\n'}"
+        self.assertEqual(arch_file, expected)
 
             
         
@@ -68,6 +63,6 @@ class TestTada(unittest.TestCase):
         arch_file='NA'
         #print('fits1={}'.format(self.fits1))
         arch_file = tada.submit_to_archive(self.fits1, overwrite=True)
-        exp='/data/natica-archive/20141219/WIYN/2012B-0500/kww_141220_130138_ori.fits.fz'
+        exp='/data/natica-archive/20141219/wiyn/2012B-0500/kww_141220_130138_ori.fits.fz'
         self.assertEqual(arch_file, exp)
         

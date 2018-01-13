@@ -8,3 +8,6 @@ pushd /sandbox/natica/naticasite
 source /opt/natica/venv/bin/activate
 nohup python3 -u manage.py runserver 0.0.0.0:8000 > /var/log/natica/server.log &
 
+
+# Stop this server with:
+#   sudo pkill -f "manage.py runserver"

@@ -235,14 +235,15 @@ is not good enuf for Archive.
     except Exception as err:
         tele_list = [obj.name for obj in Telescope.objects.all()]
         raise nex.TelescopeError(
-            'Telescope from hdr ({}) not known DB value {}; {}'.
+            'Telescope from hdr \'{}\' not in known DB list {}; {}'.
                                format(telescope, tele_list, err))
     try:
         Instrument.objects.get(name=instrument)
     except Exception as err:
+        tele_list = [obj.name for obj in Instrument.objects.all()]
         raise nex.InstrumentError(
-            'Instrument from hdr ({}) not known DB value; {}'.
-                               format(instrument, err))
+            'Instrument from hdr \'{}\' not in known DB list {}; {}'.
+                               format(instrument, inst_list, err))
 
     # Validate against schema
     try:

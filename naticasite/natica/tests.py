@@ -50,13 +50,18 @@ def testcase_log_console(lggr):
 
 logger = logging.getLogger('django_test')
 
+def setUpModule():
+    print('# Using archive database: {}\n'
+          .format(settings.DATABASES['default']['HOST']))
 
 class StoreTest(TestCase):
     maxDiff = None # too see full values in DIFF on assert failure
     fixtures = ['natica.yaml', ]
 
+        
     def setUp(self):
         self.fits1 = '/data/natica-archive/20141225/ct13m/smarts/c13a_141226_070040_ori.fits.fz'
+
 
     @testcase_log_console(logger)
     def test_store_0(self):
@@ -138,8 +143,6 @@ class SearchTest(TestCase):
         "No filter. Verify: API version."
         req = '{ }'
         #print('DBG: settings.DATABASES={}'.format(settings.DATABASES))
-        print('DBG: Using archive database: {}'
-              .format(settings.DATABASES['default']['HOST']))
         response = self.client.post('/natica/search/',
                                     content_type='application/json',
                                     data=req  )
